@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>居酒屋 あしびなぁ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      margin: 0;
+      background: #111;
+      color: #f5f5f5;
+    }
+    header {
+      padding: 16px;
+      text-align: center;
+      background: #222;
+      border-bottom: 1px solid #444;
+    }
+    .logo {
+      font-size: 1.8rem;
+      letter-spacing: 0.2em;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 4px;
+    }
+    .status {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      border: 1px solid #0f0;
+      color: #0f0;
+    }
+    main {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      margin: 16px 0 8px;
+      border-left: 4px solid #f5b542;
+      padding-left: 8px;
+    }
+    .card {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      border: 1px solid #333;
+    }
+    .card-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+    .card-sub {
+      font-size: 0.85rem;
+      color: #ccc;
+    }
+    .price {
+      float: right;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 999px;
+      border: 1px solid #555;
+      font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .tab.active {
+      background: #f5b542;
+      color: #111;
+      border-color: #f5b542;
+      font-weight: 600;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      margin: 6px 0;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-line {
+      background: #06c755;
+      color: #fff;
+      font-weight: 600;
+    }
+    .btn-instagram {
+      background: #b22b8a;
+      color: #fff;
+    }
+    .btn-tiktok {
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    .small {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.75rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">居酒屋 あしびなぁ</div>
+    <div class="subtitle">石垣島・ゆるっと飲める隠れ家</div>
+    <div class="status">本日 営業中（16:00〜2:00）</div>
+  </header>
+
+  <main>
+    <section>
+      <div class="section-title">店舗情報</div>
+      <div class="card">
+        <div class="card-sub">
+          🕓 営業時間：16:00〜2:00頃<br>
+          📅 定休日：不定休<br>
+          📍 場所：〇〇県〇〇市〇〇（ここを書き換え）
+        </div>
+        <p class="small">
+          ※ラストオーダーや貸切などはLINEでお気軽にご相談ください。
+        </p>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="today">本日のおすすめ</div>
+      <div class="tab" data-tab="food">フード</div>
+      <div class="tab" data-tab="drink">ドリンク</div>
+    </div>
+
+    <section id="tab-today" class="tab-content active">
+      <div class="card">
+        <div class="card-title">⭐ 今日のイチオシ</div>
+        <div class="card-sub">
+          ・チーズリゾット（〆に人気）<br>
+          ・タコのバター焼き<br>
+          ・ウムズナー（沖縄風野菜炒め）<br>
+          ・その日の仕入れで変わるおすすめもあります
+        </div>
+        <p class="small">
+          ※内容はその日の気分と仕入れで変わります。
+        </p>
+      </div>
+    </section>
+
+    <section id="tab-food" class="tab-content">
+      <div class="section-title">フードメニュー</div>
+
+      <div class="card">
+        <div class="card-title">
+          チーズリゾット <span class="price">¥○○○</span>
+        </div>
+        <div class="card-sub">〆にぴったりな、とろとろチーズの人気メニュー。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          タコのバター焼き <span class="price">¥○○○</span>
+        </div>
+        <div class="card-sub">バターとにんにくで香ばしく仕上げた一品。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          ウムズナー <span class="price">¥○○○</span>
+        </div>
+        <div class="card-sub">沖縄っぽさ全開の野菜炒め。泡盛とも相性◎</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          日替わりおつまみ <span class="price">¥○○○〜</span>
+        </div>
+        <div class="card-sub">冷蔵庫の中身で、その日いちばん美味しくなるように作ります。</div>
+      </div>
+    </section>
+
+    <section id="tab-drink" class="tab-content">
+      <div class="section-title">ドリンクメニュー</div>
+
+      <div class="card">
+        <div class="card-title">
+          生ビール <span class="price">¥○○○</span>
+        </div>
+        <div class="card-sub">まずはこれから。キンキンに冷やしてお待ちしてます。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          チューハイ各種 <span class="price">¥○○○</span>
+        </div>
+        <div class="card-sub">レモン・グレープフルーツ・シークヮーサーなど。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          泡盛 <span class="price">¥○○○〜</span>
+        </div>
+        <div class="card-sub">地元のおすすめ泡盛をご用意してます。</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">予約・お問い合わせ</div>
+
+      <a class="btn btn-line" href="https://line.me/R/ti/p/xxxxxxxx" target="_blank" rel="noopener">
+        LINEで予約・問い合わせ
+      </a>
+
+      <a class="btn btn-instagram" href="https://www.instagram.com/" target="_blank" rel="noopener">
+        Instagram を見る
+      </a>
+
+      <a class="btn btn-tiktok" href="https://www.tiktok.com/" target="_blank" rel="noopener">
+        TikTok を見る
+      </a>
+
+      <p class="small">
+        ※リンクは後で本物に差し替えてください。
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © 居酒屋 あしびなぁ
+  </footer>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contents = {
+      today: document.getElementById('tab-today'),
+      food: document.getElementById('tab-food'),
+      drink: document.getElementById('tab-drink')
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        Object.values(contents).forEach(c => c.classList.remove('active'));
+        const key = tab.dataset.tab;
+        contents[key].classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
