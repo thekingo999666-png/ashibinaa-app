@@ -1,1 +1,757 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>店内注文 | 居酒屋 あしびなぁ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      margin: 0;
+      background: #111;
+      color: #f5f5f5;
+    }
+    .lang-jp .en { display: none; }
+    .lang-en .jp { display: none; }
+
+    header {
+      background: #000;
+      padding: 12px 16px;
+      border-bottom: 1px solid #333;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+    }
+    .lang-switch button {
+      background: #222;
+      color: #fff;
+      border-radius: 999px;
+      border: 1px solid #555;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+    .lang-switch button.active {
+      background: #f5b542;
+      color: #111;
+      border-color: #f5b542;
+    }
+    .subtitle {
+      font-size: 0.8rem;
+      color: #ccc;
+      margin-top: 4px;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 12px 12px 40px;
+    }
+    .section-title {
+      margin: 16px 0 8px;
+      font-size: 1rem;
+      border-left: 4px solid #f5b542;
+      padding-left: 8px;
+    }
+    .card {
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      border: 1px solid #333;
+    }
+    .card-sub {
+      font-size: 0.85rem;
+      color: #ccc;
+      white-space: pre-line;
+    }
+    .seat-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+    select, textarea {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border-radius: 6px;
+      border: 1px solid #555;
+      padding: 6px;
+      font-size: 0.9rem;
+    }
+    .note-label {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-top: 4px;
+    }
+
+    .menu-category-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      color: #f5b542;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 0;
+      border-bottom: 1px dashed #333;
+      font-size: 0.9rem;
+    }
+    .item-name {
+      flex: 1;
+    }
+    .item-name small {
+      display: block;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .qty-controls button {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #222;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .qty-controls input {
+      width: 32px;
+      text-align: center;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #000;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 2px;
+    }
+
+    .btn-submit {
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      background: #06c755;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .info-text {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .back-link {
+      font-size: 0.8rem;
+      color: #999;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body class="lang-jp">
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <span class="jp">あしびなぁ 店内注文</span>
+        <span class="en">Ashibinaa In-store Order</span>
+      </div>
+      <div class="lang-switch">
+        <button id="btnJp" class="active">日本語</button>
+        <button id="btnEn">EN</button>
+      </div>
+    </div>
+    <div class="subtitle">
+      <span class="jp">この画面を使って、スタッフにLINEで注文を送信できます。</span>
+      <span class="en">Use this screen to send your order via LINE to the staff.</span>
+    </div>
+    <a class="back-link" href="index.html">
+      <span class="jp">← メニューTOPへ戻る</span>
+      <span class="en">← Back to main menu</span>
+    </a>
+  </header>
+
+  <main>
+    <!-- 席情報 -->
+    <section>
+      <div class="section-title">
+        <span class="jp">席を選択</span>
+        <span class="en">Select your seat</span>
+      </div>
+      <div class="card">
+        <div class="seat-row">
+          <span class="jp">席：</span><span class="en">Seat:</span>
+          <select id="seat">
+            <option value="">-</option>
+            <option value="テーブル1">テーブル1 / Table 1</option>
+            <option value="テーブル2">テーブル2 / Table 2</option>
+            <option value="カウンター1">カウンター1 / Counter 1</option>
+            <option value="カウンター2">カウンター2 / Counter 2</option>
+            <option value="カウンター3">カウンター3 / Counter 3</option>
+            <option value="スタンド1">スタンド1 / Stand 1</option>
+            <option value="座敷1">座敷1 / Tatami 1</option>
+          </select>
+        </div>
+        <div class="note-label">
+          <span class="jp">一言メモ（辛さ・氷少なめ など任意）</span>
+          <span class="en">Note (optional: less ice, spicy, etc.)</span>
+        </div>
+        <textarea id="note" rows="2"></textarea>
+        <div class="info-text">
+          <span class="jp">※ このフォームは店内専用です。送信すると公式LINE（@213funlp）とのトーク画面が開きます。</span>
+          <span class="en">* This form is for in-store use only. When you send, LINE chat with @213funlp will open.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- フード -->
+    <section>
+      <div class="section-title">
+        <span class="jp">フード</span>
+        <span class="en">Food</span>
+      </div>
+      <div class="card" id="food-section">
+        <!-- ﾁｮﾒﾁｮﾒシリーズ -->
+        <div class="menu-category-title">
+          <span class="jp">ﾁｮﾒﾁｮﾒシリーズ</span>
+          <span class="en">Chome-chome Series</span>
+        </div>
+        <div class="item-row" data-id="kyuri-chome">
+          <div class="item-name">
+            <span class="jp">きゅうりチョメ</span>
+            <small class="en">Kyuri Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="kyuri-chome" data-delta="-1">-</button>
+            <input id="qty-kyuri-chome" type="text" value="0" readonly>
+            <button type="button" data-target="kyuri-chome" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="cheese-chome">
+          <div class="item-name">
+            <span class="jp">チーズチョメ</span>
+            <small class="en">Cheese Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="cheese-chome" data-delta="-1">-</button>
+            <input id="qty-cheese-chome" type="text" value="0" readonly>
+            <button type="button" data-target="cheese-chome" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="nasu-chome">
+          <div class="item-name">
+            <span class="jp">ナスチョメ</span>
+            <small class="en">Nasu Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="nasu-chome" data-delta="-1">-</button>
+            <input id="qty-nasu-chome" type="text" value="0" readonly>
+            <button type="button" data-target="nasu-chome" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="jagaimo-chome">
+          <div class="item-name">
+            <span class="jp">ジャガイモチョメ</span>
+            <small class="en">Jagaimo Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="jagaimo-chome" data-delta="-1">-</button>
+            <input id="qty-jagaimo-chome" type="text" value="0" readonly>
+            <button type="button" data-target="jagaimo-chome" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="piman-chome">
+          <div class="item-name">
+            <span class="jp">ピーマンチョメ</span>
+            <small class="en">Piman Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="piman-chome" data-delta="-1">-</button>
+            <input id="qty-piman-chome" type="text" value="0" readonly>
+            <button type="button" data-target="piman-chome" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="saba-chome">
+          <div class="item-name">
+            <span class="jp">サバ缶チョメ</span>
+            <small class="en">Saba-kan Chome</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="saba-chome" data-delta="-1">-</button>
+            <input id="qty-saba-chome" type="text" value="0" readonly>
+            <button type="button" data-target="saba-chome" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <!-- さっぱりなやつたち -->
+        <div class="menu-category-title">
+          <span class="jp">さっぱりなやつたち</span>
+          <span class="en">Sappari na Yatsu-tachi</span>
+        </div>
+        <div class="item-row" data-id="shima-rakkyou">
+          <div class="item-name">
+            <span class="jp">島らっきょ</span>
+            <small class="en">Shima Rakkyou</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="shima-rakkyou" data-delta="-1">-</button>
+            <input id="qty-shima-rakkyou" type="text" value="0" readonly>
+            <button type="button" data-target="shima-rakkyou" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="shima-rakkyou-cream">
+          <div class="item-name">
+            <span class="jp">島らっきょクリームチーズベーコン</span>
+            <small class="en">Shima Rakkyou Cream Cheese Bacon</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="shima-rakkyou-cream" data-delta="-1">-</button>
+            <input id="qty-shima-rakkyou-cream" type="text" value="0" readonly>
+            <button type="button" data-target="shima-rakkyou-cream" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="ume-suisho">
+          <div class="item-name">
+            <span class="jp">梅水晶</span>
+            <small class="en">Ume Suisho</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="ume-suisho" data-delta="-1">-</button>
+            <input id="qty-ume-suisho" type="text" value="0" readonly>
+            <button type="button" data-target="ume-suisho" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="goya-slice">
+          <div class="item-name">
+            <span class="jp">ゴーヤスライス</span>
+            <small class="en">Goya Slice</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="goya-slice" data-delta="-1">-</button>
+            <input id="qty-goya-slice" type="text" value="0" readonly>
+            <button type="button" data-target="goya-slice" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="shiokara-kaku">
+          <div class="item-name">
+            <span class="jp">塩辛 各</span>
+            <small class="en">Shiokara (Each)</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="shiokara-kaku" data-delta="-1">-</button>
+            <input id="qty-shiokara-kaku" type="text" value="0" readonly>
+            <button type="button" data-target="shiokara-kaku" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="shiokara-3shu">
+          <div class="item-name">
+            <span class="jp">塩辛3種盛り</span>
+            <small class="en">Shiokara 3-shu Mori</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="shiokara-3shu" data-delta="-1">-</button>
+            <input id="qty-shiokara-3shu" type="text" value="0" readonly>
+            <button type="button" data-target="shiokara-3shu" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="umi-budou">
+          <div class="item-name">
+            <span class="jp">海ぶどう</span>
+            <small class="en">Umi Budou</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="umi-budou" data-delta="-1">-</button>
+            <input id="qty-umi-budou" type="text" value="0" readonly>
+            <button type="button" data-target="umi-budou" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <!-- チャンプル・ご飯物・リゾット代表例 -->
+        <div class="menu-category-title">
+          <span class="jp">チャンプルたち</span>
+          <span class="en">Champuru</span>
+        </div>
+        <div class="item-row" data-id="goya-champuru">
+          <div class="item-name">
+            <span class="jp">ゴーヤチャンプル</span>
+            <small class="en">Goya Champuru</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="goya-champuru" data-delta="-1">-</button>
+            <input id="qty-goya-champuru" type="text" value="0" readonly>
+            <button type="button" data-target="goya-champuru" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">ご飯物</span>
+          <span class="en">Rice Dishes</span>
+        </div>
+        <div class="item-row" data-id="gaju-don">
+          <div class="item-name">
+            <span class="jp">がじゅ丼</span>
+            <small class="en">Gaju-don</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="gaju-don" data-delta="-1">-</button>
+            <input id="qty-gaju-don" type="text" value="0" readonly>
+            <button type="button" data-target="gaju-don" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="rafute-don">
+          <div class="item-name">
+            <span class="jp">らふて〜丼</span>
+            <small class="en">Rafute-don</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="rafute-don" data-delta="-1">-</button>
+            <input id="qty-rafute-don" type="text" value="0" readonly>
+            <button type="button" data-target="rafute-don" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">リゾットたち</span>
+          <span class="en">Risotto</span>
+        </div>
+        <div class="item-row" data-id="cheese-risotto">
+          <div class="item-name">
+            <span class="jp">チーズリゾット</span>
+            <small class="en">Cheese Risotto</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="cheese-risotto" data-delta="-1">-</button>
+            <input id="qty-cheese-risotto" type="text" value="0" readonly>
+            <button type="button" data-target="cheese-risotto" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="ikasumi-risotto">
+          <div class="item-name">
+            <span class="jp">イカ墨リゾット</span>
+            <small class="en">Squid Ink Risotto</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="ikasumi-risotto" data-delta="-1">-</button>
+            <input id="qty-ikasumi-risotto" type="text" value="0" readonly>
+            <button type="button" data-target="ikasumi-risotto" data-delta="1">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ドリンク -->
+    <section>
+      <div class="section-title">
+        <span class="jp">ドリンク</span>
+        <span class="en">Drinks</span>
+      </div>
+      <div class="card" id="drink-section">
+
+        <div class="menu-category-title">
+          <span class="jp">ビール</span>
+          <span class="en">Beer</span>
+        </div>
+        <div class="item-row" data-id="draft-beer">
+          <div class="item-name">
+            <span class="jp">生ビール</span>
+            <small class="en">Draft Beer</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="draft-beer" data-delta="-1">-</button>
+            <input id="qty-draft-beer" type="text" value="0" readonly>
+            <button type="button" data-target="draft-beer" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="bottle-beer">
+          <div class="item-name">
+            <span class="jp">瓶ビール</span>
+            <small class="en">Bottled Beer</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="bottle-beer" data-delta="-1">-</button>
+            <input id="qty-bottle-beer" type="text" value="0" readonly>
+            <button type="button" data-target="bottle-beer" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">ウイスキー</span>
+          <span class="en">Whisky</span>
+        </div>
+        <div class="item-row" data-id="kaku-highball">
+          <div class="item-name">
+            <span class="jp">角ハイボール</span>
+            <small class="en">Kaku Whisky Highball</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="kaku-highball" data-delta="-1">-</button>
+            <input id="qty-kaku-highball" type="text" value="0" readonly>
+            <button type="button" data-target="kaku-highball" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="ao-whisky">
+          <div class="item-name">
+            <span class="jp">碧（あお）</span>
+            <small class="en">Ao Japanese Whisky</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="ao-whisky" data-delta="-1">-</button>
+            <input id="qty-ao-whisky" type="text" value="0" readonly>
+            <button type="button" data-target="ao-whisky" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">カクテル</span>
+          <span class="en">Cocktails</span>
+        </div>
+        <div class="item-row" data-id="cassis-soda">
+          <div class="item-name">
+            <span class="jp">カシスソーダ</span>
+            <small class="en">Cassis Soda</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="cassis-soda" data-delta="-1">-</button>
+            <input id="qty-cassis-soda" type="text" value="0" readonly>
+            <button type="button" data-target="cassis-soda" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="cassis-orange">
+          <div class="item-name">
+            <span class="jp">カシスオレンジ</span>
+            <small class="en">Cassis Orange</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="cassis-orange" data-delta="-1">-</button>
+            <input id="qty-cassis-orange" type="text" value="0" readonly>
+            <button type="button" data-target="cassis-orange" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">酎ハイ・サワー</span>
+          <span class="en">Chuhai & Sours</span>
+        </div>
+        <div class="item-row" data-id="lemon-sour">
+          <div class="item-name">
+            <span class="jp">レモンサワー</span>
+            <small class="en">Lemon Sour</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="lemon-sour" data-delta="-1">-</button>
+            <input id="qty-lemon-sour" type="text" value="0" readonly>
+            <button type="button" data-target="lemon-sour" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="item-row" data-id="shoppai-ume-sour">
+          <div class="item-name">
+            <span class="jp">しょっぱい梅サワー</span>
+            <small class="en">Salty Plum Sour</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="shoppai-ume-sour" data-delta="-1">-</button>
+            <input id="qty-shoppai-ume-sour" type="text" value="0" readonly>
+            <button type="button" data-target="shoppai-ume-sour" data-delta="1">+</button>
+          </div>
+        </div>
+
+        <div class="menu-category-title">
+          <span class="jp">ソフトドリンク</span>
+          <span class="en">Soft Drinks</span>
+        </div>
+        <div class="item-row" data-id="soft-drink">
+          <div class="item-name">
+            <span class="jp">ソフトドリンク各種</span>
+            <small class="en">Soft Drinks (assorted)</small>
+          </div>
+          <div class="qty-controls">
+            <button type="button" data-target="soft-drink" data-delta="-1">-</button>
+            <input id="qty-soft-drink" type="text" value="0" readonly>
+            <button type="button" data-target="soft-drink" data-delta="1">+</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <button class="btn-submit" id="btnSend">
+      <span class="jp">LINEで注文を送信</span>
+      <span class="en">Send order via LINE</span>
+    </button>
+    <div class="info-text">
+      <span class="jp">※ ボタンを押すとLINEアプリが開きます。内容を確認してから送信してください。</span>
+      <span class="en">* LINE app will open. Please check your order and then send.</span>
+    </div>
+
+  </main>
+
+  <script>
+    // 言語切り替え
+    const btnJp = document.getElementById('btnJp');
+    const btnEn = document.getElementById('btnEn');
+
+    btnJp.addEventListener('click', () => {
+      document.body.classList.remove('lang-en');
+      document.body.classList.add('lang-jp');
+      btnJp.classList.add('active');
+      btnEn.classList.remove('active');
+    });
+    btnEn.addEventListener('click', () => {
+      document.body.classList.remove('lang-jp');
+      document.body.classList.add('lang-en');
+      btnEn.classList.add('active');
+      btnJp.classList.remove('active');
+    });
+
+    // 数量ボタン
+    document.querySelectorAll('.qty-controls button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-target');
+        const delta = parseInt(btn.getAttribute('data-delta'), 10);
+        const input = document.getElementById('qty-' + id);
+        let v = parseInt(input.value, 10) || 0;
+        v += delta;
+        if (v < 0) v = 0;
+        if (v > 99) v = 99;
+        input.value = v;
+      });
+    });
+
+    // メニュー定義（カテゴリ分け用）
+    const items = [
+      // Food
+      { id: 'kyuri-chome', jp: 'きゅうりチョメ', en: 'Kyuri Chome', type: 'food' },
+      { id: 'cheese-chome', jp: 'チーズチョメ', en: 'Cheese Chome', type: 'food' },
+      { id: 'nasu-chome', jp: 'ナスチョメ', en: 'Nasu Chome', type: 'food' },
+      { id: 'jagaimo-chome', jp: 'ジャガイモチョメ', en: 'Jagaimo Chome', type: 'food' },
+      { id: 'piman-chome', jp: 'ピーマンチョメ', en: 'Piman Chome', type: 'food' },
+      { id: 'saba-chome', jp: 'サバ缶チョメ', en: 'Saba-kan Chome', type: 'food' },
+
+      { id: 'shima-rakkyou', jp: '島らっきょ', en: 'Shima Rakkyou', type: 'food' },
+      { id: 'shima-rakkyou-cream', jp: '島らっきょクリームチーズベーコン', en: 'Shima Rakkyou Cream Cheese Bacon', type: 'food' },
+      { id: 'ume-suisho', jp: '梅水晶', en: 'Ume Suisho', type: 'food' },
+      { id: 'goya-slice', jp: 'ゴーヤスライス', en: 'Goya Slice', type: 'food' },
+      { id: 'shiokara-kaku', jp: '塩辛 各', en: 'Shiokara (Each)', type: 'food' },
+      { id: 'shiokara-3shu', jp: '塩辛3種盛り', en: 'Shiokara 3-shu Mori', type: 'food' },
+      { id: 'umi-budou', jp: '海ぶどう', en: 'Umi Budou', type: 'food' },
+
+      { id: 'goya-champuru', jp: 'ゴーヤチャンプル', en: 'Goya Champuru', type: 'food' },
+
+      { id: 'gaju-don', jp: 'がじゅ丼', en: 'Gaju-don', type: 'food' },
+      { id: 'rafute-don', jp: 'らふて〜丼', en: 'Rafute-don', type: 'food' },
+
+      { id: 'cheese-risotto', jp: 'チーズリゾット', en: 'Cheese Risotto', type: 'food' },
+      { id: 'ikasumi-risotto', jp: 'イカ墨リゾット', en: 'Squid Ink Risotto', type: 'food' },
+
+      // Drinks
+      { id: 'draft-beer', jp: '生ビール', en: 'Draft Beer', type: 'drink' },
+      { id: 'bottle-beer', jp: '瓶ビール', en: 'Bottled Beer', type: 'drink' },
+
+      { id: 'kaku-highball', jp: '角ハイボール', en: 'Kaku Whisky Highball', type: 'drink' },
+      { id: 'ao-whisky', jp: '碧（あお）', en: 'Ao Japanese Whisky', type: 'drink' },
+
+      { id: 'cassis-soda', jp: 'カシスソーダ', en: 'Cassis Soda', type: 'drink' },
+      { id: 'cassis-orange', jp: 'カシスオレンジ', en: 'Cassis Orange', type: 'drink' },
+
+      { id: 'lemon-sour', jp: 'レモンサワー', en: 'Lemon Sour', type: 'drink' },
+      { id: 'shoppai-ume-sour', jp: 'しょっぱい梅サワー', en: 'Salty Plum Sour', type: 'drink' },
+
+      { id: 'soft-drink', jp: 'ソフトドリンク各種', en: 'Soft Drinks (assorted)', type: 'drink' }
+    ];
+
+    // 注文送信
+    document.getElementById('btnSend').addEventListener('click', () => {
+      const seat = document.getElementById('seat').value;
+      const note = document.getElementById('note').value.trim();
+      const bodyClassIsJp = document.body.classList.contains('lang-jp');
+
+      if (!seat) {
+        alert(bodyClassIsJp ? '席を選んでください。' : 'Please select your seat.');
+        return;
+      }
+
+      const foodLines = [];
+      const drinkLines = [];
+
+      items.forEach(item => {
+        const qtyInput = document.getElementById('qty-' + item.id);
+        const qty = parseInt(qtyInput.value, 10) || 0;
+        if (qty > 0) {
+          const name = bodyClassIsJp ? item.jp : item.en;
+          const line = name + ' ×' + qty;
+          if (item.type === 'food') {
+            foodLines.push(line);
+          } else {
+            drinkLines.push(line);
+          }
+        }
+      });
+
+      if (foodLines.length === 0 && drinkLines.length === 0) {
+        alert(bodyClassIsJp ? '1品以上選んでください。' : 'Please select at least one item.');
+        return;
+      }
+
+      let msg = '';
+      if (bodyClassIsJp) {
+        msg += '【店内注文】%0A';
+        msg += '席: ' + seat + '%0A%0A';
+        if (foodLines.length) {
+          msg += '--- フード --- %0A' + foodLines.join('%0A') + '%0A%0A';
+        }
+        if (drinkLines.length) {
+          msg += '--- ドリンク --- %0A' + drinkLines.join('%0A') + '%0A';
+        }
+        if (note) {
+          msg += '%0Aメモ: ' + encodeURIComponent(note);
+        }
+      } else {
+        msg += '[In-store Order]%0A';
+        msg += 'Seat: ' + seat + '%0A%0A';
+        if (foodLines.length) {
+          msg += '--- Food --- %0A' + foodLines.join('%0A') + '%0A%0A';
+        }
+        if (drinkLines.length) {
+          msg += '--- Drinks --- %0A' + drinkLines.join('%0A') + '%0A';
+        }
+        if (note) {
+          msg += '%0ANote: ' + encodeURIComponent(note);
+        }
+      }
+
+      const baseUrl = 'https://line.me/R/oaMessage/%40213funlp/?';
+      const url = baseUrl + msg;
+      window.location.href = url;
+    });
+  </script>
+</body>
+</html>
