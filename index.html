@@ -19,7 +19,6 @@
       background-attachment: fixed;
     }
 
-    /* 背景に黒の透明フィルターをかけて文字を見やすく */
     body::before {
       content: "";
       position: fixed;
@@ -95,8 +94,7 @@
     .tabs {
       display: flex;
       gap: 8px;
-      margin-top: 12px;
-      margin-bottom: 12px;
+      margin: 12px 0;
     }
     .tab {
       flex: 1;
@@ -106,7 +104,6 @@
       border: 1px solid #555;
       font-size: 0.9rem;
       cursor: pointer;
-      user-select: none;
       background: rgba(0, 0, 0, 0.5);
     }
     .tab.active {
@@ -140,12 +137,71 @@
       padding: 16px;
       font-size: 0.75rem;
       color: #ddd;
-      text-shadow: 0 1px 2px #000;
+    }
+
+    /* ===== ハンバーガーメニュー ===== */
+    .menu-btn {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 1500;
+      color: #fff;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 230px;
+      height: 100%;
+      background: rgba(20,20,20,0.95);
+      backdrop-filter: blur(5px);
+      padding-top: 60px;
+      transition: 0.3s;
+      z-index: 1400;
+    }
+    .side-menu a {
+      display: block;
+      padding: 14px 20px;
+      color: #fff;
+      border-bottom: 1px solid #333;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .side-menu a:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    .side-menu.open {
+      left: 0;
+    }
+    .menu-header {
+      font-size: 18px;
+      color: #f5b542;
+      padding: 8px 20px;
+      border-bottom: 2px solid #555;
     }
   </style>
 </head>
 
-<body>
+<body id="top">
+
+  <!-- === ハンバーガーメニュー === -->
+  <div id="menuBtn" class="menu-btn">☰</div>
+
+  <nav id="sideMenu" class="side-menu">
+    <div class="menu-header">メニュー</div>
+    <a href="#top">🏠 ホーム</a>
+    <a href="#tab-today">⭐ 本日のおすすめ</a>
+    <a href="#tab-food">🍽 フード</a>
+    <a href="#tab-drink">🍻 ドリンク</a>
+    <a href="https://line.me/R/ti/p/@213funlp" target="_blank">💬 LINEで予約</a>
+    <a href="https://www.instagram.com/ashibinaa.ishigaki" target="_blank">📸 Instagram</a>
+  </nav>
 
   <!-- ======== ヘッダー ======== -->
   <header>
@@ -163,7 +219,7 @@
         <div class="card-sub">
 🕓 営業時間：16:00〜2:00頃
 📅 定休日：不定休
-📍 場所：沖縄県石垣市石垣28-1 ニュー18番街101
+📍 場所：沖縄県石垣市28-1 ニュー18番街101
         </div>
       </div>
     </section>
@@ -180,22 +236,24 @@
       <div class="card">
         <div class="card-title">⭐ 今日のイチオシ</div>
         <div class="card-sub">
+・石垣牛ハンバーグ（自家製タレ）
+・ざるもずく
+・イカ墨リゾット
 ・チーズリゾット（本日チーズ増量中）
-・石垣牛ハンバーグ（自家製ソース）
-・牛そば（牛汁もあり）
 ・気まぐれ一品（内容はカウンターで！）
         </div>
       </div>
     </section>
 
-    <!-- ======== フードメニュー ======== -->
+    <!-- ======== フードメニュー（カテゴリ分け） ======== -->
     <section id="tab-food" class="tab-content">
       <div class="section-title">フードメニュー</div>
 
-      <!-- チョメチョメシリーズ -->
-      <div class="card"><div class="card-title">ﾁｮﾒﾁｮﾒシリーズ（人気！）</div>
-      <div class="card-sub">サクッとつまめる大人のおつまみシリーズ。</div></div>
-
+      <!-- ﾁｮﾒﾁｮﾒシリーズ -->
+      <div class="card">
+        <div class="card-title">ﾁｮﾒﾁｮﾒシリーズ</div>
+        <div class="card-sub">サクッとつまめる大人のおつまみシリーズ。</div>
+      </div>
       <div class="card"><div class="card-title">きゅうりチョメ <span class="price">¥300</span></div></div>
       <div class="card"><div class="card-title">チーズチョメ <span class="price">¥500</span></div></div>
       <div class="card"><div class="card-title">ナスチョメ <span class="price">¥600</span></div></div>
@@ -203,14 +261,96 @@
       <div class="card"><div class="card-title">ピーマンチョメ <span class="price">¥600</span></div></div>
       <div class="card"><div class="card-title">サバ缶チョメ <span class="price">¥600</span></div></div>
 
-      <!-- 通常メニュー -->
-      <div class="card"><div class="card-title">チーズリゾット <span class="price">¥900</span></div></div>
-      <div class="card"><div class="card-title">イカ墨リゾット <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">ざるもずく <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">石垣牛ハンバーグ <span class="price">¥1600</span></div></div>
-      <div class="card"><div class="card-title">沖縄味噌汁 <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">からしな炒め <span class="price">¥800</span></div></div>
+      <!-- さっぱりなやつたち -->
+      <div class="card">
+        <div class="card-title">さっぱりなやつたち</div>
+      </div>
+      <div class="card"><div class="card-title">島らっきょ <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">島らっきょクリームチーズベーコン <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">梅水晶 <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">ゴーヤスライス <span class="price">¥400</span></div></div>
+      <div class="card"><div class="card-title">塩辛 各 <span class="price">¥300</span></div></div>
+      <div class="card"><div class="card-title">塩辛3種盛り <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">海ぶどう <span class="price">¥600</span></div></div>
 
+      <!-- チャンプルたち -->
+      <div class="card">
+        <div class="card-title">チャンプルたち</div>
+      </div>
+      <div class="card"><div class="card-title">ゴーヤチャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">ソーメンチャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">豆腐チャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">フーチャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">らっきょチャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">カラシナチャンプル <span class="price">¥800</span></div></div>
+
+      <!-- シリシたち -->
+      <div class="card">
+        <div class="card-title">シリシたち</div>
+      </div>
+      <div class="card"><div class="card-title">人参シリシリ <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">パパイヤシリシリ <span class="price">¥600</span></div></div>
+
+      <!-- 玉子たち -->
+      <div class="card">
+        <div class="card-title">玉子たち</div>
+      </div>
+      <div class="card"><div class="card-title">ポークと玉子 <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title">だし巻き <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">目玉焼き <span class="price">¥600</span></div></div>
+
+      <!-- 唐揚げたち -->
+      <div class="card">
+        <div class="card-title">唐揚げたち</div>
+      </div>
+      <div class="card"><div class="card-title">鶏の唐揚げ <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">タコ唐揚げ <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">イカ唐揚げ <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">エビ唐揚げ <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">チーズの棒 <span class="price">¥500</span></div></div>
+
+      <!-- 島そばで -->
+      <div class="card">
+        <div class="card-title">島そばで</div>
+      </div>
+      <div class="card"><div class="card-title">ピリ辛エビトマト <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">ぽなペティート <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">あぐ〜ペペロン <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">本日の気まぐれ <span class="price">¥800</span></div></div>
+
+      <!-- 男爺のつまみ -->
+      <div class="card">
+        <div class="card-title">男爺のつまみ</div>
+      </div>
+      <div class="card"><div class="card-title">たちつてと <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title">ポチギ <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title">らふて〜 <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">ナーベラ <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title">島豆腐 <span class="price">¥500</span></div></div>
+
+      <!-- ご飯物 -->
+      <div class="card">
+        <div class="card-title">ご飯物</div>
+      </div>
+      <div class="card"><div class="card-title">がじゅ丼 <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">らふて〜丼 <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">焼き飯（らふて〜・らっきょ） <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">島焼きそば（塩・シークヮーサー） <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">ちゃんぽん <span class="price">¥800</span></div></div>
+
+      <!-- そばたち -->
+      <div class="card">
+        <div class="card-title">そばたち</div>
+      </div>
+      <div class="card"><div class="card-title">ソーキそば <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title">テビチそば <span class="price">¥1,000</span></div></div>
+
+      <!-- リゾットたち（コード1にあったリゾット整理） -->
+      <div class="card">
+        <div class="card-title">リゾットたち</div>
+      </div>
+      <div class="card"><div class="card-title">チーズリゾット <span class="price">¥900</span></div></div>
+      <div class="card"><div class="card-title">イカ墨リゾット <span class="price">¥900</span></div></div>
     </section>
 
     <!-- ======== ドリンクメニュー ======== -->
@@ -221,6 +361,7 @@
       <div class="card"><div class="card-title">ハイボール <span class="price">¥600</span></div></div>
       <div class="card"><div class="card-title">チューハイ各種 <span class="price">¥550〜</span></div></div>
       <div class="card"><div class="card-title">泡盛 <span class="price">¥600〜</span></div></div>
+      <div class="card"><div class="card-title">八重泉 <span class="price">¥600</span></div></div>
       <div class="card"><div class="card-title">ソフトドリンク各種 <span class="price">¥400</span></div></div>
     </section>
 
@@ -228,12 +369,12 @@
     <section>
       <div class="section-title">予約・お問い合わせ</div>
 
-      <a class="btn btn-line" href="https://line.me/R/ti/p/@213funlp" target="_blank" rel="noopener">
+      <a class="btn btn-line" href="https://line.me/R/ti/p/@213funlp" target="_blank">
         LINEで予約・問い合わせ
       </a>
 
-      <a class="btn btn-instagram" href="https://www.instagram.com/ashibinaa.ishigaki?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">
-  　　　　Instagram を見る
+      <a class="btn btn-instagram" href="https://www.instagram.com/ashibinaa.ishigaki" target="_blank">
+        Instagram を見る
       </a>
 
       <a class="btn btn-tiktok" href="https://www.tiktok.com/" target="_blank">
@@ -245,8 +386,8 @@
 
   <footer>© 居酒屋 あしびなぁ</footer>
 
-  <!-- ======== タブ切り替え ======== -->
   <script>
+    // タブ切り替え
     const tabs = document.querySelectorAll('.tab');
     const contents = {
       today: document.getElementById('tab-today'),
@@ -262,6 +403,14 @@
         Object.values(contents).forEach(c => c.classList.remove('active'));
         contents[tab.dataset.tab].classList.add('active');
       });
+    });
+
+    // ハンバーガーメニュー動作
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+
+    menuBtn.addEventListener('click', () => {
+      sideMenu.classList.toggle('open');
     });
   </script>
 
