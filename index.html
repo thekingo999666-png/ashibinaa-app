@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>居酒屋 あしびなぁ</title>
+  <title>居酒屋 あしびなぁ〜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
@@ -29,6 +29,7 @@
 
     /* 言語切り替え */
     .lang-jp .en { display: none; }
+    .lang-en .en { display: inline; }
     .lang-en .jp { display: none; }
 
     /* ======== ヘッダー ======== */
@@ -219,6 +220,10 @@
       <span class="jp">🍻 ドリンク</span>
       <span class="en">🍻 Drinks</span>
     </a>
+    <a href="order.html">
+      <span class="jp">📝 店内注文</span>
+      <span class="en">📝 In-store Order</span>
+    </a>
     <a href="https://line.me/R/ti/p/@213funlp" target="_blank">
       <span class="jp">💬 LINEで予約</span>
       <span class="en">💬 Reserve via LINE</span>
@@ -238,7 +243,7 @@
   <!-- ======== ヘッダー ======== -->
   <header>
     <div class="logo">
-      <span class="jp">居酒屋 あしびなぁ</span>
+      <span class="jp">居酒屋 あしびなぁ〜</span>
       <span class="en">Izakaya Ashibinaa</span>
     </div>
     <div class="subtitle">
@@ -264,7 +269,7 @@
 <span class="jp">
 🕓 営業時間：16:00〜2:00頃
 📅 定休日：不定休
-📍 場所：沖縄県石垣市28-1 ニュー18番街101
+📍 場所：沖縄県石垣市石垣28-1 ニュー18番街101
 </span>
 <span class="en">
 🕓 Open: 16:00–around 2:00  
@@ -321,11 +326,47 @@
       </div>
     </section>
 
-    <!-- ======== フードメニュー（前と同じ：ローマ字） ======== -->
+    <!-- ======== フードメニュー ======== -->
     <section id="tab-food" class="tab-content">
       <div class="section-title">
         <span class="jp">フードメニュー</span>
         <span class="en">Food Menu</span>
+      </div>
+
+      <!-- オススメ -->
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">オススメ</span>
+          <span class="en">Recommended</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">石垣牛ハンバーグ（自家製タレ）</span>
+          <span class="en">Ishigaki Beef Hamburg Steak</span>
+          <span class="price">¥1,600</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">島らっきょ餃子</span>
+          <span class="en">Shima Rakkyou Gyoza</span>
+          <span class="price">¥600</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">もずくキムチ</span>
+          <span class="en">Mozuku Kimchi</span>
+          <span class="price">¥600</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">がじゅカレー</span>
+          <span class="en">Gaju Curry</span>
+          <span class="price">¥900</span>
+        </div>
       </div>
 
       <!-- ﾁｮﾒﾁｮﾒシリーズ -->
@@ -342,7 +383,6 @@
       <div class="card"><div class="card-title"><span class="jp">ピーマンチョメ</span><span class="en">Piman Chome</span><span class="price">¥600</span></div></div>
       <div class="card"><div class="card-title"><span class="jp">サバ缶チョメ</span><span class="en">Saba-kan Chome</span><span class="price">¥600</span></div></div>
 
-      <!-- 以下フード部は前回と同じ（ローマ字）なので省略せずそのまま貼り直してOK -->
       <!-- さっぱりなやつたち -->
       <div class="card">
         <div class="card-title">
@@ -406,6 +446,50 @@
       <div class="card"><div class="card-title"><span class="jp">エビ唐揚げ</span><span class="en">Ebi Karaage</span><span class="price">¥500</span></div></div>
       <div class="card"><div class="card-title"><span class="jp">チーズの棒</span><span class="en">Cheese no Bou</span><span class="price">¥500</span></div></div>
 
+      <!-- 揚げ物 -->
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">揚げ物</span>
+          <span class="en">Fried Snacks</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">カーリーフライ</span>
+          <span class="en">Curly Fries</span>
+          <span class="price">¥600</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">タコスボール</span>
+          <span class="en">Taco Balls</span>
+          <span class="price">¥600</span>
+        </div>
+      </div>
+
+      <!-- 天ぷら -->
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">天ぷら</span>
+          <span class="en">Tempura</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">お任せ３種</span>
+          <span class="en">Chef's Choice 3 kinds</span>
+          <span class="price">¥1,000</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">お任せ５種</span>
+          <span class="en">Chef's Choice 5 kinds</span>
+          <span class="price">¥1,500</span>
+        </div>
+      </div>
+
       <!-- 島そばで -->
       <div class="card">
         <div class="card-title">
@@ -463,9 +547,16 @@
       </div>
       <div class="card"><div class="card-title"><span class="jp">チーズリゾット</span><span class="en">Cheese Risotto</span><span class="price">¥900</span></div></div>
       <div class="card"><div class="card-title"><span class="jp">イカ墨リゾット</span><span class="en">Squid Ink Risotto</span><span class="price">¥900</span></div></div>
+      <div class="card">
+        <div class="card-title">
+          <span class="jp">チーズトマトリゾット</span>
+          <span class="en">Cheese Tomato Risotto</span>
+          <span class="price">¥1,000</span>
+        </div>
+      </div>
     </section>
 
-    <!-- ======== ドリンクメニュー（英語しっかり版） ======== -->
+    <!-- ======== ドリンクメニュー ======== -->
     <section id="tab-drink" class="tab-content">
       <div class="section-title">
         <span class="jp">ドリンクメニュー</span>
@@ -539,8 +630,8 @@
         </div>
       </div>
       <div class="card"><div class="card-title">
-        <span class="jp">レポサド</span>
-        <span class="en">Reposado1800 Tequila</span>
+        <span class="jp">レポサド1800</span>
+        <span class="en">Reposado 1800 Tequila</span>
         <span class="price">¥1,200</span>
       </div></div>
 
