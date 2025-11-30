@@ -27,6 +27,10 @@
       z-index: -1;
     }
 
+    /* 言語切り替え */
+    .lang-jp .en { display: none; }
+    .lang-en .jp { display: none; }
+
     /* ======== ヘッダー ======== */
     header {
       padding: 16px;
@@ -188,334 +192,493 @@
   </style>
 </head>
 
-<body id="top">
+<body id="top" class="lang-jp">
 
   <!-- === ハンバーガーメニュー === -->
   <div id="menuBtn" class="menu-btn">☰</div>
 
   <nav id="sideMenu" class="side-menu">
-    <div class="menu-header">メニュー</div>
-    <a href="#top">🏠 ホーム</a>
-    <a href="#tab-today">⭐ 本日のおすすめ</a>
-    <a href="#tab-food">🍽 フード</a>
-    <a href="#tab-drink">🍻 ドリンク</a>
-    <a href="https://line.me/R/ti/p/@213funlp" target="_blank">💬 LINEで予約</a>
-    <a href="https://www.instagram.com/ashibinaa.ishigaki" target="_blank">📸 Instagram</a>
+    <div class="menu-header">
+      <span class="jp">メニュー</span>
+      <span class="en">Menu</span>
+    </div>
+    <a href="#top">
+      <span class="jp">🏠 ホーム</span>
+      <span class="en">🏠 Home</span>
+    </a>
+    <a href="#tab-today">
+      <span class="jp">⭐ 本日のおすすめ</span>
+      <span class="en">⭐ Today's Specials</span>
+    </a>
+    <a href="#tab-food">
+      <span class="jp">🍽 フード</span>
+      <span class="en">🍽 Food</span>
+    </a>
+    <a href="#tab-drink">
+      <span class="jp">🍻 ドリンク</span>
+      <span class="en">🍻 Drinks</span>
+    </a>
+    <a href="https://line.me/R/ti/p/@213funlp" target="_blank">
+      <span class="jp">💬 LINEで予約</span>
+      <span class="en">💬 Reserve via LINE</span>
+    </a>
+    <a href="https://www.instagram.com/ashibinaa.ishigaki" target="_blank">
+      <span class="jp">📸 Instagram</span>
+      <span class="en">📸 Instagram</span>
+    </a>
+    <a href="#" id="langJp">
+      🌐 <span class="jp">日本語</span><span class="en">Japanese</span>
+    </a>
+    <a href="#" id="langEn">
+      🌐 <span class="jp">English</span><span class="en">English</span>
+    </a>
   </nav>
 
   <!-- ======== ヘッダー ======== -->
   <header>
-    <div class="logo">居酒屋 あしびなぁ</div>
-    <div class="subtitle">石垣島・ゆるっと飲める隠れ家</div>
-    <div class="status">本日 営業中（16:00〜2:00）</div>
+    <div class="logo">
+      <span class="jp">居酒屋 あしびなぁ</span>
+      <span class="en">Izakaya Ashibinaa</span>
+    </div>
+    <div class="subtitle">
+      <span class="jp">石垣島・ゆるっと飲める隠れ家</span>
+      <span class="en">Ishigaki-jima · Relaxed Hideout Bar</span>
+    </div>
+    <div class="status">
+      <span class="jp">本日 営業中（16:00〜2:00）</span>
+      <span class="en">Open Today (16:00–2:00)</span>
+    </div>
   </header>
 
   <main>
 
     <!-- ======== 店舗情報 ======== -->
     <section>
-      <div class="section-title">店舗情報</div>
+      <div class="section-title">
+        <span class="jp">店舗情報</span>
+        <span class="en">Shop Info</span>
+      </div>
       <div class="card">
         <div class="card-sub">
+<span class="jp">
 🕓 営業時間：16:00〜2:00頃
 📅 定休日：不定休
 📍 場所：沖縄県石垣市28-1 ニュー18番街101
+</span>
+<span class="en">
+🕓 Open: 16:00–around 2:00
+📅 Closed: Irregular
+📍 Address: 28-1, New 18 Bangaï 101, Ishigaki-shi, Okinawa
+</span>
         </div>
       </div>
     </section>
 
     <!-- ======== タブ ======== -->
     <div class="tabs">
-      <div class="tab active" data-tab="today">本日のおすすめ</div>
-      <div class="tab" data-tab="food">フード</div>
-      <div class="tab" data-tab="drink">ドリンク</div>
+      <div class="tab active" data-tab="today">
+        <span class="jp">本日のおすすめ</span>
+        <span class="en">Today's Specials</span>
+      </div>
+      <div class="tab" data-tab="food">
+        <span class="jp">フード</span>
+        <span class="en">Food</span>
+      </div>
+      <div class="tab" data-tab="drink">
+        <span class="jp">ドリンク</span>
+        <span class="en">Drinks</span>
+      </div>
     </div>
 
     <!-- ======== 今日のおすすめ ======== -->
     <section id="tab-today" class="tab-content active">
       <div class="card">
-        <div class="card-title">⭐ 今日のイチオシ</div>
+        <div class="card-title">
+          <span class="jp">⭐ 今日のイチオシ</span>
+          <span class="en">⭐ Today's Picks</span>
+        </div>
         <div class="card-sub">
+<span class="jp">
 ・石垣牛ハンバーグ（自家製タレ）
 ・ざるもずく
 ・イカ墨リゾット
 ・チーズリゾット（本日チーズ増量中）
 ・気まぐれ一品（内容はカウンターで！）
+</span>
+<span class="en">
+・Ishigaki-gyu Hamburg (Jikasei Tare)
+・Zaru Mozuku
+・Ika-sumi Risotto
+・Cheese Risotto (extra cheese today)
+・Kimagure Ippin (ask at the counter!)
+</span>
         </div>
       </div>
     </section>
 
     <!-- ======== フードメニュー（カテゴリ分け） ======== -->
     <section id="tab-food" class="tab-content">
-      <div class="section-title">フードメニュー</div>
+      <div class="section-title">
+        <span class="jp">フードメニュー</span>
+        <span class="en">Food Menu</span>
+      </div>
 
       <!-- ﾁｮﾒﾁｮﾒシリーズ -->
       <div class="card">
-        <div class="card-title">ﾁｮﾒﾁｮﾒシリーズ</div>
-        <div class="card-sub">サクッとつまめる大人のおつまみシリーズ。</div>
+        <div class="card-title">
+          <span class="jp">ﾁｮﾒﾁｮﾒシリーズ</span>
+          <span class="en">Chome-chome Series</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">きゅうりチョメ <span class="price">¥300</span></div></div>
-      <div class="card"><div class="card-title">チーズチョメ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">ナスチョメ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">ジャガイモチョメ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">ピーマンチョメ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">サバ缶チョメ <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">きゅうりチョメ</span><span class="en">Kyuri Chome</span><span class="price">¥300</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">チーズチョメ</span><span class="en">Cheese Chome</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ナスチョメ</span><span class="en">Nasu Chome</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ジャガイモチョメ</span><span class="en">Jagaimo Chome</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ピーマンチョメ</span><span class="en">Piman Chome</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">サバ缶チョメ</span><span class="en">Saba-kan Chome</span><span class="price">¥600</span></div></div>
 
       <!-- さっぱりなやつたち -->
       <div class="card">
-        <div class="card-title">さっぱりなやつたち</div>
+        <div class="card-title">
+          <span class="jp">さっぱりなやつたち</span>
+          <span class="en">Sappari na Yatsu-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">島らっきょ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">島らっきょクリームチーズベーコン <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">梅水晶 <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">ゴーヤスライス <span class="price">¥400</span></div></div>
-      <div class="card"><div class="card-title">塩辛 各 <span class="price">¥300</span></div></div>
-      <div class="card"><div class="card-title">塩辛3種盛り <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">海ぶどう <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">島らっきょ</span><span class="en">Shima Rakkyou</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">島らっきょクリームチーズベーコン</span><span class="en">Shima Rakkyou Cream Cheese Bacon</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">梅水晶</span><span class="en">Ume Suisho</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ゴーヤスライス</span><span class="en">Goya Slice</span><span class="price">¥400</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">塩辛 各</span><span class="en">Shiokara (Each)</span><span class="price">¥300</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">塩辛3種盛り</span><span class="en">Shiokara 3-shu Mori</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">海ぶどう</span><span class="en">Umi Budou</span><span class="price">¥600</span></div></div>
 
       <!-- チャンプルたち -->
       <div class="card">
-        <div class="card-title">チャンプルたち</div>
+        <div class="card-title">
+          <span class="jp">チャンプルたち</span>
+          <span class="en">Champuru-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">ゴーヤチャンプル <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">ソーメンチャンプル <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">豆腐チャンプル <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">フーチャンプル <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">らっきょチャンプル <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">カラシナチャンプル <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ゴーヤチャンプル</span><span class="en">Goya Champuru</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ソーメンチャンプル</span><span class="en">Somen Champuru</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">豆腐チャンプル</span><span class="en">Tofu Champuru</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">フーチャンプル</span><span class="en">Fu Champuru</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">らっきょチャンプル</span><span class="en">Rakkyou Champuru</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">カラシナチャンプル</span><span class="en">Karashina Champuru</span><span class="price">¥800</span></div></div>
 
       <!-- シリシたち -->
       <div class="card">
-        <div class="card-title">シリシたち</div>
+        <div class="card-title">
+          <span class="jp">シリシたち</span>
+          <span class="en">Shirishiri-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">人参シリシリ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">パパイヤシリシリ <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">人参シリシリ</span><span class="en">Ninjin Shirishiri</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">パパイヤシリシリ</span><span class="en">Papaya Shirishiri</span><span class="price">¥600</span></div></div>
 
       <!-- 玉子たち -->
       <div class="card">
-        <div class="card-title">玉子たち</div>
+        <div class="card-title">
+          <span class="jp">玉子たち</span>
+          <span class="en">Tamago-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">ポークと玉子 <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">だし巻き <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">目玉焼き <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ポークと玉子</span><span class="en">Pork to Tamago</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">だし巻き</span><span class="en">Dashimaki</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">目玉焼き</span><span class="en">Medamayaki</span><span class="price">¥600</span></div></div>
 
       <!-- 唐揚げたち -->
       <div class="card">
-        <div class="card-title">唐揚げたち</div>
+        <div class="card-title">
+          <span class="jp">唐揚げたち</span>
+          <span class="en">Karaage-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">鶏の唐揚げ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">タコ唐揚げ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">イカ唐揚げ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">エビ唐揚げ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">チーズの棒 <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">鶏の唐揚げ</span><span class="en">Tori Karaage</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">タコ唐揚げ</span><span class="en">Tako Karaage</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">イカ唐揚げ</span><span class="en">Ika Karaage</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">エビ唐揚げ</span><span class="en">Ebi Karaage</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">チーズの棒</span><span class="en">Cheese no Bou</span><span class="price">¥500</span></div></div>
 
       <!-- 島そばで -->
       <div class="card">
-        <div class="card-title">島そばで</div>
+        <div class="card-title">
+          <span class="jp">島そばで</span>
+          <span class="en">Shima Soba de</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">ピリ辛エビトマト <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">ぽなペティート <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">あぐ〜ペペロン <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">本日の気まぐれ <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ピリ辛エビトマト</span><span class="en">Pirikara Ebi Tomato</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ぽなペティート</span><span class="en">Pona Petite</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">あぐ〜ペペロン</span><span class="en">Agu Peperon</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">本日の気まぐれ</span><span class="en">Honjitsu no Kimagure</span><span class="price">¥800</span></div></div>
 
       <!-- 男爺のつまみ -->
       <div class="card">
-        <div class="card-title">男爺のつまみ</div>
+        <div class="card-title">
+          <span class="jp">男爺のつまみ</span>
+          <span class="en">Otokojii no Tsumami</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">たちつてと <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">ポチギ <span class="price">¥500</span></div></div>
-      <div class="card"><div class="card-title">らふて〜 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">ナーベラ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">島豆腐 <span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">たちつてと</span><span class="en">Tachitsuteto</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ポチギ</span><span class="en">Pochigi</span><span class="price">¥500</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">らふて〜</span><span class="en">Rafute</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ナーベラ</span><span class="en">Nabera</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">島豆腐</span><span class="en">Shima Dofu</span><span class="price">¥500</span></div></div>
 
       <!-- ご飯物 -->
       <div class="card">
-        <div class="card-title">ご飯物</div>
+        <div class="card-title">
+          <span class="jp">ご飯物</span>
+          <span class="en">Gohan-mono</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">がじゅ丼 <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">らふて〜丼 <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">焼き飯（らふて〜・らっきょ） <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">島焼きそば（塩・シークヮーサー） <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">ちゃんぽん <span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">がじゅ丼</span><span class="en">Gaju-don</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">らふて〜丼</span><span class="en">Rafute-don</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">焼き飯（らふて〜・らっきょ）</span><span class="en">Yakimeshi (Rafute · Rakkyou)</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">島焼きそば（塩・シークヮーサー）</span><span class="en">Shima Yakisoba (Shio · Shikuwasa)</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ちゃんぽん</span><span class="en">Chanpon</span><span class="price">¥800</span></div></div>
 
       <!-- そばたち -->
       <div class="card">
-        <div class="card-title">そばたち</div>
+        <div class="card-title">
+          <span class="jp">そばたち</span>
+          <span class="en">Soba-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">ソーキそば <span class="price">¥800</span></div></div>
-      <div class="card"><div class="card-title">テビチそば <span class="price">¥1,000</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ソーキそば</span><span class="en">Soki Soba</span><span class="price">¥800</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">テビチそば</span><span class="en">Tebichi Soba</span><span class="price">¥1,000</span></div></div>
 
       <!-- リゾットたち -->
       <div class="card">
-        <div class="card-title">リゾットたち</div>
+        <div class="card-title">
+          <span class="jp">リゾットたち</span>
+          <span class="en">Risotto-tachi</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">チーズリゾット <span class="price">¥900</span></div></div>
-      <div class="card"><div class="card-title">イカ墨リゾット <span class="price">¥900</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">チーズリゾット</span><span class="en">Cheese Risotto</span><span class="price">¥900</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">イカ墨リゾット</span><span class="en">Ika-sumi Risotto</span><span class="price">¥900</span></div></div>
     </section>
 
     <!-- ======== ドリンクメニュー（カテゴリ分け） ======== -->
     <section id="tab-drink" class="tab-content">
-      <div class="section-title">ドリンクメニュー</div>
+      <div class="section-title">
+        <span class="jp">ドリンクメニュー</span>
+        <span class="en">Drink Menu</span>
+      </div>
 
       <!-- ビール -->
       <div class="card">
-        <div class="card-title">ビール</div>
+        <div class="card-title">
+          <span class="jp">ビール</span>
+          <span class="en">Beer</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">生ビール <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">瓶ビール <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">クリアフリー（ノンアル） <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">ビアボール <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">生ビール</span><span class="en">Nama Beer</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">瓶ビール</span><span class="en">Bin Beer</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">クリアフリー（ノンアル）</span><span class="en">Clear Free (Non-al)</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ビアボール</span><span class="en">Beer Ball</span><span class="price">¥600</span></div></div>
 
       <!-- ウイスキー -->
       <div class="card">
-        <div class="card-title">ウイスキー</div>
+        <div class="card-title">
+          <span class="jp">ウイスキー</span>
+          <span class="en">Whisky</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">角ハイボール <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">碧（あお） <span class="price">¥850</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">角ハイボール</span><span class="en">Kaku Highball</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">碧（あお）</span><span class="en">Ao</span><span class="price">¥850</span></div></div>
 
       <!-- バーボン -->
       <div class="card">
-        <div class="card-title">バーボン</div>
+        <div class="card-title">
+          <span class="jp">バーボン</span>
+          <span class="en">Bourbon</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">マッケンナー <span class="price">¥880</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">マッケンナー</span><span class="en">Mckenna</span><span class="price">¥880</span></div></div>
 
       <!-- テキーラ -->
       <div class="card">
-        <div class="card-title">テキーラ</div>
+        <div class="card-title">
+          <span class="jp">テキーラ</span>
+          <span class="en">Tequila</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">レポサド <span class="price">¥1,800 / ¥1,200</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">レポサド</span><span class="en">Reposado</span><span class="price">¥1,800 / ¥1,200</span></div></div>
 
       <!-- ショット -->
       <div class="card">
-        <div class="card-title">ショット</div>
+        <div class="card-title">
+          <span class="jp">ショット</span>
+          <span class="en">Shots</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">どなん <span class="price">¥1,200</span></div></div>
-      <div class="card"><div class="card-title">ハブ酒 <span class="price">¥1,200</span></div></div>
-      <div class="card"><div class="card-title">ハブーラ <span class="price">¥1,400</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">どなん</span><span class="en">Donan</span><span class="price">¥1,200</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ハブ酒</span><span class="en">Habushu</span><span class="price">¥1,200</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ハブーラ</span><span class="en">Habura</span><span class="price">¥1,400</span></div></div>
 
       <!-- カクテル -->
       <div class="card">
-        <div class="card-title">カクテル</div>
+        <div class="card-title">
+          <span class="jp">カクテル</span>
+          <span class="en">Cocktails</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">カシスソーダ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">カシスオレンジ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">ピーチオレンジ <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">ピーチウーロン <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">カシスソーダ</span><span class="en">Cassis Soda</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">カシスオレンジ</span><span class="en">Cassis Orange</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ピーチオレンジ</span><span class="en">Peach Orange</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ピーチウーロン</span><span class="en">Peach Oolong</span><span class="price">¥600</span></div></div>
 
       <!-- 焼酎 -->
       <div class="card">
-        <div class="card-title">焼酎</div>
+        <div class="card-title">
+          <span class="jp">焼酎</span>
+          <span class="en">Shochu</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">黒霧島 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">二階堂 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">金宮 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">黒糖焼酎 <span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">黒霧島</span><span class="en">Kurokirishima</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">二階堂</span><span class="en">Nikaido</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">金宮</span><span class="en">Kinmiya</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">黒糖焼酎</span><span class="en">Kokuto Shochu</span><span class="price">¥550</span></div></div>
 
       <!-- 日本酒 -->
       <div class="card">
-        <div class="card-title">日本酒</div>
+        <div class="card-title">
+          <span class="jp">日本酒</span>
+          <span class="en">Sake</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">夜の帝王 <span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">夜の帝王</span><span class="en">Yoru no Teio</span><span class="price">¥600</span></div></div>
 
       <!-- 茶割り -->
       <div class="card">
-        <div class="card-title">茶割り</div>
+        <div class="card-title">
+          <span class="jp">茶割り</span>
+          <span class="en">Tea High</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">ウーロンハイ <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">緑茶ハイ <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">JJ <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">JR <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">MM <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">ヒゲ茶ハイ <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">無糖紅茶ハイ <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">さんぴん茶ハイ <span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ウーロンハイ</span><span class="en">Oolong High</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">緑茶ハイ</span><span class="en">Ryokucha High</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">JJ</span><span class="en">JJ</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">JR</span><span class="en">JR</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">MM</span><span class="en">MM</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ヒゲ茶ハイ</span><span class="en">Hige-cha High</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">無糖紅茶ハイ</span><span class="en">Muto Kocha High</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">さんぴん茶ハイ</span><span class="en">Sanpin-cha High</span><span class="price">¥550</span></div></div>
 
       <!-- 酎ハイ・サワー -->
       <div class="card">
-        <div class="card-title">酎ハイ・サワー</div>
+        <div class="card-title">
+          <span class="jp">酎ハイ・サワー</span>
+          <span class="en">Chuhai & Sours</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">しょっぱい梅サワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">すっきりトマトサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">ホワイトサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">巨峰サワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">プレーンサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">シークヮーサーサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">グレープフルーツサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">バイスサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">レモンサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">ガリサワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">クエン酸サワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">男梅サワー <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">ピリ辛トマトハイ <span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">しょっぱい梅サワー</span><span class="en">Shoppai Ume Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">すっきりトマトサワー</span><span class="en">Sukkiri Tomato Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ホワイトサワー</span><span class="en">White Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">巨峰サワー</span><span class="en">Kyoho Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">プレーンサワー</span><span class="en">Plain Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">シークヮーサーサワー</span><span class="en">Shikuwasa Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">グレープフルーツサワー</span><span class="en">Grapefruit Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">バイスサワー</span><span class="en">Weiss Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">レモンサワー</span><span class="en">Lemon Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ガリサワー</span><span class="en">Gari Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">クエン酸サワー</span><span class="en">Citric Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">男梅サワー</span><span class="en">Otoko Ume Sour</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">ピリ辛トマトハイ</span><span class="en">Pirikara Tomato High</span><span class="price">¥550</span></div></div>
 
       <!-- 沖縄の泡盛 -->
       <div class="card">
-        <div class="card-title">沖縄の泡盛</div>
+        <div class="card-title">
+          <span class="jp">沖縄の泡盛</span>
+          <span class="en">Okinawa Awamori</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">残波 白 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">残波 黒 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">菊之露 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">久米仙 <span class="price">¥550</span></div></div>
-      <div class="card"><div class="card-title">久米仙 古酒35° <span class="price">¥750</span></div></div>
-      <div class="card"><div class="card-title">春雨 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">古里 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">菊之露VIP <span class="price">¥750</span></div></div>
-      <div class="card"><div class="card-title">琉球王朝 <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">残波 白</span><span class="en">Zanpa Shiro</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">残波 黒</span><span class="en">Zanpa Kuro</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">菊之露</span><span class="en">Kikunotsuyu</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">久米仙</span><span class="en">Kumesen</span><span class="price">¥550</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">久米仙 古酒35°</span><span class="en">Kumesen Koshu 35°</span><span class="price">¥750</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">春雨</span><span class="en">Harusame</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">古里</span><span class="en">Furusato</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">菊之露VIP</span><span class="en">Kikunotsuyu VIP</span><span class="price">¥750</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">琉球王朝</span><span class="en">Ryukyu Ocho</span><span class="price">¥700</span></div></div>
 
       <!-- 泡盛リキュール -->
       <div class="card">
-        <div class="card-title">泡盛リキュール</div>
+        <div class="card-title">
+          <span class="jp">泡盛リキュール</span>
+          <span class="en">Awamori Liqueur</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">請福 ゆず <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">請福 生姜レモン <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">請福 シークヮーサー <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">格 <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">請福 ゆず</span><span class="en">Seifuku Yuzu</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">請福 生姜レモン</span><span class="en">Seifuku Shoga Lemon</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">請福 シークヮーサー</span><span class="en">Seifuku Shikuwasa</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">格</span><span class="en">Kaku</span><span class="price">¥700</span></div></div>
 
       <!-- 八重山の泡盛 -->
       <div class="card">
-        <div class="card-title">八重山の泡盛</div>
+        <div class="card-title">
+          <span class="jp">八重山の泡盛</span>
+          <span class="en">Yaeyama Awamori</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">請福 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">八重泉 <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">黒真珠 <span class="price">¥880</span></div></div>
-      <div class="card"><div class="card-title">玉の露 <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">おもと <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">請福</span><span class="en">Seifuku</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">八重泉</span><span class="en">Yaesen</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">黒真珠</span><span class="en">Kuro Shinju</span><span class="price">¥880</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">玉の露</span><span class="en">Tamanotsuyu</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">おもと</span><span class="en">Omoto</span><span class="price">¥700</span></div></div>
 
       <!-- 石垣島のお酒 -->
       <div class="card">
-        <div class="card-title">石垣島のお酒</div>
+        <div class="card-title">
+          <span class="jp">石垣島のお酒</span>
+          <span class="en">Ishigaki-jima no Osake</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">IMUGE. 25° <span class="price">¥600</span></div></div>
-      <div class="card"><div class="card-title">IMUGE. 37° <span class="price">¥700</span></div></div>
-      <div class="card"><div class="card-title">島ラム <span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">IMUGE. 25°</span><span class="en">IMUGE. 25°</span><span class="price">¥600</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">IMUGE. 37°</span><span class="en">IMUGE. 37°</span><span class="price">¥700</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">島ラム</span><span class="en">Shima Rum</span><span class="price">¥700</span></div></div>
 
       <!-- ソフトドリンク -->
       <div class="card">
-        <div class="card-title">ソフトドリンク</div>
+        <div class="card-title">
+          <span class="jp">ソフトドリンク</span>
+          <span class="en">Soft Drinks</span>
+        </div>
       </div>
-      <div class="card"><div class="card-title">各種 <span class="price">¥400</span></div></div>
+      <div class="card"><div class="card-title"><span class="jp">各種</span><span class="en">Assorted</span><span class="price">¥400</span></div></div>
     </section>
 
     <!-- ======== 予約・問い合わせ ======== -->
     <section>
-      <div class="section-title">予約・お問い合わせ</div>
+      <div class="section-title">
+        <span class="jp">予約・お問い合わせ</span>
+        <span class="en">Reservation & Contact</span>
+      </div>
 
       <a class="btn btn-line" href="https://line.me/R/ti/p/@213funlp" target="_blank">
-        LINEで予約・問い合わせ
+        <span class="jp">LINEで予約・問い合わせ</span>
+        <span class="en">Reserve / Ask via LINE</span>
       </a>
 
       <a class="btn btn-instagram" href="https://www.instagram.com/ashibinaa.ishigaki" target="_blank">
-        Instagram を見る
+        <span class="jp">Instagram を見る</span>
+        <span class="en">View Instagram</span>
       </a>
 
       <a class="btn btn-tiktok" href="https://www.tiktok.com/" target="_blank">
-        TikTok を見る
+        <span class="jp">TikTok を見る</span>
+        <span class="en">View TikTok</span>
       </a>
     </section>
 
   </main>
 
-  <footer>© 居酒屋 あしびなぁ</footer>
+  <footer>
+    <span class="jp">© 居酒屋 あしびなぁ</span>
+    <span class="en">© Izakaya Ashibinaa</span>
+  </footer>
 
   <script>
     // タブ切り替え
@@ -542,6 +705,24 @@
 
     menuBtn.addEventListener('click', () => {
       sideMenu.classList.toggle('open');
+    });
+
+    // 言語切り替え
+    const langJp = document.getElementById('langJp');
+    const langEn = document.getElementById('langEn');
+
+    langJp.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.classList.remove('lang-en');
+      document.body.classList.add('lang-jp');
+      sideMenu.classList.remove('open');
+    });
+
+    langEn.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.classList.remove('lang-jp');
+      document.body.classList.add('lang-en');
+      sideMenu.classList.remove('open');
     });
   </script>
 
