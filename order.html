@@ -573,13 +573,13 @@ document.getElementById("sendLine").addEventListener("click", () => {
   window.location.href = url;
 });
 </script>
-<script>
-<!-- ▼ 注文ボタン -->
+<!-- ▼ 注文ボタン（script の外に置くこと！） -->
 <button id="sendLine" class="order-button">
   <span class="jp">注文する</span>
   <span class="en">Send Order</span>
 </button>
 
+<script>
 /* ==========================================================
     席選択モーダル
 ========================================================== */
@@ -601,27 +601,27 @@ document.querySelectorAll(".qty-box").forEach(box => {
     <input type="number" class="qty" value="0" min="0">
     <button class="qty-btn plus">＋</button>
   `;
-
-  const input = box.querySelector(".qty");
-  box.querySelector(".plus").addEventListener("click", () => input.value++);
-  box.querySelector(".minus").addEventListener("click", () => {
-    if (input.value > 0) input.value--;
-  });
 });
 
 /* ==========================================================
-    カテゴリ開閉
+    数量プラス・マイナス
 ========================================================== */
-document.querySelectorAll(".category-title").forEach(title => {
-  title.addEventListener("click", () => {
-    title.classList.toggle("open");
-    const content = title.nextElementSibling;
-    if (content) content.classList.toggle("open");
+document.querySelectorAll(".qty-box").forEach(box => {
+  const minus = box.querySelector(".minus");
+  const plus = box.querySelector(".plus");
+  const qty = box.querySelector(".qty");
+
+  minus.addEventListener("click", () => {
+    qty.value = Math.max(0, Number(qty.value) - 1);
+  });
+
+  plus.addEventListener("click", () => {
+    qty.value = Number(qty.value) + 1;
   });
 });
 
 /* ==========================================================
-    LINE 送信用（フード＋ドリンク＋メモ）
+    LINE 送信（フード＋ドリンク＋メモ）
 ========================================================== */
 document.getElementById("sendLine").addEventListener("click", () => {
 
@@ -638,42 +638,29 @@ document.getElementById("sendLine").addEventListener("click", () => {
   let drinkList = "";
 
   document.querySelectorAll(".item").forEach(item => {
-    const nameBox = item.querySelector(".item-name .jp");
-    const qty = item.querySelector(".qty")?.value ?? 0;
+    const jpName = item.querySelector(".item-name .jp")?.textContent.trim() ?? "";
+    const qty = Number(item.querySelector(".qty")?.value ?? 0);
 
     if (qty > 0) {
-      const name = nameBox ? nameBox.textContent.trim() : "";
-      const parent = item.closest(".category")?.dataset.group ?? "";
-
-      if (parent === "food") {
-        foodList += `${name} × ${qty}\n`;
-      } else if (parent === "drink") {
-        drinkList += `${name} × ${qty}\n`;
-      }
+      const group = item.closest(".category")?.dataset.group ?? "";
+      if (group === "food") foodList += `${jpName} × ${qty}\n`;
+      if (group === "drink") drinkList += `${jpName} × ${qty}\n`;
     }
   });
 
-  // フード
-  orderText += "--- フード ---\n";
-  orderText += foodList ? foodList : "なし\n";
-  orderText += "\n";
+  orderText += "--- フード ---\n" + (foodList || "なし") + "\n\n";
+  orderText += "--- ドリンク ---\n" + (drinkList || "なし") + "\n\n";
 
-  // ドリンク
-  orderText += "--- ドリンク ---\n";
-  orderText += drinkList ? drinkList : "なし\n";
-  orderText += "\n";
+  // メモ欄
+  const memo = document.getElementById("memoBox")?.value.trim();
+  orderText += "【メモ】\n" + (memo || "なし") + "\n";
 
-  // メモ
-  const memo = document.getElementById("memoBox").value.trim();
-  orderText += "--- メモ ---\n";
-  orderText += memo ? memo : "なし";
-
-  // エンコード
   const encoded = encodeURIComponent(orderText);
 
-  // ★ 公式アカウントへ送信
+  /* ---- LINEへ送信 ---- */
   const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
-
   window.location.href = url;
 });
 </script>
+
+<script>
