@@ -399,7 +399,7 @@ document.getElementById("sendLine").addEventListener("click", () => {
 const encoded = encodeURIComponent(orderText);
 
 // ★ここが最重要（LINE公式アカウントへ確定送信）
-const url = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
+const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
 
 window.location.href = url;
 
