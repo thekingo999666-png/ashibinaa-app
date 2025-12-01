@@ -357,7 +357,7 @@ function selectSeat(seatName) {
 }
 
 /* ==========================================================
-    LINE 送信（100％動作版）
+    LINE 送信（完全版：名前100%取得）
 ========================================================== */
 document.getElementById("sendLine").addEventListener("click", () => {
 
@@ -371,37 +371,40 @@ document.getElementById("sendLine").addEventListener("click", () => {
 
   document.querySelectorAll(".item").forEach(item => {
 
-  const nameBox = item.querySelector(".item-name");
-  let jpName = "";
+    // --- 名前取得（100％取れる版） ---
+    let jpName = "";
+    const jpSpan = item.querySelector(".item-name .jp");
+    const enSpan = item.querySelector(".item-name .en");
 
-  if (nameBox) {
-    const jpSpan = nameBox.querySelector(".jp");
-    if (jpSpan) {
+    if (jpSpan && jpSpan.textContent.trim() !== "") {
       jpName = jpSpan.textContent.trim();
+    } else if (enSpan && enSpan.textContent.trim() !== "") {
+      jpName = enSpan.textContent.trim();
     } else {
-      jpName = nameBox.textContent.trim().split("\n")[0];
+      jpName = item.querySelector(".item-name").textContent.trim();
     }
-  }
 
-  const qty = item.querySelector(".qty").value;
+    // 数量
+    const qty = item.querySelector(".qty").value;
 
-  if (qty > 0 && jpName !== "") {
-    orderText += `${jpName} × ${qty}\n`;
-  }
-});
+    if (qty > 0 && jpName !== "") {
+      orderText += `${jpName} × ${qty}\n`;
+    }
+  });
 
-
+  // 商品がゼロなら警告
   if (orderText.trim() === `【注文】\n席：${seat}`) {
-  alert("※商品が選択されていません");
-  return;
-}
+    alert("※商品が選択されていません");
+    return;
+  }
 
-const encoded = encodeURIComponent(orderText);
+  const encoded = encodeURIComponent(orderText);
 
-// ★ここが最重要（LINE公式アカウントへ確定送信）
-const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
+  // 公式アカウント固定送信
+  const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
 
-window.location.href = url;
+  window.location.href = url;
+});
 
 });
 </script>
