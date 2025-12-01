@@ -155,17 +155,18 @@
 </div>
 
 <!-- ▼ 席選択モーダル ▼ -->
-<div id="seatModal"><select id="seatSelect" style="display:none;">
-  <option value="カウンター1">カウンター1</option>
-  <option value="カウンター2">カウンター2</option>
-  <option value="カウンター3">カウンター3</option>
-  <option value="テーブル1">テーブル1</option>
-  <option value="テーブル2">テーブル2</option>
-  <option value="スタンド1">スタンド1</option>
-  <option value="スタンド2">スタンド2</option>
-  <option value="座敷">座敷</option>
-</select>
-  
+<div id="seatModal">
+  <select id="seatSelect" style="display:none;">
+    <option value="カウンター1">カウンター1</option>
+    <option value="カウンター2">カウンター2</option>
+    <option value="カウンター3">カウンター3</option>
+    <option value="テーブル1">テーブル1</option>
+    <option value="テーブル2">テーブル2</option>
+    <option value="スタンド1">スタンド1</option>
+    <option value="スタンド2">スタンド2</option>
+    <option value="座敷">座敷</option>
+  </select>
+
   <div id="seatBox">
     <h2>席を選択してください</h2>
     <button class="seat-btn" onclick="selectSeat('カウンター1')">カウンター1</button>
@@ -179,7 +180,7 @@
   </div>
 </div>
 
-<!-- ▼ メニューエリア（ここに全カテゴリが入る） ▼ -->
+<!-- ▼ メニューエリア開始 ▼ -->
 <div id="menuArea">
   <!-- ① オススメ -->
   <div class="category">
@@ -409,10 +410,10 @@
     </div>
   </div>
 
-  <!-- ⑤ シリシ -->
+  <!-- ⑤ シリシリ -->
   <div class="category">
     <div class="category-title">
-      <span class="jp">シリシ</span>
+      <span class="jp">シリシリ</span>
       <span class="en">Shirishiri</span>
     </div>
     <div class="category-content">
@@ -435,7 +436,6 @@
 
     </div>
   </div>
-
   <!-- ⑥ 玉子 -->
   <div class="category">
     <div class="category-title">
@@ -738,96 +738,7 @@
 
     </div>
   </div>
-
-</div> <!-- menuArea end -->
-<script>
-/* =============================
-    言語切り替え
-============================= */
-document.getElementById("langJp").addEventListener("click", () => {
-  document.body.classList.remove("en");
-  document.body.classList.add("jp");
-});
-
-document.getElementById("langEn").addEventListener("click", () => {
-  document.body.classList.remove("jp");
-  document.body.classList.add("en");
-});
-
-
-/* =============================
-    アコーディオン
-============================= */
-document.querySelectorAll(".category-title").forEach(title => {
-  title.addEventListener("click", () => {
-    const content = title.nextElementSibling;
-    content.style.display = content.style.display === "block" ? "none" : "block";
-  });
-});
-
-
-/* =============================
-    数量ボックス作成
-============================= */
-document.querySelectorAll(".qty-box").forEach(box => {
-  let select = document.createElement("select");
-  select.classList.add("qty");
-  for (let i = 0; i <= 5; i++) {
-    let op = document.createElement("option");
-    op.value = i;
-    op.textContent = i;
-    select.appendChild(op);
-  }
-  box.appendChild(select);
-});
-
-
-/* =============================
-    LINE送信用
-============================= */
-document.getElementById("sendLine").addEventListener("click", () => {
-  const seat = document.getElementById("seatSelect").value;
-  if (!seat) {
-    alert("※席を選択してください");
-    return;
-  }
-
-  let orderText = `【注文】\n席：${seat}\n\n`;
-
-  const items = document.querySelectorAll(".item");
-  items.forEach(item => {
-    const nameJP = item.querySelector(".jp")?.textContent || "";
-    const qty = item.querySelector(".qty").value;
-    if (qty > 0) {
-      orderText += `${nameJP} × ${qty}\n`;
-    }
-  });
-
-  if (orderText === `【注文】\n席：${seat}\n\n`) {
-    alert("※商品が選択されていません");
-    return;
-  }
-
-  const encoded = encodeURIComponent(orderText);
-
-  window.location.href =
-    `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
-});
-</script>
-
-
-  <script>
-function selectSeat(seatName) {
-  // 座席名を反映
-  document.getElementById("seatSelect").value = seatName;
-
-  // モーダルを閉じる
-  document.getElementById("seatModal").style.display = "none";
-
-  // 選択された座席を画面に表示する部分があるならここで更新
-  const seatLabel = document.getElementById("selectedSeatLabel");
-  if (seatLabel) seatLabel.textContent = seatName;
-}
-</script>
-</body>
-</html>
+<button class="order-button" onclick="sendOrder()">
+  <span class="jp">注文する</span>
+  <span class="en">Send Order</span>
+</button>
