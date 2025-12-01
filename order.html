@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,6 +39,7 @@
     font-size: 0.9rem;
     cursor: pointer;
     color: #fff;
+    margin: 4px;
   }
 
   /* カテゴリ */
@@ -74,22 +76,7 @@
     align-items: center;
     gap: 8px;
   }
-  .qty-btn {
-    width: 28px;
-    height: 28px;
-    font-size: 1.1rem;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background: #fff;
-    cursor: pointer;
-  }
-  .qty-number {
-    width: 24px;
-    text-align: center;
-    font-size: 1rem;
-  }
 
-  /* ボタン */
   .order-button {
     display: block;
     width: 90%;
@@ -100,7 +87,6 @@
     color: #fff;
     border-radius: 8px;
     font-size: 1.2rem;
-    border: none;
     cursor: pointer;
   }
 
@@ -134,8 +120,8 @@
     color: #fff;
     border: none;
     border-radius: 6px;
-    font-size: 1rem;
     cursor: pointer;
+    font-size: 1rem;
   }
 </style>
 </head>
@@ -147,39 +133,45 @@
   <span class="en">In-store Order</span>
 </header>
 
+<!-- 言語切替 -->
 <div class="lang-switch">
   <button id="langJp" class="lang-btn">日本語</button>
   <button id="langEn" class="lang-btn">English</button>
 </div>
 
+<!-- 非表示 seatSelect（正位置） -->
+<select id="seatSelect" style="display:none;">
+  <option value="カウンター1">カウンター1</option>
+  <option value="カウンター2">カウンター2</option>
+  <option value="カウンター3">カウンター3</option>
+  <option value="テーブル1">テーブル1</option>
+  <option value="テーブル2">テーブル2</option>
+  <option value="スタンド1">スタンド1</option>
+  <option value="スタンド2">スタンド2</option>
+  <option value="座敷">座敷</option>
+</select>
 
-<!-- ▼ 席選択モーダル ▼ -->
+<!-- 席選択モーダル -->
 <div id="seatModal">
-  <select id="seatSelect" style="display:none;">
-    <option value="カウンター1">カウンター1</option>
-    <option value="カウンター2">カウンター2</option>
-    <option value="カウンター3">カウンター3</option>
-    <option value="テーブル1">テーブル1</option>
-    <option value="テーブル2">テーブル2</option>
-    <option value="スタンド1">スタンド1</option>
-    <option value="スタンド2">スタンド2</option>
-    <option value="座敷">座敷</option>
-  </select>
-
   <div id="seatBox">
     <h2>席を選択してください</h2>
+
     <button class="seat-btn" onclick="selectSeat('カウンター1')">カウンター1</button>
     <button class="seat-btn" onclick="selectSeat('カウンター2')">カウンター2</button>
     <button class="seat-btn" onclick="selectSeat('カウンター3')">カウンター3</button>
+
     <button class="seat-btn" onclick="selectSeat('テーブル1')">テーブル1</button>
     <button class="seat-btn" onclick="selectSeat('テーブル2')">テーブル2</button>
+
     <button class="seat-btn" onclick="selectSeat('スタンド1')">スタンド1</button>
     <button class="seat-btn" onclick="selectSeat('スタンド2')">スタンド2</button>
+
     <button class="seat-btn" onclick="selectSeat('座敷')">座敷</button>
+
   </div>
 </div>
 
-<!-- ▼ メニューエリア開始 ▼ -->
+<!-- ▼ メニューエリアここから ▼ -->
 <div id="menuArea">
   <!-- ① オススメ -->
   <div class="category">
@@ -189,37 +181,25 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">石垣牛ハンバーグ</span>
-          <span class="en">Ishigaki Beef Hamburg Steak</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">石垣牛ハンバーグ</span>
+        <span class="en">Ishigaki Beef Hamburg Steak</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">島らっきょ餃子</span>
-          <span class="en">Island Shallot Dumplings</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">島らっきょ餃子</span>
+        <span class="en">Island Shallot Dumplings</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">もずくキムチ</span>
-          <span class="en">Mozuku Seaweed Kimchi</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">もずくキムチ</span>
+        <span class="en">Mozuku Seaweed Kimchi</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">がじゅカレー</span>
-          <span class="en">Gaju Curry</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">がじゅカレー</span>
+        <span class="en">Gaju Curry</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -232,53 +212,35 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">きゅうりチョメ</span>
-          <span class="en">Cucumber “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">きゅうりチョメ</span>
+        <span class="en">Cucumber “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">チーズチョメ</span>
-          <span class="en">Cheese “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">チーズチョメ</span>
+        <span class="en">Cheese “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ナスチョメ</span>
-          <span class="en">Eggplant “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ナスチョメ</span>
+        <span class="en">Eggplant “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ジャガイモチョメ</span>
-          <span class="en">Potato “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ジャガイモチョメ</span>
+        <span class="en">Potato “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ピーマンチョメ</span>
-          <span class="en">Green Pepper “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ピーマンチョメ</span>
+        <span class="en">Green Pepper “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">サバ缶チョメ</span>
-          <span class="en">Canned Mackerel “Chome”</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">サバ缶チョメ</span>
+        <span class="en">Canned Mackerel “Chome”</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -287,65 +249,44 @@
   <div class="category">
     <div class="category-title">
       <span class="jp">さっぱりなやつ</span>
-      <span class="en">Refreshing Dishes</span>
+      <span class="en">Refreshing</span>
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">島らっきょ</span>
-          <span class="en">Island Shallot</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">島らっきょ</span>
+        <span class="en">Island Shallot</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">島らっきょクリームチーズベーコン</span>
-          <span class="en">Shallot with Cream Cheese & Bacon</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">島らっきょクリームチーズベーコン</span>
+        <span class="en">Shallot with Cream Cheese & Bacon</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">梅水晶</span>
-          <span class="en">Plum Jellyfish</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">梅水晶</span>
+        <span class="en">Plum Jellyfish</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ゴーヤスライス</span>
-          <span class="en">Goya Bitter Melon Slices</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ゴーヤスライス</span>
+        <span class="en">Goya Slices</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">塩辛 各</span>
-          <span class="en">Salted Seafood</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">塩辛 各</span>
+        <span class="en">Salted Seafood (single)</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">塩辛3種盛り</span>
-          <span class="en">Salted Seafood Trio</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">塩辛3種盛り</span>
+        <span class="en">Salted Seafood Trio</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">海ぶどう</span>
-          <span class="en">Sea Grapes</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">海ぶどう</span>
+        <span class="en">Sea Grapes</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -354,57 +295,39 @@
   <div class="category">
     <div class="category-title">
       <span class="jp">チャンプル</span>
-      <span class="en">Champuru Stir-fry</span>
+      <span class="en">Champuru</span>
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ゴーヤチャンプル</span>
-          <span class="en">Goya Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ゴーヤチャンプル</span>
+        <span class="en">Goya Champuru</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ソーメンチャンプル</span>
-          <span class="en">Somen Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ソーメンチャンプル</span>
+        <span class="en">Somen Champuru</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">豆腐チャンプル</span>
-          <span class="en">Tofu Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">豆腐チャンプル</span>
+        <span class="en">Tofu Champuru</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">フーチャンプル</span>
-          <span class="en">Fu (Gluten) Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">フーチャンプル</span>
+        <span class="en">Fu Champuru</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">らっきょチャンプル</span>
-          <span class="en">Shallot Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">らっきょチャンプル</span>
+        <span class="en">Shallot Champuru</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">カラシナチャンプル</span>
-          <span class="en">Mustard Greens Champuru</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">カラシナチャンプル</span>
+        <span class="en">Mustard Greens Champuru</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -417,21 +340,15 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">人参シリシリ</span>
-          <span class="en">Carrot Shirishiri</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">人参シリシリ</span>
+        <span class="en">Carrot Shirishiri</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">パパイヤシリシリ</span>
-          <span class="en">Papaya Shirishiri</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">パパイヤシリシリ</span>
+        <span class="en">Papaya Shirishiri</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -443,29 +360,20 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ポークと玉子</span>
-          <span class="en">Pork & Egg</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ポークと玉子</span>
+        <span class="en">Pork & Egg</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">だし巻き</span>
-          <span class="en">Japanese Omelette</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">だし巻き</span>
+        <span class="en">Japanese Omelette</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">目玉焼き</span>
-          <span class="en">Sunny-side Egg</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">目玉焼き</span>
+        <span class="en">Sunny-side Egg</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -478,77 +386,50 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">鶏の唐揚げ</span>
-          <span class="en">Fried Chicken</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">鶏の唐揚げ</span>
+        <span class="en">Fried Chicken</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">タコ唐揚げ</span>
-          <span class="en">Fried Octopus</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">タコ唐揚げ</span>
+        <span class="en">Fried Octopus</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">イカ唐揚げ</span>
-          <span class="en">Fried Squid</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">イカ唐揚げ</span>
+        <span class="en">Fried Squid</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">エビ唐揚げ</span>
-          <span class="en">Fried Shrimp</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">エビ唐揚げ</span>
+        <span class="en">Fried Shrimp</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">チーズの棒</span>
-          <span class="en">Cheese Sticks</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">チーズの棒</span>
+        <span class="en">Cheese Sticks</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">カーリーフライ</span>
-          <span class="en">Curly Fries</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">カーリーフライ</span>
+        <span class="en">Curly Fries</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">タコスボール</span>
-          <span class="en">Tacos Balls</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">タコスボール</span>
+        <span class="en">Tacos Balls</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">天ぷら お任せ3種</span>
-          <span class="en">Tempura (3 Assortments)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">天ぷら お任せ3種</span>
+        <span class="en">Tempura (3 Assortments)</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">天ぷら お任せ5種</span>
-          <span class="en">Tempura (5 Assortments)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">天ぷら お任せ5種</span>
+        <span class="en">Tempura (5 Assortments)</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -561,61 +442,40 @@
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ピリ辛エビトマト</span>
-          <span class="en">Spicy Shrimp Tomato Soba</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ピリ辛エビトマト</span>
+        <span class="en">Spicy Shrimp Tomato Soba</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ぽなペティート</span>
-          <span class="en">Pona Petite Soba</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ぽなペティート</span>
+        <span class="en">Pona Petite Soba</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">あぐ〜ペペロン</span>
-          <span class="en">Agu Pork Peperoncino Soba</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">あぐ〜ペペロン</span>
+        <span class="en">Agu Pork Peperoncino Sob</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">本日の気まぐれ</span>
-          <span class="en">Today’s Special</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">本日の気まぐれ</span>
+        <span class="en">Today's Special</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ソーキそば</span>
-          <span class="en">Pork Rib Soba (Soki)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ソーキそば</span>
+        <span class="en">Soki Soba</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">テビチそば</span>
-          <span class="en">Pork Trotter Soba (Tebichi)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">テビチそば</span>
+        <span class="en">Tebichi Soba</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">島焼きそば（塩・シークヮーサー）</span>
-          <span class="en">Island Yakisoba (Salt / Shikuwasa)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">島焼きそば（塩・シークヮーサー）</span>
+        <span class="en">Island Yakisoba (Salt / Shikuwasa)</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -624,49 +484,34 @@
   <div class="category">
     <div class="category-title">
       <span class="jp">男爺のつまみ</span>
-      <span class="en">Old Man’s Snacks</span>
+      <span class="en">Old Man's Snacks</span>
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">たちつてと</span>
-          <span class="en">Tachi-Tsu-Te-To Mix</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">たちつてと</span>
+        <span class="en">Tachi-Tsu-Te-To Mix</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ポチギ</span>
-          <span class="en">Spicy Sausage (Pochigi)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ポチギ</span>
+        <span class="en">Pochigi (Spicy Sausage)</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">らふて〜</span>
-          <span class="en">Braised Pork (Rafute)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">らふて〜</span>
+        <span class="en">Rafute (Braised Pork)</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ナーベラ</span>
-          <span class="en">Okinawan Sponge Gourd (Nabera)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ナーベラ</span>
+        <span class="en">Nabera Stir-fry</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">島豆腐</span>
-          <span class="en">Okinawan Tofu</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">島豆腐</span>
+        <span class="en">Okinawan Tofu</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
@@ -675,69 +520,145 @@
   <div class="category">
     <div class="category-title">
       <span class="jp">ご飯もの</span>
-      <span class="en">Rice & Risotto</span>
+      <span class="en">Rice Dishes</span>
     </div>
     <div class="category-content">
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">がじゅ丼</span>
-          <span class="en">Gaju Rice Bowl</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">がじゅ丼</span>
+        <span class="en">Gaju Bowl</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">らふて〜丼</span>
-          <span class="en">Rafute Pork Rice Bowl</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">らふて〜丼</span>
+        <span class="en">Rafute Bowl</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">焼き飯（らふて〜・らっきょ）</span>
-          <span class="en">Fried Rice (Rafute / Shallot)</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">焼き飯（らふて〜・らっきょ）</span>
+        <span class="en">Fried Rice (Rafute / Shallot)</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">ちゃんぽん</span>
-          <span class="en">Champon Rice</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">ちゃんぽん</span>
+        <span class="en">Champon Rice</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">チーズリゾット</span>
-          <span class="en">Cheese Risotto</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">チーズリゾット</span>
+        <span class="en">Cheese Risotto</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">イカ墨リゾット</span>
-          <span class="en">Squid Ink Risotto</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">イカ墨リゾット</span>
+        <span class="en">Squid Ink Risotto</span>
+      </div><div class="qty-box"></div></div>
 
-      <div class="item">
-        <div class="item-name">
-          <span class="jp">チーズトマトリゾット</span>
-          <span class="en">Cheese Tomato Risotto</span>
-        </div>
-        <div class="qty-box">{q}</div>
-      </div>
+      <div class="item"><div class="item-name">
+        <span class="jp">チーズトマトリゾット</span>
+        <span class="en">Cheese Tomato Risotto</span>
+      </div><div class="qty-box"></div></div>
 
     </div>
   </div>
-<button class="order-button" onclick="sendOrder()">
+</div> <!-- menuArea end -->
+
+<!-- ▼ 注文ボタン -->
+<button id="sendLine" class="order-button">
   <span class="jp">注文する</span>
   <span class="en">Send Order</span>
 </button>
+
+<script>
+/* =============================
+    言語切り替え
+============================= */
+function toggleLang() {
+  if (document.body.classList.contains("lang-jp")) {
+    document.body.classList.remove("lang-jp");
+    document.body.classList.add("lang-en");
+  } else {
+    document.body.classList.remove("lang-en");
+    document.body.classList.add("lang-jp");
+  }
+}
+
+/* =============================
+    アコーディオン
+============================= */
+document.querySelectorAll(".category-title").forEach(title => {
+  title.addEventListener("click", () => {
+    const box = title.nextElementSibling;
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  });
+});
+
+/* =============================
+    数量セレクト生成（0〜5）
+============================= */
+document.querySelectorAll(".qty-box").forEach(box => {
+  const select = document.createElement("select");
+  select.classList.add("qty");
+  for (let i = 0; i <= 5; i++) {
+    const op = document.createElement("option");
+    op.value = i;
+    op.textContent = i;
+    select.appendChild(op);
+  }
+  box.appendChild(select);
+});
+
+/* =============================
+    席選択モーダル
+============================= */
+function selectSeat(seatName) {
+  document.getElementById("seatSelect").value = seatName;
+  document.getElementById("seatModal").style.display = "none";
+}
+
+/* =============================
+    LINE送信
+============================= */
+document.getElementById("sendLine").addEventListener("click", () => {
+  const seat = document.getElementById("seatSelect").value;
+
+  if (!seat) {
+    alert("※席を選択してください");
+    return;
+  }
+
+  let orderText = `【注文】\n席：${seat}\n\n`;
+
+  const items = document.querySelectorAll(".item");
+  items.forEach(item => {
+    const nameJP = item.querySelector(".jp")?.textContent || "";
+    const qty = item.querySelector(".qty").value;
+    if (qty > 0) {
+      orderText += `${nameJP} × ${qty}\n`;
+    }
+  });
+
+  if (orderText === `【注文】\n席：${seat}\n\n`) {
+    alert("※商品が選択されていません");
+    return;
+  }
+
+  const encoded = encodeURIComponent(orderText);
+  window.location.href = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
+});
+</script>
+
+<!-- ▼ seatSelect（席データ）-->
+<select id="seatSelect" style="display:none;">
+  <option value="カウンター1">カウンター1</option>
+  <option value="カウンター2">カウンター2</option>
+  <option value="カウンター3">カウンター3</option>
+  <option value="テーブル1">テーブル1</option>
+  <option value="テーブル2">テーブル2</option>
+  <option value="スタンド1">スタンド1</option>
+  <option value="スタンド2">スタンド2</option>
+  <option value="座敷">座敷</option>
+</select>
+
+</body>
+</html>
