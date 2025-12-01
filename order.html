@@ -806,5 +806,18 @@ document.getElementById("sendLine").addEventListener("click", () => {
 </script>
 
 
+  <script>
+function selectSeat(seatName) {
+  // 座席名を反映
+  document.getElementById("seatSelect").value = seatName;
+
+  // モーダルを閉じる
+  document.getElementById("seatModal").style.display = "none";
+
+  // 選択された座席を画面に表示する部分があるならここで更新
+  const seatLabel = document.getElementById("selectedSeatLabel");
+  if (seatLabel) seatLabel.textContent = seatName;
+}
+</script>
 </body>
 </html>
