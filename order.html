@@ -2,8 +2,8 @@
 <html lang="ja">
 
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>店内注文 - あしびなぁ</title>
 
 <style>
@@ -14,18 +14,18 @@
     color: #111;
   }
 
-  header {
-    padding: 16px;
-    background: #fff;
-    border-bottom: 3px solid #f5a623;
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: bold;
-  }
-
   /* 言語切替 */
   .lang-jp .en { display: none; }
   .lang-en .jp { display: none; }
+
+  header {
+    padding: 16px;
+    text-align: center;
+    background: #fff;
+    border-bottom: 3px solid #f5a623;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
 
   .lang-switch {
     text-align: center;
@@ -43,9 +43,7 @@
   }
 
   /* カテゴリ */
-  .category {
-    border-bottom: 1px solid #ddd;
-  }
+  .category { border-bottom: 1px solid #ddd; }
   .category-title {
     padding: 14px;
     background: #fff;
@@ -59,11 +57,10 @@
     padding: 10px 14px 20px 14px;
   }
 
-  /* メニュー行 */
+  /* メニュー項目 */
   .item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
     padding: 8px 0;
     border-bottom: 1px solid #eee;
   }
@@ -83,7 +80,6 @@
     width: 90%;
     margin: 30px auto;
     padding: 14px;
-    text-align: center;
     background: #f5a623;
     color: #fff;
     border-radius: 8px;
@@ -125,7 +121,19 @@
     cursor: pointer;
     font-size: 1rem;
   }
+
+  /* メモ */
+  #memoBox {
+    width: 90%;
+    margin: 20px auto;
+    display: block;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
 </style>
+
 </head>
 
 <body class="lang-jp">
@@ -140,7 +148,8 @@
   <button id="langJp" class="lang-btn">日本語</button>
   <button id="langEn" class="lang-btn">English</button>
 </div>
-<!-- ▼ seatSelect（非表示 / JavaScriptが使用） -->
+
+<!-- 席選択（非表示の値保持用） -->
 <select id="seatSelect" style="display:none;">
   <option value="カウンター1">カウンター1</option>
   <option value="カウンター2">カウンター2</option>
@@ -152,7 +161,7 @@
   <option value="座敷">座敷</option>
 </select>
 
-<!-- ▼ 席選択モーダル -->
+<!-- 席選択モーダル -->
 <div id="seatModal">
   <div id="seatBox">
     <h2>席を選択してください</h2>
@@ -300,42 +309,172 @@
     </div>
   </div>
 
-</div>
-<div style="padding: 20px;">
-  <label style="font-weight:bold;">メモ（ご要望など）</label>
-  <textarea id="memoInput" placeholder="例：取り皿お願いします" 
-    style="width:100%; height:80px; font-size:1rem; padding:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
+</div><!-- /menuArea END -->
+<!-- ▼ ドリンクカテゴリ ▼ -->
+
+<!-- ① ビール -->
+<div class="category">
+  <div class="category-title"><span class="jp">ビール</span><span class="en">Beer</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">生ビール</span><span class="en">Draft Beer</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">瓶ビール</span><span class="en">Bottled Beer</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">クリアフリー（ノンアル）</span><span class="en">Clear Free (Non-Alcohol)</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ビアボール</span><span class="en">Beer Ball</span></div><div class="qty-box"></div></div>
+  </div>
 </div>
 
-<!-- ▼ 注文ボタン -->
-<button id="sendLine" class="order-button">
-  <span class="jp">注文する</span>
-  <span class="en">Send Order</span>
-</button>
+<!-- ② ウイスキー -->
+<div class="category">
+  <div class="category-title"><span class="jp">ウイスキー</span><span class="en">Whisky</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">角ハイボール</span><span class="en">Kaku Highball</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">碧（あお）</span><span class="en">Ao Whisky</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
 
-<!-- ▼ JavaScript -->
+<!-- ③ バーボン -->
+<div class="category">
+  <div class="category-title"><span class="jp">バーボン</span><span class="en">Bourbon</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">マッケンナー</span><span class="en">Mckenna</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ④ ショット（テキーラ統合） -->
+<div class="category">
+  <div class="category-title"><span class="jp">ショット</span><span class="en">Shots</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">レポサド1800（テキーラ）</span><span class="en">Reposado 1800</span></div><div class="qty-box"></div></div>
+
+    <div class="item"><div class="item-name"><span class="jp">どなん</span><span class="en">Donan</span></div><div class="qty-box"></div></div>
+
+    <div class="item"><div class="item-name"><span class="jp">ハブ酒</span><span class="en">Habushu</span></div><div class="qty-box"></div></div>
+
+    <div class="item"><div class="item-name"><span class="jp">ハブーラ</span><span class="en">Habura</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑤ カクテル -->
+<div class="category">
+  <div class="category-title"><span class="jp">カクテル</span><span class="en">Cocktails</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">カシスソーダ</span><span class="en">Cassis Soda</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">カシスオレンジ</span><span class="en">Cassis Orange</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ピーチオレンジ</span><span class="en">Peach Orange</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ピーチウーロン</span><span class="en">Peach Oolong</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑥ 焼酎 -->
+<div class="category">
+  <div class="category-title"><span class="jp">焼酎</span><span class="en">Shochu</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">黒霧島</span><span class="en">Kurokirishima</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">二階堂</span><span class="en">Nikaido</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">金宮</span><span class="en">Kinmiya</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">黒糖焼酎</span><span class="en">Brown Sugar Shochu</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑦ 日本酒 -->
+<div class="category">
+  <div class="category-title"><span class="jp">日本酒</span><span class="en">Sake</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">夜の帝王</span><span class="en">Yoru no Teio</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑧ 茶割り -->
+<div class="category">
+  <div class="category-title"><span class="jp">茶割り</span><span class="en">Tea Highball</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">ウーロンハイ</span><span class="en">Oolong High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">緑茶ハイ</span><span class="en">Green Tea High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">JJ</span><span class="en">JJ High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">JR</span><span class="en">JR High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">MM</span><span class="en">MM High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ヒゲ茶ハイ</span><span class="en">Hige Tea High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">無糖紅茶ハイ</span><span class="en">Unsweet Black Tea High</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">さんぴん茶ハイ</span><span class="en">Sanpin Tea High</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑨ 酎ハイ・サワー -->
+<div class="category">
+  <div class="category-title"><span class="jp">酎ハイ・サワー</span><span class="en">Sours</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">しょっぱい梅サワー</span><span class="en">Salty Plum Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">すっきりトマトサワー</span><span class="en">Tomato Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ホワイトサワー</span><span class="en">White Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">巨峰サワー</span><span class="en">Grape Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">プレーンサワー</span><span class="en">Plain Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">シークヮーサーサワー</span><span class="en">Shikuwasa Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">グレープフルーツサワー</span><span class="en">Grapefruit Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">バイスサワー</span><span class="en">Weiss Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">レモンサワー</span><span class="en">Lemon Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ガリサワー</span><span class="en">Pickled Ginger Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">クエン酸サワー</span><span class="en">Citric Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">男梅サワー</span><span class="en">Otoko Ume Sour</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">ピリ辛トマトハイ</span><span class="en">Spicy Tomato Highball</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+
+<!-- ⑩ 泡盛（八重山含むすべて統合） -->
+<div class="category">
+  <div class="category-title"><span class="jp">泡盛</span><span class="en">Awamori</span></div>
+  <div class="category-content">
+
+    <!-- 元の泡盛 -->
+    <div class="item"><div class="item-name"><span class="jp">残波 白</span><span class="en">Zanpa White</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">残波 黒</span><span class="en">Zanpa Black</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">菊之露</span><span class="en">Kikunotsuyu</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">久米仙</span><span class="en">Kumesen</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">久米仙 古酒35°</span><span class="en">Kumesen Koshu 35°</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">春雨</span><span class="en">Harusame</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">古里</span><span class="en">Furusato</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">菊之露VIP</span><span class="en">Kikunotsuyu VIP</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">琉球王朝</span><span class="en">Ryukyu Dynasty</span></div><div class="qty-box"></div></div>
+
+    <!-- 八重山の泡盛（統合） -->
+    <div class="item"><div class="item-name"><span class="jp">請福</span><span class="en">Seifuku</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">八重泉</span><span class="en">Yaesen</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">黒真珠</span><span class="en">Black Pearl</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">玉の露</span><span class="en">Tamanotsuyu</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">おもと</span><span class="en">Omoto</span></div><div class="qty-box"></div></div>
+
+  </div>
+</div>
+
+<!-- ⑪ 石垣島のお酒（独立カテゴリ） -->
+<div class="category">
+  <div class="category-title"><span class="jp">石垣島のお酒</span><span class="en">Ishigaki Spirits</span></div>
+  <div class="category-content">
+    <div class="item"><div class="item-name"><span class="jp">IMUGE. 25°</span><span class="en">IMUGE. 25°</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">IMUGE. 37°</span><span class="en">IMUGE. 37°</span></div><div class="qty-box"></div></div>
+    <div class="item"><div class="item-name"><span class="jp">島ラム</span><span class="en">Island Rum</span></div><div class="qty-box"></div></div>
+  </div>
+</div>
+<!-- ▼ JavaScript：最後に貼る -->
 <script>
 /* ==========================================================
     言語切替
 ========================================================== */
-function toggleLang() {
-  if (document.body.classList.contains("lang-jp")) {
-    document.body.classList.remove("lang-jp");
-    document.body.classList.add("lang-en");
-  } else {
-    document.body.classList.remove("lang-en");
-    document.body.classList.add("lang-jp");
-  }
-}
+document.getElementById("langJp").addEventListener("click", () => {
+  document.body.classList.remove("lang-en");
+  document.body.classList.add("lang-jp");
+});
+document.getElementById("langEn").addEventListener("click", () => {
+  document.body.classList.remove("lang-jp");
+  document.body.classList.add("lang-en");
+});
 
 /* ==========================================================
-    アコーディオン（カテゴリ開閉）
+    カテゴリ アコーディオン
 ========================================================== */
 document.querySelectorAll(".category-title").forEach(title => {
   title.addEventListener("click", () => {
     const content = title.nextElementSibling;
-    content.style.display =
-      content.style.display === "block" ? "none" : "block";
+    content.style.display = content.style.display === "block" ? "none" : "block";
   });
 });
 
@@ -363,7 +502,120 @@ function selectSeat(seatName) {
 }
 
 /* ==========================================================
-    LINE 送信（フード・ドリンク分離＋メモ付）
+    注文送信（テキスト生成 → LINEへ）
+========================================================== */
+document.getElementById("sendLine").addEventListener("click", () => {
+
+  const seat = document.getElementById("seatSelect").value;
+  if (!seat) return alert("※席を選択してください");
+
+  // 注文テキスト
+  let orderText = `【店内注文】\n席：${seat}\n\n`;
+  orderText += "【フード】\n";
+
+  let hasFood = false;
+  let hasDrink = false;
+
+  /* ---- フードとドリンク両方をチェック ---- */
+  document.querySelectorAll(".category").forEach(category => {
+    const title = category.querySelector(".category-title .jp")?.textContent || "";
+    const items = category.querySelectorAll(".item");
+
+    items.forEach(item => {
+      const qty = Number(item.querySelector(".qty").value);
+      if (qty > 0) {
+
+        const name = item.querySelector(".item-name .jp")?.textContent.trim()
+                    || item.querySelector(".item-name").textContent.trim();
+
+        // フード / ドリンク 判定
+        const isDrink = (
+          title.includes("ビール") ||
+          title.includes("ウイスキー") ||
+          title.includes("バーボン") ||
+          title.includes("ショット") ||
+          title.includes("カクテル") ||
+          title.includes("焼酎") ||
+          title.includes("日本酒") ||
+          title.includes("茶割り") ||
+          title.includes("酎ハイ") ||
+          title.includes("泡盛") ||
+          title.includes("石垣島のお酒")
+        );
+
+        if (isDrink) {
+          if (!hasDrink) orderText += "\n【ドリンク】\n";
+          hasDrink = true;
+          orderText += `${name} × ${qty}\n`;
+        } else {
+          hasFood = true;
+          orderText += `${name} × ${qty}\n`;
+        }
+      }
+    });
+  });
+
+  if (!hasFood && !hasDrink) {
+    alert("※注文が選択されていません");
+    return;
+  }
+
+  // メモ欄
+  const memo = document.getElementById("memoBox").value.trim();
+  if (memo) {
+    orderText += `\n【メモ】\n${memo}\n`;
+  }
+
+  const encoded = encodeURIComponent(orderText);
+
+  /* ---- LINEへ送信 ---- */
+  const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
+  window.location.href = url;
+});
+</script>
+<script>
+/* ==========================================================
+    席選択モーダル
+========================================================== */
+window.onload = () => {
+  document.getElementById("seatModal").style.display = "flex";
+};
+
+function selectSeat(seat) {
+  document.getElementById("seatSelect").value = seat;
+  document.getElementById("seatModal").style.display = "none";
+}
+
+/* ==========================================================
+    数量ボタン自動生成
+========================================================== */
+document.querySelectorAll(".qty-box").forEach(box => {
+  box.innerHTML = `
+    <button class="qty-btn minus">－</button>
+    <input type="number" class="qty" value="0" min="0">
+    <button class="qty-btn plus">＋</button>
+  `;
+
+  const input = box.querySelector(".qty");
+  box.querySelector(".plus").addEventListener("click", () => input.value++);
+  box.querySelector(".minus").addEventListener("click", () => {
+    if (input.value > 0) input.value--;
+  });
+});
+
+/* ==========================================================
+    カテゴリ開閉
+========================================================== */
+document.querySelectorAll(".category-title").forEach(title => {
+  title.addEventListener("click", () => {
+    title.classList.toggle("open");
+    const content = title.nextElementSibling;
+    if (content) content.classList.toggle("open");
+  });
+});
+
+/* ==========================================================
+    LINE 送信用（フード＋ドリンク＋メモ）
 ========================================================== */
 document.getElementById("sendLine").addEventListener("click", () => {
 
@@ -373,72 +625,49 @@ document.getElementById("sendLine").addEventListener("click", () => {
     return;
   }
 
-  let foodText = "";
-  let drinkText = "";
+  let orderText = "【店内注文】\n";
+  orderText += `席：${seat}\n\n`;
 
-  document.querySelectorAll(".category").forEach(category => {
+  let foodList = "";
+  let drinkList = "";
 
-    // カテゴリ名（JP）
-    const categoryName = category.querySelector(".category-title .jp")?.textContent.trim() || "";
+  document.querySelectorAll(".item").forEach(item => {
+    const nameBox = item.querySelector(".item-name .jp");
+    const qty = item.querySelector(".qty")?.value ?? 0;
 
-    // アイテムごとに処理
-    category.querySelectorAll(".item").forEach(item => {
+    if (qty > 0) {
+      const name = nameBox ? nameBox.textContent.trim() : "";
+      const parent = item.closest(".category")?.dataset.group ?? "";
 
-      // 名前取得
-      const jpSpan = item.querySelector(".item-name .jp");
-      let jpName = jpSpan ? jpSpan.textContent.trim() : "";
-
-      // 数量
-      const qty = item.querySelector(".qty").value;
-
-      if (qty > 0 && jpName !== "") {
-
-        // ドリンク判定（コード1に合わせ調整可能）
-        const drinkKeywords = ["ビール", "泡盛", "焼酎", "カクテル", "ワイン", "ハイボール", "サワー", "梅酒", "ソフトドリンク"];
-
-        const isDrink = drinkKeywords.some(word => jpName.includes(word) || categoryName.includes(word));
-
-        if (isDrink) {
-          drinkText += `${jpName} × ${qty}\n`;
-        } else {
-          foodText += `${jpName} × ${qty}\n`;
-        }
+      if (parent === "food") {
+        foodList += `${name} × ${qty}\n`;
+      } else if (parent === "drink") {
+        drinkList += `${name} × ${qty}\n`;
       }
-    });
+    }
   });
 
-  // 何も選ばれていない
-  if (foodText === "" && drinkText === "") {
-    alert("※商品が選択されていません");
-    return;
-  }
+  // フード
+  orderText += "--- フード ---\n";
+  orderText += foodList ? foodList : "なし\n";
+  orderText += "\n";
 
-  // メモ欄
-  const memo = document.getElementById("memoInput")?.value.trim() || "";
+  // ドリンク
+  orderText += "--- ドリンク ---\n";
+  orderText += drinkList ? drinkList : "なし\n";
+  orderText += "\n";
 
-  // 送信テキスト組み立て
-  let orderText = `【店内注文】\n席：${seat}\n\n`;
+  // メモ
+  const memo = document.getElementById("memoBox").value.trim();
+  orderText += "--- メモ ---\n";
+  orderText += memo ? memo : "なし";
 
-  if (foodText !== "") {
-    orderText += `【フード】\n${foodText}\n`;
-  }
-
-  if (drinkText !== "") {
-    orderText += `【ドリンク】\n${drinkText}\n`;
-  }
-
-  if (memo !== "") {
-    orderText += `【メモ】\n${memo}\n`;
-  }
-
+  // エンコード
   const encoded = encodeURIComponent(orderText);
 
-  // ★公式アカウント固定送信（自動入力まで対応）
+  // ★ 公式アカウントへ送信
   const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
 
   window.location.href = url;
 });
-
 </script>
-</body>
-</html>
