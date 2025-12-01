@@ -643,8 +643,8 @@ document.getElementById("sendLine").addEventListener("click", () => {
     return;
   }
 
-  const encoded = encodeURIComponent(orderText);
-  window.location.href = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
+  const url = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
+　 window.location.href = url;
 });
 </script>
 
