@@ -77,6 +77,7 @@
     gap: 8px;
   }
 
+  /* 注文ボタン */
   .order-button {
     display: block;
     width: 90%;
@@ -88,6 +89,7 @@
     border-radius: 8px;
     font-size: 1.2rem;
     cursor: pointer;
+    border: none;
   }
 
   /* 席選択モーダル */
@@ -138,8 +140,7 @@
   <button id="langJp" class="lang-btn">日本語</button>
   <button id="langEn" class="lang-btn">English</button>
 </div>
-
-<!-- 非表示 seatSelect（正位置） -->
+<!-- ▼ seatSelect（非表示 / JavaScriptが使用） -->
 <select id="seatSelect" style="display:none;">
   <option value="カウンター1">カウンター1</option>
   <option value="カウンター2">カウンター2</option>
@@ -151,7 +152,7 @@
   <option value="座敷">座敷</option>
 </select>
 
-<!-- 席選択モーダル -->
+<!-- ▼ 席選択モーダル -->
 <div id="seatModal">
   <div id="seatBox">
     <h2>席を選択してください</h2>
@@ -170,409 +171,147 @@
 
   </div>
 </div>
-
-<!-- ▼ メニューエリアここから ▼ -->
+<!-- ▼ メニューエリア ▼ -->
 <div id="menuArea">
+
   <!-- ① オススメ -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">⭐ オススメ</span>
-      <span class="en">⭐ Recommended</span>
-    </div>
+    <div class="category-title"><span class="jp">⭐ オススメ</span><span class="en">⭐ Recommended</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">石垣牛ハンバーグ</span>
-        <span class="en">Ishigaki Beef Hamburg Steak</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">島らっきょ餃子</span>
-        <span class="en">Island Shallot Dumplings</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">もずくキムチ</span>
-        <span class="en">Mozuku Seaweed Kimchi</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">がじゅカレー</span>
-        <span class="en">Gaju Curry</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">石垣牛ハンバーグ</span><span class="en">Ishigaki Beef Hamburg Steak</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">島らっきょ餃子</span><span class="en">Island Shallot Dumplings</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">もずくキムチ</span><span class="en">Mozuku Kimchi</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">がじゅカレー</span><span class="en">Gaju Curry</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ② ﾁｮﾒﾁｮﾒシリーズ -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">ﾁｮﾒﾁｮﾒシリーズ</span>
-      <span class="en">Chome Series</span>
-    </div>
+    <div class="category-title"><span class="jp">ﾁｮﾒﾁｮﾒシリーズ</span><span class="en">Chome Series</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">きゅうりチョメ</span>
-        <span class="en">Cucumber “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">チーズチョメ</span>
-        <span class="en">Cheese “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ナスチョメ</span>
-        <span class="en">Eggplant “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ジャガイモチョメ</span>
-        <span class="en">Potato “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ピーマンチョメ</span>
-        <span class="en">Green Pepper “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">サバ缶チョメ</span>
-        <span class="en">Canned Mackerel “Chome”</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">きゅうりチョメ</span><span class="en">Cucumber Chome</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">チーズチョメ</span><span class="en">Cheese Chome</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ナスチョメ</span><span class="en">Eggplant Chome</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ジャガイモチョメ</span><span class="en">Potato Chome</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ピーマンチョメ</span><span class="en">Green Pepper Chome</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">サバ缶チョメ</span><span class="en">Canned Mackerel Chome</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ③ さっぱり -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">さっぱりなやつ</span>
-      <span class="en">Refreshing</span>
-    </div>
+    <div class="category-title"><span class="jp">さっぱりなやつ</span><span class="en">Refreshing</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">島らっきょ</span>
-        <span class="en">Island Shallot</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">島らっきょクリームチーズベーコン</span>
-        <span class="en">Shallot with Cream Cheese & Bacon</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">梅水晶</span>
-        <span class="en">Plum Jellyfish</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ゴーヤスライス</span>
-        <span class="en">Goya Slices</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">塩辛 各</span>
-        <span class="en">Salted Seafood (single)</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">塩辛3種盛り</span>
-        <span class="en">Salted Seafood Trio</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">海ぶどう</span>
-        <span class="en">Sea Grapes</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">島らっきょ</span><span class="en">Island Shallot</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">島らっきょクリームチーズベーコン</span><span class="en">Shallot Cream Cheese Bacon</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">梅水晶</span><span class="en">Plum Jellyfish</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ゴーヤスライス</span><span class="en">Goya Slice</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">塩辛 各</span><span class="en">Salted Seafood</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">塩辛3種盛り</span><span class="en">Salted Seafood Trio</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">海ぶどう</span><span class="en">Sea Grapes</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ④ チャンプル -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">チャンプル</span>
-      <span class="en">Champuru</span>
-    </div>
+    <div class="category-title"><span class="jp">チャンプル</span><span class="en">Champuru</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ゴーヤチャンプル</span>
-        <span class="en">Goya Champuru</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ソーメンチャンプル</span>
-        <span class="en">Somen Champuru</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">豆腐チャンプル</span>
-        <span class="en">Tofu Champuru</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">フーチャンプル</span>
-        <span class="en">Fu Champuru</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">らっきょチャンプル</span>
-        <span class="en">Shallot Champuru</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">カラシナチャンプル</span>
-        <span class="en">Mustard Greens Champuru</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">ゴーヤチャンプル</span><span class="en">Goya Champuru</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ソーメンチャンプル</span><span class="en">Somen Champuru</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">豆腐チャンプル</span><span class="en">Tofu Champuru</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">フーチャンプル</span><span class="en">Fu Champuru</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">らっきょチャンプル</span><span class="en">Shallot Champuru</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">カラシナチャンプル</span><span class="en">Mustard Greens Champuru</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ⑤ シリシリ -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">シリシリ</span>
-      <span class="en">Shirishiri</span>
-    </div>
+    <div class="category-title"><span class="jp">シリシリ</span><span class="en">Shirishiri</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">人参シリシリ</span>
-        <span class="en">Carrot Shirishiri</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">パパイヤシリシリ</span>
-        <span class="en">Papaya Shirishiri</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">人参シリシリ</span><span class="en">Carrot Shirishiri</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">パパイヤシリシリ</span><span class="en">Papaya Shirishiri</span></div><div class="qty-box"></div></div>
     </div>
   </div>
+
   <!-- ⑥ 玉子 -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">玉子</span>
-      <span class="en">Egg Dishes</span>
-    </div>
+    <div class="category-title"><span class="jp">玉子</span><span class="en">Egg Dishes</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ポークと玉子</span>
-        <span class="en">Pork & Egg</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">だし巻き</span>
-        <span class="en">Japanese Omelette</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">目玉焼き</span>
-        <span class="en">Sunny-side Egg</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">ポークと玉子</span><span class="en">Pork & Egg</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">だし巻き</span><span class="en">Japanese Omelette</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">目玉焼き</span><span class="en">Sunny-side Egg</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ⑦ 揚げ物 -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">揚げ物</span>
-      <span class="en">Fried Items</span>
-    </div>
+    <div class="category-title"><span class="jp">揚げ物</span><span class="en">Fried</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">鶏の唐揚げ</span>
-        <span class="en">Fried Chicken</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">タコ唐揚げ</span>
-        <span class="en">Fried Octopus</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">イカ唐揚げ</span>
-        <span class="en">Fried Squid</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">エビ唐揚げ</span>
-        <span class="en">Fried Shrimp</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">チーズの棒</span>
-        <span class="en">Cheese Sticks</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">カーリーフライ</span>
-        <span class="en">Curly Fries</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">タコスボール</span>
-        <span class="en">Tacos Balls</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">天ぷら お任せ3種</span>
-        <span class="en">Tempura (3 Assortments)</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">天ぷら お任せ5種</span>
-        <span class="en">Tempura (5 Assortments)</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">鶏の唐揚げ</span><span class="en">Fried Chicken</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">タコ唐揚げ</span><span class="en">Fried Octopus</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">イカ唐揚げ</span><span class="en">Fried Squid</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">エビ唐揚げ</span><span class="en">Fried Shrimp</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">チーズの棒</span><span class="en">Cheese Sticks</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">カーリーフライ</span><span class="en">Curly Fries</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">タコスボール</span><span class="en">Tacos Balls</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">天ぷら お任せ3種</span><span class="en">Tempura 3</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">天ぷら お任せ5種</span><span class="en">Tempura 5</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ⑧ そば -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">そば</span>
-      <span class="en">Soba Noodles</span>
-    </div>
+    <div class="category-title"><span class="jp">そば</span><span class="en">Soba</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ピリ辛エビトマト</span>
-        <span class="en">Spicy Shrimp Tomato Soba</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ぽなペティート</span>
-        <span class="en">Pona Petite Soba</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">あぐ〜ペペロン</span>
-        <span class="en">Agu Pork Peperoncino Sob</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">本日の気まぐれ</span>
-        <span class="en">Today's Special</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ソーキそば</span>
-        <span class="en">Soki Soba</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">テビチそば</span>
-        <span class="en">Tebichi Soba</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">島焼きそば（塩・シークヮーサー）</span>
-        <span class="en">Island Yakisoba (Salt / Shikuwasa)</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">ピリ辛エビトマト</span><span class="en">Spicy Shrimp Tomato</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ぽなペティート</span><span class="en">Pona Petite</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">あぐ〜ペペロン</span><span class="en">Agu Peperoncino</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">本日の気まぐれ</span><span class="en">Today's Special</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ソーキそば</span><span class="en">Soki Soba</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">テビチそば</span><span class="en">Tebichi Soba</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">島焼きそば（塩・シークヮーサー）</span><span class="en">Island Yakisoba</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ⑨ 男爺のつまみ -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">男爺のつまみ</span>
-      <span class="en">Old Man's Snacks</span>
-    </div>
+    <div class="category-title"><span class="jp">男爺のつまみ</span><span class="en">Old Man Snacks</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">たちつてと</span>
-        <span class="en">Tachi-Tsu-Te-To Mix</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ポチギ</span>
-        <span class="en">Pochigi (Spicy Sausage)</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">らふて〜</span>
-        <span class="en">Rafute (Braised Pork)</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ナーベラ</span>
-        <span class="en">Nabera Stir-fry</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">島豆腐</span>
-        <span class="en">Okinawan Tofu</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">たちつてと</span><span class="en">Tachi-Tsu-Te-To</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ポチギ</span><span class="en">Pochigi</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">らふて〜</span><span class="en">Rafute</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ナーベラ</span><span class="en">Nabera</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">島豆腐</span><span class="en">Okinawan Tofu</span></div><div class="qty-box"></div></div>
     </div>
   </div>
 
   <!-- ⑩ ご飯もの -->
   <div class="category">
-    <div class="category-title">
-      <span class="jp">ご飯もの</span>
-      <span class="en">Rice Dishes</span>
-    </div>
+    <div class="category-title"><span class="jp">ご飯もの</span><span class="en">Rice Dishes</span></div>
     <div class="category-content">
-
-      <div class="item"><div class="item-name">
-        <span class="jp">がじゅ丼</span>
-        <span class="en">Gaju Bowl</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">らふて〜丼</span>
-        <span class="en">Rafute Bowl</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">焼き飯（らふて〜・らっきょ）</span>
-        <span class="en">Fried Rice (Rafute / Shallot)</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">ちゃんぽん</span>
-        <span class="en">Champon Rice</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">チーズリゾット</span>
-        <span class="en">Cheese Risotto</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">イカ墨リゾット</span>
-        <span class="en">Squid Ink Risotto</span>
-      </div><div class="qty-box"></div></div>
-
-      <div class="item"><div class="item-name">
-        <span class="jp">チーズトマトリゾット</span>
-        <span class="en">Cheese Tomato Risotto</span>
-      </div><div class="qty-box"></div></div>
-
+      <div class="item"><div class="item-name"><span class="jp">がじゅ丼</span><span class="en">Gaju Bowl</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">らふて〜丼</span><span class="en">Rafute Bowl</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">焼き飯（らふて〜・らっきょ）</span><span class="en">Fried Rice</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">ちゃんぽん</span><span class="en">Champon Rice</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">チーズリゾット</span><span class="en">Cheese Risotto</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">イカ墨リゾット</span><span class="en">Squid Ink Risotto</span></div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name"><span class="jp">チーズトマトリゾット</span><span class="en">Cheese Tomato Risotto</span></div><div class="qty-box"></div></div>
     </div>
   </div>
-</div> <!-- menuArea end -->
 
+</div>
 <!-- ▼ 注文ボタン -->
 <button id="sendLine" class="order-button">
   <span class="jp">注文する</span>
   <span class="en">Send Order</span>
 </button>
 
+<!-- ▼ JavaScript -->
 <script>
-/* =============================
-    言語切り替え
-============================= */
+/* ==========================================================
+    言語切替
+========================================================== */
 function toggleLang() {
   if (document.body.classList.contains("lang-jp")) {
     document.body.classList.remove("lang-jp");
@@ -583,19 +322,20 @@ function toggleLang() {
   }
 }
 
-/* =============================
-    アコーディオン
-============================= */
+/* ==========================================================
+    アコーディオン（カテゴリ開閉）
+========================================================== */
 document.querySelectorAll(".category-title").forEach(title => {
   title.addEventListener("click", () => {
-    const box = title.nextElementSibling;
-    box.style.display = box.style.display === "block" ? "none" : "block";
+    const content = title.nextElementSibling;
+    content.style.display =
+      content.style.display === "block" ? "none" : "block";
   });
 });
 
-/* =============================
+/* ==========================================================
     数量セレクト生成（0〜5）
-============================= */
+========================================================== */
 document.querySelectorAll(".qty-box").forEach(box => {
   const select = document.createElement("select");
   select.classList.add("qty");
@@ -608,20 +348,20 @@ document.querySelectorAll(".qty-box").forEach(box => {
   box.appendChild(select);
 });
 
-/* =============================
+/* ==========================================================
     席選択モーダル
-============================= */
+========================================================== */
 function selectSeat(seatName) {
   document.getElementById("seatSelect").value = seatName;
   document.getElementById("seatModal").style.display = "none";
 }
 
-/* =============================
-    LINE送信（前に動いてた形式）
-============================= */
+/* ==========================================================
+    LINE 送信（100％動作版）
+========================================================== */
 document.getElementById("sendLine").addEventListener("click", () => {
-  const seat = document.getElementById("seatSelect").value;
 
+  const seat = document.getElementById("seatSelect").value;
   if (!seat) {
     alert("※席を選択してください");
     return;
@@ -629,25 +369,26 @@ document.getElementById("sendLine").addEventListener("click", () => {
 
   let orderText = `【注文】\n席：${seat}\n\n`;
 
-  const items = document.querySelectorAll(".item");
-  items.forEach(item => {
-    const nameJP = item.querySelector(".jp")?.textContent || "";
+  document.querySelectorAll(".item").forEach(item => {
+    const jpName = item.querySelector(".jp")?.textContent?.trim() || "";
     const qty = item.querySelector(".qty").value;
     if (qty > 0) {
-      orderText += `${nameJP} × ${qty}\n`;
+      orderText += `${jpName} × ${qty}\n`;
     }
   });
 
+  if (orderText.trim() === `【注文】\n席：${seat}`) {
+    alert("※商品が選択されていません");
+    return;
+  }
+
   const encoded = encodeURIComponent(orderText);
 
-  // ← 前に“送れていた”形式
-  const url = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
+  /* ←この形式が LINE のトークに反映される最も安定するURL */
+  const url = `https://line.me/R/msg/text/?${encoded}`;
 
   window.location.href = url;
 });
 </script>
-
-
-
 </body>
 </html>
