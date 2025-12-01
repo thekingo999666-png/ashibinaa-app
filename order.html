@@ -1,344 +1,397 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <title>店内注文 - 居酒屋あしびなぁ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>店内注文 - あしびなぁ</title>
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-      color: #222;
-    }
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    margin: 0;
+    background: #fff;
+    color: #111;
+  }
 
-    header {
-      text-align: center;
-      padding: 18px;
-      border-bottom: 2px solid #f39c12;
-    }
+  header {
+    padding: 16px;
+    background: #fff;
+    border-bottom: 3px solid #f5a623;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
 
-    .logo {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
+  /* 言語切替 */
+  .lang-jp .en { display: none; }
+  .lang-en .jp { display: none; }
 
-    .lang-switch {
-      margin-top: 8px;
-    }
+  .lang-switch {
+    text-align: center;
+    padding: 10px;
+  }
+  .lang-btn {
+    padding: 6px 14px;
+    background: #f5a623;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #fff;
+  }
 
-    .lang-btn {
-      border: 1px solid #f39c12;
-      background: #fff;
-      color: #f39c12;
-      padding: 6px 14px;
-      margin: 0 4px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
+  /* カテゴリ */
+  .category {
+    border-bottom: 1px solid #ddd;
+  }
+  .category-title {
+    padding: 14px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 1.1rem;
+    border-left: 4px solid #f5a623;
+  }
+  .category-content {
+    display: none;
+    background: #fafafa;
+    padding: 10px 14px 20px 14px;
+  }
 
-    main {
-      max-width: 650px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+  /* メニュー行 */
+  .item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .item-name {
+    font-size: 1rem;
+    max-width: 60%;
+  }
+  .qty-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1.1rem;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .qty-number {
+    width: 24px;
+    text-align: center;
+    font-size: 1rem;
+  }
 
-    .category-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin: 32px 0 12px;
-      border-left: 6px solid #f39c12;
-      padding-left: 10px;
-    }
+  /* ボタン */
+  .order-button {
+    display: block;
+    width: 90%;
+    margin: 30px auto;
+    padding: 14px;
+    text-align: center;
+    background: #f5a623;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+  }
 
-    .item-card {
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
-      background: #fff;
-    }
-
-    .item-name {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .order-btn {
-      border: none;
-      background: #f39c12;
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      float: right;
-    }
-
-    .seat-popup {
-      position: fixed;
-      left: 0; right: 0; top: 0; bottom: 0;
-      background: rgba(0,0,0,0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .popup-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 14px;
-      width: 85%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .popup-title {
-      font-size: 1.2rem;
-      margin-bottom: 14px;
-    }
-
-    .seat-btn {
-      display: inline-block;
-      background: #f39c12;
-      color: #fff;
-      padding: 8px 14px;
-      margin: 6px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .close-btn {
-      margin-top: 14px;
-      display: inline-block;
-      color: #666;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #888;
-      font-size: 0.8rem;
-    }
-
-    /* 言語切替 */
-    .lang-jp .en { display:none;}
-    .lang-en .jp { display:none;}
-
-  </style>
+  /* 席選択モーダル */
+  #seatModal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+  }
+  #seatBox {
+    background: #fff;
+    padding: 20px;
+    width: 80%;
+    max-width: 360px;
+    border-radius: 10px;
+  }
+  #seatBox h2 {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+  .seat-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    background: #f5a623;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
 </head>
 
 <body class="lang-jp">
 
-  <header>
-    <div class="logo">
-      <span class="jp">店内注文メニュー</span>
-      <span class="en">In-store Order Menu</span>
-    </div>
-    <div class="lang-switch">
-      <button class="lang-btn" id="langJp">日本語</button>
-      <button class="lang-btn" id="langEn">English</button>
-    </div>
-  </header>
+<header>
+  <span class="jp">店内注文</span>
+  <span class="en">In-store Order</span>
+</header>
 
-  <main>
+<div class="lang-switch">
+  <button class="lang-btn" onclick="toggleLang()">
+    <span class="jp">English</span>
+    <span class="en">日本語</span>
+  </button>
+</div>
 
-    <!-- ===== カテゴリ 1：オススメ ===== -->
-    <div class="category-title">
-      <span class="jp">オススメ</span>
-      <span class="en">Recommended</span>
-    </div>
+<!-- ▼ 席選択モーダル ▼ -->
+<div id="seatModal">
+  <div id="seatBox">
+    <h2>席を選択してください</h2>
+    <button class="seat-btn" onclick="selectSeat('カウンター1')">カウンター1</button>
+    <button class="seat-btn" onclick="selectSeat('カウンター2')">カウンター2</button>
+    <button class="seat-btn" onclick="selectSeat('カウンター3')">カウンター3</button>
+    <button class="seat-btn" onclick="selectSeat('テーブル1')">テーブル1</button>
+    <button class="seat-btn" onclick="selectSeat('テーブル2')">テーブル2</button>
+    <button class="seat-btn" onclick="selectSeat('スタンド1')">スタンド1</button>
+    <button class="seat-btn" onclick="selectSeat('スタンド2')">スタンド2</button>
+    <button class="seat-btn" onclick="selectSeat('座敷')">座敷</button>
+  </div>
+</div>
 
-    <div class="item-card">
-      <div class="item-name">
-        <span class="jp">石垣牛ハンバーグ</span>
-        <span class="en">Ishigaki Beef Hamburg</span>
-      </div>
-      <button class="order-btn" onclick="startOrder('石垣牛ハンバーグ')">注文</button>
-    </div>
+<!-- ▼ カテゴリ＋メニュー ▼ -->
+<div id="menuArea">
 
-    <div class="item-card">
-      <div class="item-name">
-        <span class="jp">島らっきょ餃子</span>
-        <span class="en">Shima Rakkyou Gyoza</span>
-      </div>
-      <button class="order-btn" onclick="startOrder('島らっきょ餃子')">注文</button>
-    </div>
-
-
-    <!-- ===== カテゴリ ・・・以下すべて同じ構造 ===== -->
-
-    <!-- ===== 2：ﾁｮﾒﾁｮﾒシリーズ ===== -->
-    <div class="category-title">
-      <span class="jp">ﾁｮﾒﾁｮﾒシリーズ</span>
-      <span class="en">Chome-chome Series</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">きゅうりチョメ</span><span class="en">Kyuri Chome</span></div><button class="order-btn" onclick="startOrder('きゅうりチョメ')">注文</button></div>
-    <div class="item-card"><div class="item-name"><span class="jp">チーズチョメ</span><span class="en">Cheese Chome</span></div><button class="order-btn" onclick="startOrder('チーズチョメ')">注文</button></div>
-    <div class="item-card"><div class="item-name"><span class="jp">ナスチョメ</span><span class="en">Nasu Chome</span></div><button class="order-btn" onclick="startOrder('ナスチョメ')">注文</button></div>
-
-
-    <!-- ===== 3：さっぱりなやつたち ===== -->
-    <div class="category-title">
-      <span class="jp">さっぱりなやつたち</span>
-      <span class="en">Light & Refreshing</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">島らっきょ</span><span class="en">Shima Rakkyou</span></div><button class="order-btn" onclick="startOrder('島らっきょ')">注文</button></div>
-
-    <!-- ===== 4：チャンプル ===== -->
-    <div class="category-title">
-      <span class="jp">チャンプルたち</span>
-      <span class="en">Champuru</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">ゴーヤチャンプル</span><span class="en">Goya Champuru</span></div><button class="order-btn" onclick="startOrder('ゴーヤチャンプル')">注文</button></div>
-
-
-    <!-- ===== 5：シリシ ===== -->
-    <div class="category-title">
-      <span class="jp">シリシたち</span>
-      <span class="en">Shirishiri</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">人参シリシリ</span><span class="en">Ninjin Shirishiri</span></div><button class="order-btn" onclick="startOrder('人参シリシリ')">注文</button></div>
-
-
-    <!-- ===== 6：玉子 ===== -->
-    <div class="category-title">
-      <span class="jp">玉子たち</span>
-      <span class="en">Egg dishes</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">だし巻き</span><span class="en">Dashimaki</span></div><button class="order-btn" onclick="startOrder('だし巻き')">注文</button></div>
-
-
-    <!-- ===== 7：揚げ物 ===== -->
-    <div class="category-title">
-      <span class="jp">揚げ物</span>
-      <span class="en">Fried</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">鶏の唐揚げ</span><span class="en">Fried Chicken</span></div><button class="order-btn" onclick="startOrder('鶏の唐揚げ')">注文</button></div>
-
-
-    <!-- ===== 8：そば ===== -->
-    <div class="category-title">
-      <span class="jp">そば</span>
-      <span class="en">Soba</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">島焼きそば</span><span class="en">Shima Yakisoba</span></div><button class="order-btn" onclick="startOrder('島焼きそば')">注文</button></div>
-
-
-    <!-- ===== 9：男爺のつまみ ===== -->
-    <div class="category-title">
-      <span class="jp">男爺のつまみ</span>
-      <span class="en">Otokojii Snacks</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">らふて〜</span><span class="en">Rafute</span></div><button class="order-btn" onclick="startOrder('らふて〜')">注文</button></div>
-
-
-    <!-- ===== 10：ご飯もの ===== -->
-    <div class="category-title">
-      <span class="jp">ご飯もの</span>
-      <span class="en">Rice & Risotto</span>
-    </div>
-
-    <div class="item-card"><div class="item-name"><span class="jp">チーズリゾット</span><span class="en">Cheese Risotto</span></div><button class="order-btn" onclick="startOrder('チーズリゾット')">注文</button></div>
-
-
-  </main>
-
-  <!-- ===== 座席選択ポップアップ ===== -->
-  <div class="seat-popup" id="seatPopup">
-    <div class="popup-box">
-      <div class="popup-title">
-        <span class="jp">席を選んでください</span>
-        <span class="en">Select your seat</span>
-      </div>
-
-      <div id="seatButtons"></div>
-
-      <div class="close-btn" onclick="closePopup()">
-        <span class="jp">閉じる</span>
-        <span class="en">Close</span>
-      </div>
+  <!-- ① オススメ -->
+  <div class="category">
+    <div class="category-title">⭐ オススメ / Recommended</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">石垣牛ハンバーグ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">島らっきょ餃子</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">もずくキムチ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">がじゅカレー</div><div class="qty-box">{q}</div></div>
     </div>
   </div>
 
-  <footer>
-    © 居酒屋 あしびなぁ
-  </footer>
+  <!-- ② ﾁｮﾒﾁｮﾒ -->
+  <div class="category">
+    <div class="category-title">ﾁｮﾒﾁｮﾒシリーズ / Chome Series</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">きゅうりチョメ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">チーズチョメ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ナスチョメ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ジャガイモチョメ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ピーマンチョメ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">サバ缶チョメ</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
 
-  <script>
-    // 言語切替
-    document.getElementById("langJp").onclick = () => {
-      document.body.classList.remove('lang-en');
-      document.body.classList.add('lang-jp');
-    };
-    document.getElementById("langEn").onclick = () => {
-      document.body.classList.remove('lang-jp');
-      document.body.classList.add('lang-en');
-    };
+  <!-- ③ さっぱり -->
+  <div class="category">
+    <div class="category-title">さっぱりなやつ / Refreshing</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">島らっきょ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">島らっきょクリームチーズベーコン</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">梅水晶</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ゴーヤスライス</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">塩辛 各</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">塩辛3種盛り</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">海ぶどう</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
 
-    // 座席リスト
-    const seatList = [
-      "カウンター1",
-      "カウンター2",
-      "カウンター3",
-      "テーブル1",
-      "テーブル2",
-      "スタンド1",
-      "スタンド2",
-      "座敷"
-    ];
+  <!-- ④ チャンプル -->
+  <div class="category">
+    <div class="category-title">チャンプル / Champuru Stir-fry</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">ゴーヤチャンプル</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ソーメンチャンプル</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">豆腐チャンプル</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">フーチャンプル</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">らっきょチャンプル</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">カラシナチャンプル</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
 
-    let selectedItem = "";
+  <!-- ⑤ シリシ -->
+  <div class="category">
+    <div class="category-title">シリシ / Shirishiri</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">人参シリシリ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">パパイヤシリシリ</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
 
-    function startOrder(item) {
-      selectedItem = item;
-      const seatButtons = document.getElementById("seatButtons");
-      seatButtons.innerHTML = "";
+  <!-- ⑥ 玉子 -->
+  <div class="category">
+    <div class="category-title">玉子 / Egg Dishes</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">ポークと玉子</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">だし巻き</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">目玉焼き</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
 
-      seatList.forEach(seat => {
-        const btn = document.createElement("div");
-        btn.className = "seat-btn";
-        btn.innerText = seat;
-        btn.onclick = () => sendOrder(seat);
-        seatButtons.appendChild(btn);
-      });
+  <!-- ⑦ 揚げ物 -->
+  <div class="category">
+    <div class="category-title">揚げ物 / Fried Items</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">鶏の唐揚げ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">タコ唐揚げ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">イカ唐揚げ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">エビ唐揚げ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">チーズの棒</div><div class="qty-box">{q}</div></div>
 
-      document.getElementById("seatPopup").style.display = "flex";
+      <div class="item"><div class="item-name">カーリーフライ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">タコスボール</div><div class="qty-box">{q}</div></div>
+
+      <div class="item"><div class="item-name">天ぷら お任せ3種</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">天ぷら お任せ5種</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
+
+  <!-- ⑧ そば -->
+  <div class="category">
+    <div class="category-title">そば / Soba Noodles</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">ピリ辛エビトマト</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ぽなペティート</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">あぐ〜ペペロン</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">本日の気まぐれ</div><div class="qty-box">{q}</div></div>
+
+      <div class="item"><div class="item-name">ソーキそば</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">テビチそば</div><div class="qty-box">{q}</div></div>
+
+      <div class="item"><div class="item-name">島焼きそば（塩・シークヮーサー）</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
+
+  <!-- ⑨ 男爺 -->
+  <div class="category">
+    <div class="category-title">男爺のつまみ / Old Man’s Snacks</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">たちつてと</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ポチギ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">らふて〜</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ナーベラ</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">島豆腐</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
+
+  <!-- ⑩ ご飯もの -->
+  <div class="category">
+    <div class="category-title">ご飯もの / Rice & Risotto</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">がじゅ丼</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">らふて〜丼</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">焼き飯（らふて〜・らっきょ）</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">ちゃんぽん</div><div class="qty-box">{q}</div></div>
+
+      <div class="item"><div class="item-name">チーズリゾット</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">イカ墨リゾット</div><div class="qty-box">{q}</div></div>
+      <div class="item"><div class="item-name">チーズトマトリゾット</div><div class="qty-box">{q}</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 注文ボタン -->
+<button class="order-button" onclick="sendOrder()">注文する</button>
+
+<script>
+/* ----------- 言語切替 ----------- */
+function toggleLang(){
+  document.body.classList.toggle("lang-en");
+  document.body.classList.toggle("lang-jp");
+}
+
+/* ----------- 席選択 ----------- */
+let selectedSeat = null;
+
+function selectSeat(seat){
+  selectedSeat = seat;
+  localStorage.setItem("ashibinaa_seat", seat);
+  document.getElementById("seatModal").style.display = "none";
+}
+
+window.onload = function(){
+  let saved = localStorage.getItem("ashibinaa_seat");
+  if(saved){
+    selectedSeat = saved;
+    document.getElementById("seatModal").style.display = "none";
+  }
+};
+
+/* ----------- 数量ボックステンプレを埋め込む ----------- */
+document.querySelectorAll(".qty-box").forEach(box=>{
+  box.innerHTML = `
+    <button class="qty-btn" onclick="qtyChange(this, -1)">−</button>
+    <span class="qty-number">0</span>
+    <button class="qty-btn" onclick="qtyChange(this, 1)">＋</button>
+  `;
+});
+
+/* ----------- 数量変更 ----------- */
+function qtyChange(btn, delta){
+  const number = btn.parentElement.querySelector(".qty-number");
+  let num = parseInt(number.textContent);
+
+  num += delta;
+  if(num < 0) num = 0;
+  if(num > 5) num = 5;
+
+  number.textContent = num;
+}
+
+/* ----------- アコーディオン ----------- */
+document.querySelectorAll(".category-title").forEach(title=>{
+  title.addEventListener("click", ()=>{
+    let content = title.nextElementSibling;
+    content.style.display = content.style.display === "block" ? "none" : "block";
+  });
+});
+
+/* ----------- 注文送信 ----------- */
+function sendOrder(){
+  if(!selectedSeat){
+    alert("席を選んでください");
+    return;
+  }
+
+  let items = [];
+  document.querySelectorAll(".item").forEach(item=>{
+    const name = item.querySelector(".item-name").textContent.trim();
+    const qty = parseInt(item.querySelector(".qty-number").textContent);
+    if(qty > 0){
+      items.push(`・${name} ×${qty}`);
     }
+  });
 
-    function closePopup() {
-      document.getElementById("seatPopup").style.display = "none";
-    }
+  if(items.length === 0){
+    alert("商品が選択されていません");
+    return;
+  }
 
-    function sendOrder(seat) {
-      const message =
+  const message =
 `【注文】
-席：${seat}
-商品：${selectedItem}
-数量：1`;
+席：${selectedSeat}
+商品：
+${items.join("\n")}`;
 
-      const encoded = encodeURIComponent(message);
-      const url = `https://line.me/R/ti/p/@213funlp?${encoded}`;
-
-      window.location.href = url;
-    }
-  </script>
+  const url = "https://line.me/R/ti/p/@213funlp?text=" + encodeURIComponent(message);
+  window.location.href = url;
+}
+</script>
 
 </body>
 </html>
