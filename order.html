@@ -301,6 +301,12 @@
   </div>
 
 </div>
+<div style="padding: 20px;">
+  <label style="font-weight:bold;">メモ（ご要望など）</label>
+  <textarea id="memoInput" placeholder="例：取り皿お願いします" 
+    style="width:100%; height:80px; font-size:1rem; padding:10px; border:1px solid #ccc; border-radius:6px;"></textarea>
+</div>
+
 <!-- ▼ 注文ボタン -->
 <button id="sendLine" class="order-button">
   <span class="jp">注文する</span>
@@ -357,7 +363,7 @@ function selectSeat(seatName) {
 }
 
 /* ==========================================================
-    LINE 送信（完全版：名前100%取得）
+    LINE 送信（フード・ドリンク分離＋メモ付）
 ========================================================== */
 document.getElementById("sendLine").addEventListener("click", () => {
 
@@ -367,40 +373,67 @@ document.getElementById("sendLine").addEventListener("click", () => {
     return;
   }
 
-  let orderText = `【注文】\n席：${seat}\n\n`;
+  let foodText = "";
+  let drinkText = "";
 
-  document.querySelectorAll(".item").forEach(item => {
+  document.querySelectorAll(".category").forEach(category => {
 
-    // --- 名前取得（100％取れる版） ---
-    let jpName = "";
-    const jpSpan = item.querySelector(".item-name .jp");
-    const enSpan = item.querySelector(".item-name .en");
+    // カテゴリ名（JP）
+    const categoryName = category.querySelector(".category-title .jp")?.textContent.trim() || "";
 
-    if (jpSpan && jpSpan.textContent.trim() !== "") {
-      jpName = jpSpan.textContent.trim();
-    } else if (enSpan && enSpan.textContent.trim() !== "") {
-      jpName = enSpan.textContent.trim();
-    } else {
-      jpName = item.querySelector(".item-name").textContent.trim();
-    }
+    // アイテムごとに処理
+    category.querySelectorAll(".item").forEach(item => {
 
-    // 数量
-    const qty = item.querySelector(".qty").value;
+      // 名前取得
+      const jpSpan = item.querySelector(".item-name .jp");
+      let jpName = jpSpan ? jpSpan.textContent.trim() : "";
 
-    if (qty > 0 && jpName !== "") {
-      orderText += `${jpName} × ${qty}\n`;
-    }
+      // 数量
+      const qty = item.querySelector(".qty").value;
+
+      if (qty > 0 && jpName !== "") {
+
+        // ドリンク判定（コード1に合わせ調整可能）
+        const drinkKeywords = ["ビール", "泡盛", "焼酎", "カクテル", "ワイン", "ハイボール", "サワー", "梅酒", "ソフトドリンク"];
+
+        const isDrink = drinkKeywords.some(word => jpName.includes(word) || categoryName.includes(word));
+
+        if (isDrink) {
+          drinkText += `${jpName} × ${qty}\n`;
+        } else {
+          foodText += `${jpName} × ${qty}\n`;
+        }
+      }
+    });
   });
 
-  // 商品がゼロなら警告
-  if (orderText.trim() === `【注文】\n席：${seat}`) {
+  // 何も選ばれていない
+  if (foodText === "" && drinkText === "") {
     alert("※商品が選択されていません");
     return;
   }
 
+  // メモ欄
+  const memo = document.getElementById("memoInput")?.value.trim() || "";
+
+  // 送信テキスト組み立て
+  let orderText = `【店内注文】\n席：${seat}\n\n`;
+
+  if (foodText !== "") {
+    orderText += `【フード】\n${foodText}\n`;
+  }
+
+  if (drinkText !== "") {
+    orderText += `【ドリンク】\n${drinkText}\n`;
+  }
+
+  if (memo !== "") {
+    orderText += `【メモ】\n${memo}\n`;
+  }
+
   const encoded = encodeURIComponent(orderText);
 
-  // 公式アカウント固定送信
+  // ★公式アカウント固定送信（自動入力まで対応）
   const url = `https://line.me/R/oaMessage/@213funlp/?text=${encoded}`;
 
   window.location.href = url;
