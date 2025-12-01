@@ -392,17 +392,17 @@ document.getElementById("sendLine").addEventListener("click", () => {
 
 
   if (orderText.trim() === `【注文】\n席：${seat}`) {
-    alert("※商品が選択されていません");
-    return;
-  }
+  alert("※商品が選択されていません");
+  return;
+}
 
-  const encoded = encodeURIComponent(orderText);
+const encoded = encodeURIComponent(orderText);
 
-  /* ←この形式が LINE のトークに反映される最も安定するURL */
-  https://line.me/R/ti/p/@213funlp?text=xxxxx
+// ★ここが最重要（LINE公式アカウントへ確定送信）
+const url = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
 
+window.location.href = url;
 
-  window.location.href = url;
 });
 </script>
 </body>
