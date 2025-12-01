@@ -370,12 +370,26 @@ document.getElementById("sendLine").addEventListener("click", () => {
   let orderText = `【注文】\n席：${seat}\n\n`;
 
   document.querySelectorAll(".item").forEach(item => {
-    const jpName = item.querySelector(".jp")?.textContent?.trim() || "";
-    const qty = item.querySelector(".qty").value;
-    if (qty > 0) {
-      orderText += `${jpName} × ${qty}\n`;
+
+  const nameBox = item.querySelector(".item-name");
+  let jpName = "";
+
+  if (nameBox) {
+    const jpSpan = nameBox.querySelector(".jp");
+    if (jpSpan) {
+      jpName = jpSpan.textContent.trim();
+    } else {
+      jpName = nameBox.textContent.trim().split("\n")[0];
     }
-  });
+  }
+
+  const qty = item.querySelector(".qty").value;
+
+  if (qty > 0 && jpName !== "") {
+    orderText += `${jpName} × ${qty}\n`;
+  }
+});
+
 
   if (orderText.trim() === `【注文】\n席：${seat}`) {
     alert("※商品が選択されていません");
