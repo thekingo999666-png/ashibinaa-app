@@ -617,7 +617,7 @@ function selectSeat(seatName) {
 }
 
 /* =============================
-    LINE送信
+    LINE送信（前に動いてた形式）
 ============================= */
 document.getElementById("sendLine").addEventListener("click", () => {
   const seat = document.getElementById("seatSelect").value;
@@ -638,13 +638,12 @@ document.getElementById("sendLine").addEventListener("click", () => {
     }
   });
 
-  if (orderText === `【注文】\n席：${seat}\n\n`) {
-    alert("※商品が選択されていません");
-    return;
-  }
+  const encoded = encodeURIComponent(orderText);
 
+  // ← 前に“送れていた”URL形式
   const url = `https://line.me/R/ti/p/@213funlp?text=${encoded}`;
-　 window.location.href = url;
+
+  window.location.href = url;
 });
 </script>
 
