@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>店内注文 - あしびなぁ</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;margin:0;background:#fff;color:#111;}
+.lang-jp .en{display:none;}
+.lang-en .jp{display:none;}
+header{padding:16px;text-align:center;background:#fff;border-bottom:3px solid #f5a623;font-size:1.4rem;font-weight:bold;}
+.lang-switch{text-align:center;padding:10px;}
+.lang-btn{padding:6px 14px;background:#f5a623;border:none;border-radius:6px;font-size:.9rem;cursor:pointer;color:#fff;margin:4px;}
+.category{border-bottom:1px solid #ddd;}
+.category-title{padding:14px;background:#fff;cursor:pointer;font-size:1.1rem;border-left:4px solid #f5a623;}
+.category-content{display:none;background:#fafafa;padding:10px 14px 20px;}
+.item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}
+.item-name{font-size:1rem;max-width:60%;}
+.qty-box select{padding:4px;font-size:1rem;}
+.order-button{display:block;width:90%;margin:30px auto;padding:14px;background:#f5a623;color:#fff;border-radius:8px;font-size:1.2rem;cursor:pointer;border:none;}
+#seatModal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:5000;}
+#seatBox{background:#fff;padding:20px;width:80%;max-width:360px;border-radius:10px;}
+#seatBox h2{text-align:center;font-size:1.2rem;margin-bottom:14px;}
+.seat-btn{width:100%;padding:12px;margin:6px 0;background:#f5a623;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;}
+#memoBox{width:90%;margin:20px auto;display:block;padding:10px;font-size:1rem;border:1px solid #ccc;border-radius:6px;}
+</style>
+</head>
+<body class="lang-jp">
+<header>
+  <span class="jp">店内注文</span><span class="en">In-store Order</span>
+</header>
+<div class="lang-switch">
+  <button id="langJp" class="lang-btn">日本語</button>
+  <button id="langEn" class="lang-btn">English</button>
+</div>
+
+<select id="seatSelect" style="display:none;">
+  <option value="カウンター1">カウンター1</option>
+  <option value="カウンター2">カウンター2</option>
+  <option value="カウンター3">カウンター3</option>
+  <option value="テーブル1">テーブル1</option>
+  <option value="テーブル2">テーブル2</option>
+  <option value="スタンド1">スタンド1</option>
+  <option value="スタンド2">スタンド2</option>
+  <option value="座敷">座敷</option>
+</select>
+
+<div id="seatModal">
+  <div id="seatBox">
+    <h2>席を選択してください</h2>
+    <button class="seat-btn" onclick="selectSeat('カウンター1')">カウンター1</button>
+    <button class="seat-btn" onclick="selectSeat('カウンター2')">カウンター2</button>
+    <button class="seat-btn" onclick="selectSeat('カウンター3')">カウンター3</button>
+    <button class="seat-btn" onclick="selectSeat('テーブル1')">テーブル1</button>
+    <button class="seat-btn" onclick="selectSeat('テーブル2')">テーブル2</button>
+    <button class="seat-btn" onclick="selectSeat('スタンド1')">スタンド1</button>
+    <button class="seat-btn" onclick="selectSeat('スタンド2')">スタンド2</button>
+    <button class="seat-btn" onclick="selectSeat('座敷')">座敷</button>
+  </div>
+</div>
+
+<textarea id="memoBox" placeholder="メモ（アレルギー、焼き加減など）"></textarea>
+
+<div id="menuArea">
+  <!-- メニューは後であなたが貼った内容を反映して追加できます -->
+  <div class="category">
+    <div class="category-title">テストメニュー</div>
+    <div class="category-content">
+      <div class="item"><div class="item-name">テスト料理</div><div class="qty-box"></div></div>
+      <div class="item"><div class="item-name">テストドリンク</div><div class="qty-box"></div></div>
+    </div>
+  </div>
+</div>
+
+<button id="sendLine" class="order-button">注文する</button>
+
+<script>
+// 言語切替
+document.getElementById("langJp").onclick=()=>{document.body.classList.add("lang-jp");document.body.classList.remove("lang-en");};
+document.getElementById("langEn").onclick=()=>{document.body.classList.add("lang-en");document.body.classList.remove("lang-jp");};
+
+// カテゴリ開閉
+document.querySelectorAll(".category-title").forEach(t=>{
+  t.addEventListener("click",()=>{const c=t.nextElementSibling;c.style.display=c.style.display==="block"?"none":"block";});
+});
+
+// 数量セレクト生成
+document.querySelectorAll(".qty-box").forEach(box=>{
+  const s=document.createElement("select");
+  s.classList.add("qty");
+  for(let i=0;i<=5;i++){const op=document.createElement("option");op.value=i;op.textContent=i;s.appendChild(op);}
+  box.appendChild(s);
+});
+
+// 席選択
+function selectSeat(seat){
+  document.getElementById("seatSelect").value=seat;
+  document.getElementById("seatModal").style.display="none";
+}
+
+window.onload=()=>{document.getElementById("seatModal").style.display="flex";};
+
+// 注文送信
+document.getElementById("sendLine").addEventListener("click",()=>{
+  const seat=document.getElementById("seatSelect").value;
+  if(!seat){alert("※席を選択してください");return;}
+
+  let orderText=`【店内注文】
+席：${seat}
+
+`;
+  let foodText="";
+  let drinkText="";
+
+  document.querySelectorAll(".category").forEach(cat=>{
+    const title=cat.querySelector(".category-title").textContent;
+    const items=cat.querySelectorAll(".item");
+
+    items.forEach(item=>{
+      const qty=Number(item.querySelector(".qty").value);
+      if(qty>0){
+        const name=item.querySelector(".item-name").textContent.trim();
+
+        const isDrink = (
+          title.includes("ビール")||title.includes("ウイスキー")||title.includes("バーボン")||
+          title.includes("ショット")||title.includes("カクテル")||title.includes("焼酎")||
+          title.includes("日本酒")||title.includes("茶割り")||title.includes("酎ハイ")||
+          title.includes("泡盛")||title.includes("石垣島のお酒")
+        );
+
+        if(isDrink) drinkText += `${name} × ${qty}
+`;
+        else foodText += `${name} × ${qty}
+`;
+      }
+    });
+  });
+
+  if(!foodText && !drinkText){alert("※注文が選択されていません");return;}
+
+  orderText += "【フード】
+" + (foodText||"なし") + "
+";
+  orderText += "【ドリンク】
+" + (drinkText||"なし") + "
+";
+
+  const memo=document.getElementById("memoBox").value.trim();
+  orderText += `
+【メモ】
+${memo||"なし"}
+`;
+
+  const url=`https://line.me/R/oaMessage/@213funlp/?text=${encodeURIComponent(orderText)}`;
+  window.location.href=url;
+});
+</script>
+</body>
+</html>
