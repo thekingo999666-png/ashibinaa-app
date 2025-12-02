@@ -6,33 +6,22 @@
 <title>店内注文 - あしびなぁ</title>
 <style>
 body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;margin:0;background:#fff;color:#111;}
-.lang-jp .en{display:none;}
-.lang-en .jp{display:none;}
 header{padding:16px;text-align:center;background:#fff;border-bottom:3px solid #f5a623;font-size:1.4rem;font-weight:bold;}
-.lang-switch{text-align:center;padding:10px;}
-.lang-btn{padding:6px 14px;background:#f5a623;border:none;border-radius:6px;font-size:.9rem;cursor:pointer;color:#fff;margin:4px;}
 .category{border-bottom:1px solid #ddd;}
 .category-title{padding:14px;background:#fff;cursor:pointer;font-size:1.1rem;border-left:4px solid #f5a623;}
 .category-content{display:none;background:#fafafa;padding:10px 14px 20px;}
 .item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}
-.item-name{font-size:1rem;max-width:60%;}
 .qty-box select{padding:4px;font-size:1rem;}
 .order-button{display:block;width:90%;margin:30px auto;padding:14px;background:#f5a623;color:#fff;border-radius:8px;font-size:1.2rem;cursor:pointer;border:none;}
 #seatModal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:5000;}
 #seatBox{background:#fff;padding:20px;width:80%;max-width:360px;border-radius:10px;}
-#seatBox h2{text-align:center;font-size:1.2rem;margin-bottom:14px;}
 .seat-btn{width:100%;padding:12px;margin:6px 0;background:#f5a623;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;}
 #memoBox{width:90%;margin:20px auto;display:block;padding:10px;font-size:1rem;border:1px solid #ccc;border-radius:6px;}
 </style>
 </head>
-<body class="lang-jp">
-<header>
-  <span class="jp">店内注文</span><span class="en">In-store Order</span>
-</header>
-<div class="lang-switch">
-  <button id="langJp" class="lang-btn">日本語</button>
-  <button id="langEn" class="lang-btn">English</button>
-</div>
+<body>
+
+<header>店内注文</header>
 
 <select id="seatSelect" style="display:none;">
   <option value="カウンター1">カウンター1</option>
@@ -59,101 +48,60 @@ header{padding:16px;text-align:center;background:#fff;border-bottom:3px solid #f
   </div>
 </div>
 
-<textarea id="memoBox" placeholder="メモ（アレルギー、焼き加減など）"></textarea>
+<textarea id="memoBox" placeholder="メモ（焼き加減・アレルギーなど）"></textarea>
 
 <div id="menuArea">
-  <!-- メニューは後であなたが貼った内容を反映して追加できます -->
-  <div class="category">
-    <div class="category-title">テストメニュー</div>
-    <div class="category-content">
-      <div class="item"><div class="item-name">テスト料理</div><div class="qty-box"></div></div>
-      <div class="item"><div class="item-name">テストドリンク</div><div class="qty-box"></div></div>
-    </div>
-  </div>
+<div class="category"><div class="category-title">⭐ オススメ</div><div class="category-content"><div class="item"><div class="item-name">石垣牛ハンバーグ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島らっきょ餃子</div><div class="qty-box"></div></div><div class="item"><div class="item-name">もずくキムチ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">がじゅカレー</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ﾁｮﾒﾁｮﾒシリーズ</div><div class="category-content"><div class="item"><div class="item-name">きゅうりチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ナスチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ジャガイモチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーマンチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">サバ缶チョメ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">さっぱり</div><div class="category-content"><div class="item"><div class="item-name">島らっきょ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島らっきょクリームチーズベーコン</div><div class="qty-box"></div></div><div class="item"><div class="item-name">梅水晶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ゴーヤスライス</div><div class="qty-box"></div></div><div class="item"><div class="item-name">塩辛 各</div><div class="qty-box"></div></div><div class="item"><div class="item-name">塩辛3種盛り</div><div class="qty-box"></div></div><div class="item"><div class="item-name">海ぶどう</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">チャンプル</div><div class="category-content"><div class="item"><div class="item-name">ゴーヤチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ソーメンチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">豆腐チャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">フーチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らっきょチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カラシナチャンプル</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">シリシリ</div><div class="category-content"><div class="item"><div class="item-name">人参シリシリ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パパイヤシリシリ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">玉子</div><div class="category-content"><div class="item"><div class="item-name">ポークと玉子</div><div class="qty-box"></div></div><div class="item"><div class="item-name">だし巻き</div><div class="qty-box"></div></div><div class="item"><div class="item-name">目玉焼き</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">揚げ物</div><div class="category-content"><div class="item"><div class="item-name">鶏の唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">タコ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">イカ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">エビ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズの棒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カーリーフライ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">タコスボール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">天ぷら お任せ3種</div><div class="qty-box"></div></div><div class="item"><div class="item-name">天ぷら お任せ5種</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">そば</div><div class="category-content"><div class="item"><div class="item-name">ピリ辛エビトマト</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ぽなペティート</div><div class="qty-box"></div></div><div class="item"><div class="item-name">あぐ〜ペペロン</div><div class="qty-box"></div></div><div class="item"><div class="item-name">本日の気まぐれ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ソーキそば</div><div class="qty-box"></div></div><div class="item"><div class="item-name">テビチそば</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島焼きそば（塩・シークヮーサー）</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">男爺のつまみ</div><div class="category-content"><div class="item"><div class="item-name">たちつてと</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ポチギ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らふて〜</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ナーベラ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島豆腐</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ご飯もの</div><div class="category-content"><div class="item"><div class="item-name">がじゅ丼</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らふて〜丼</div><div class="qty-box"></div></div><div class="item"><div class="item-name">焼き飯（らふて〜・らっきょ）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ちゃんぽん</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズリゾット</div><div class="qty-box"></div></div><div class="item"><div class="item-name">イカ墨リゾット</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズトマトリゾット</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ビール</div><div class="category-content"><div class="item"><div class="item-name">生ビール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">瓶ビール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">クリアフリー（ノンアル）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ビアボール</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ウイスキー</div><div class="category-content"><div class="item"><div class="item-name">角ハイボール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">碧（あお）</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">バーボン</div><div class="category-content"><div class="item"><div class="item-name">マッケンナー</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ショット</div><div class="category-content"><div class="item"><div class="item-name">レポサド1800（テキーラ）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">どなん</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ハブ酒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ハブーラ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">カクテル</div><div class="category-content"><div class="item"><div class="item-name">カシスソーダ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カシスオレンジ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーチオレンジ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーチウーロン</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">焼酎</div><div class="category-content"><div class="item"><div class="item-name">黒霧島</div><div class="qty-box"></div></div><div class="item"><div class="item-name">二階堂</div><div class="qty-box"></div></div><div class="item"><div class="item-name">金宮</div><div class="qty-box"></div></div><div class="item"><div class="item-name">黒糖焼酎</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">日本酒</div><div class="category-content"><div class="item"><div class="item-name">夜の帝王</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">茶割り</div><div class="category-content"><div class="item"><div class="item-name">ウーロンハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">緑茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">JJ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">JR</div><div class="qty-box"></div></div><div class="item"><div class="item-name">MM</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ヒゲ茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">無糖紅茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">さんぴん茶ハイ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">酎ハイ・サワー</div><div class="category-content"><div class="item"><div class="item-name">しょっぱい梅サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">すっきりトマトサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ホワイトサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">巨峰サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">プレーンサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">シークヮーサーサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">グレープフルーツサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">バイスサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">レモンサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ガリサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">クエン酸サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">男梅サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピリ辛トマトハイ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">泡盛</div><div class="category-content"><div class="item"><div class="item-name">残波 白</div><div class="qty-box"></div></div><div class="item"><div class="item-name">残波 黒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">菊之露</div><div class="qty-box"></div></div><div class="item"><div class="item-name">久米仙</div><div class="qty-box"></div></div><div class="item"><div class="item-name">久米仙 古酒35°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">春雨</div><div class="qty-box"></div></div><div class="item"><div class="item-name">古里</div><div class="qty-box"></div></div><div class="item"><div class="item-name">菊之露VIP</div><div class="qty-box"></div></div><div class="item"><div class="item-name">琉球王朝</div><div class="qty-box"></div></div><div class="item"><div class="item-name">請福</div><div class="qty-box"></div></div><div class="item"><div class="item-name">八重泉</div><div class="qty-box"></div></div><div class="item"><div class="item-name">黒真珠</div><div class="qty-box"></div></div><div class="item"><div class="item-name">玉の露</div><div class="qty-box"></div></div><div class="item"><div class="item-name">おもと</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">石垣島のお酒</div><div class="category-content"><div class="item"><div class="item-name">IMUGE. 25°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">IMUGE. 37°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島ラム</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ソフトドリンク</div><div class="category-content"><div class="item"><div class="item-name">コーラ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ジンジャーエール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">さんぴん茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ウーロン茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">緑茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ヒゲ茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">無糖紅茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">オレンジジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">トマトジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">マンゴージュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パイナップルジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パッションフルーツジュース</div><div class="qty-box"></div></div></div></div>
 </div>
-
 <button id="sendLine" class="order-button">注文する</button>
 
 <script>
-// 言語切替
-document.getElementById("langJp").onclick=()=>{document.body.classList.add("lang-jp");document.body.classList.remove("lang-en");};
-document.getElementById("langEn").onclick=()=>{document.body.classList.add("lang-en");document.body.classList.remove("lang-jp");};
-
-// カテゴリ開閉
+// category toggle
 document.querySelectorAll(".category-title").forEach(t=>{
-  t.addEventListener("click",()=>{const c=t.nextElementSibling;c.style.display=c.style.display==="block"?"none":"block";});
+ t.addEventListener("click",()=>{let c=t.nextElementSibling;c.style.display=c.style.display==="block"?"none":"block";});
 });
 
-// 数量セレクト生成
-document.querySelectorAll(".qty-box").forEach(box=>{
-  const s=document.createElement("select");
-  s.classList.add("qty");
-  for(let i=0;i<=5;i++){const op=document.createElement("option");op.value=i;op.textContent=i;s.appendChild(op);}
-  box.appendChild(s);
+// qty
+document.querySelectorAll(".qty-box").forEach(b=>{
+ let s=document.createElement("select");
+ s.classList.add("qty");
+ for(let i=0;i<=5;i++){let o=document.createElement("option");o.value=i;o.text=i;s.appendChild(o);}
+ b.appendChild(s);
 });
 
-// 席選択
-function selectSeat(seat){
-  document.getElementById("seatSelect").value=seat;
-  document.getElementById("seatModal").style.display="none";
-}
-
+function selectSeat(s){document.getElementById("seatSelect").value=s;document.getElementById("seatModal").style.display="none";}
 window.onload=()=>{document.getElementById("seatModal").style.display="flex";};
 
-// 注文送信
-document.getElementById("sendLine").addEventListener("click",()=>{
-  const seat=document.getElementById("seatSelect").value;
-  if(!seat){alert("※席を選択してください");return;}
+document.getElementById("sendLine").onclick=()=>{
+ let seat=document.getElementById("seatSelect").value;
+ if(!seat){alert("席を選んでください");return;}
 
-  let orderText=`【店内注文】
-席：${seat}
+ let food="", drink="";
+ document.querySelectorAll(".category").forEach(cat=>{
+   let title=cat.querySelector(".category-title").innerText;
+   cat.querySelectorAll(".item").forEach(item=>{
+     let q=Number(item.querySelector(".qty").value);
+     if(q>0){
+       let name=item.querySelector(".item-name").innerText;
+       let isDrink = (
+         title.includes("ビール")||title.includes("ウイスキー")||title.includes("バーボン")||
+         title.includes("ショット")||title.includes("カクテル")||title.includes("焼酎")||
+         title.includes("日本酒")||title.includes("茶割り")||title.includes("酎ハイ")||
+         title.includes("泡盛")||title.includes("石垣島のお酒")||title.includes("ソフトドリンク")
+       );
+       if(isDrink) drink += name+" × "+q+"\n";
+       else food += name+" × "+q+"\n";
+     }
+   });
+ });
 
-`;
-  let foodText="";
-  let drinkText="";
+ if(!food && !drink){alert("注文がありません");return;}
 
-  document.querySelectorAll(".category").forEach(cat=>{
-    const title=cat.querySelector(".category-title").textContent;
-    const items=cat.querySelectorAll(".item");
+ let memo=document.getElementById("memoBox").value.trim();
+ let text=`【店内注文】\n席：${seat}\n\n【フード】\n${food||"なし"}\n【ドリンク】\n${drink||"なし"}\n\n【メモ】\n${memo||"なし"}`;
 
-    items.forEach(item=>{
-      const qty=Number(item.querySelector(".qty").value);
-      if(qty>0){
-        const name=item.querySelector(".item-name").textContent.trim();
-
-        const isDrink = (
-          title.includes("ビール")||title.includes("ウイスキー")||title.includes("バーボン")||
-          title.includes("ショット")||title.includes("カクテル")||title.includes("焼酎")||
-          title.includes("日本酒")||title.includes("茶割り")||title.includes("酎ハイ")||
-          title.includes("泡盛")||title.includes("石垣島のお酒")
-        );
-
-        if(isDrink) drinkText += `${name} × ${qty}
-`;
-        else foodText += `${name} × ${qty}
-`;
-      }
-    });
-  });
-
-  if(!foodText && !drinkText){alert("※注文が選択されていません");return;}
-
-  orderText += "【フード】
-" + (foodText||"なし") + "
-";
-  orderText += "【ドリンク】
-" + (drinkText||"なし") + "
-";
-
-  const memo=document.getElementById("memoBox").value.trim();
-  orderText += `
-【メモ】
-${memo||"なし"}
-`;
-
-  const url=`https://line.me/R/oaMessage/@213funlp/?text=${encodeURIComponent(orderText)}`;
-  window.location.href=url;
-});
+ window.location.href=`https://line.me/R/oaMessage/@213funlp/?text=${encodeURIComponent(text)}`;
+};
 </script>
-</body>
-</html>
+
+</body></html>
