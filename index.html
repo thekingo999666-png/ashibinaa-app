@@ -157,6 +157,17 @@ span.category-drink {
   font-weight: 600 !important;
   letter-spacing: 1px !important;
 }
+/* 日本語カテゴリが黒金の時、隣の英語も黒金にする */
+.card-title span.jp[class*="category-"] + span.en {
+  background-color: #000 !important;
+  color: #ffd700 !important;
+  border: 1px solid #ffd700 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  display: inline-block !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+}
 </style>
   <style>
     /* ======== 全体のベース設定 ======== */
