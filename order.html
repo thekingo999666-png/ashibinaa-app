@@ -102,6 +102,18 @@ document.getElementById("sendLine").onclick=()=>{
 
  window.location.href=`https://line.me/R/oaMessage/@213funlp/?text=${encodeURIComponent(text)}`;
 };
+  /* ==========================================================
+    言語切替（追加）
+========================================================== */
+document.getElementById("langJp").addEventListener("click", () => {
+  document.body.classList.remove("lang-en");
+  document.body.classList.add("lang-jp");
+});
+
+document.getElementById("langEn").addEventListener("click", () => {
+  document.body.classList.remove("lang-jp");
+  document.body.classList.add("lang-en");
+});
 </script>
 
 </body></html>
