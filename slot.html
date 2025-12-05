@@ -2,81 +2,84 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>あしびなぁスロット</title>
 
 <style>
 body {
-  background: linear-gradient(#6ec6ff, #b682ff);
-  text-align: center;
-  font-family: "Hiragino Maru Gothic Pro", sans-serif;
-  padding: 20px;
-}
-
-/* タイトル */
-h1 {
   margin: 0;
+  background: linear-gradient(#6ec6ff, #b682ff);
+  font-family: "Hiragino Maru Gothic Pro", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+h1 {
+  margin-top: 15px;
   color: #000;
-  font-size: 26px;
-  font-weight: bold;
+  font-size: 5vw;
+  text-align: center;
 }
 
-/* シーサー左右配置 */
-.shisa-left, .shisa-right {
-  font-size: 60px;
+/* シーサー */
+.shisa {
+  font-size: 14vw;
   position: absolute;
-  top: 120px;
+  top: 12vh;
 }
 
-.shisa-left {
-  left: 10px;
-}
+.shisa.left { left: 4vw; }
+.shisa.right { right: 4vw; }
 
-.shisa-right {
-  right: 10px;
-}
-
-/* スロット枠 */
+/* スロット枠（スマホ全画面用に拡大） */
 .slot-frame {
-  margin: 40px auto 20px auto;
+  margin-top: 10vh;
   background: #e7f9ff;
   border: 12px solid #8b5a2b;
   border-radius: 12px;
-  width: 320px;
-  height: 140px;
+  width: 90vw;
+  height: 28vh;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  position: relative;
 }
 
+/* リール */
 .reel {
-  width: 90px;
-  height: 90px;
+  width: 26vw;
+  height: 26vw;
   background: #fff;
-  border-radius: 10px;
-  border: 3px solid #444;
+  border-radius: 12px;
+  border: 4px solid #444;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 60px;
+  font-size: 13vw;
+  transition: transform 0.1s linear;
 }
 
 /* ボタン */
 #spinBtn {
-  padding: 15px 40px;
-  font-size: 22px;
+  margin-top: 3vh;
+  padding: 2vh 8vw;
+  font-size: 6vw;
   border-radius: 50px;
   background: #fff;
   border: 4px solid #444;
 }
 
+/* 景品表示 */
 #result {
-  font-size: 28px;
+  margin-top: 3vh;
+  font-size: 6vw;
   font-weight: bold;
-  margin: 15px;
   color: #ffe600;
   text-shadow: 2px 2px 4px #000;
+  text-align: center;
+  white-space: pre-line;
 }
 </style>
 </head>
@@ -84,10 +87,11 @@ h1 {
 
 <h1>ISHIGAKI<br>あしびなぁ〜</h1>
 
-<!-- 左右にシーサー -->
-<div class="shisa-left">🦁</div>
-<div class="shisa-right">🦁</div>
+<!-- シーサー -->
+<div class="shisa left">🦁</div>
+<div class="shisa right">🦁</div>
 
+<!-- スロット本体 -->
 <div class="slot-frame">
   <div class="reel" id="reel1">🍒</div>
   <div class="reel" id="reel2">🍒</div>
@@ -99,48 +103,57 @@ h1 {
 <button id="spinBtn">押す</button>
 
 <script>
-/* === 図柄 === */
+/* ==== 図柄と景品内容 ==== */
 const symbols = ["7️⃣", "🅱️", "🍉", "🍊", "🍒", "💣"];
 
-/* === トロトロ回転演出 === */
-async function slowSpin(reel, finalSymbol, startDelay) {
+const prizes = {
+  "7️⃣": "🍺 生ビール 1杯サービス！",
+  "🅱️": "島酒 1杯サービス！",
+  "🍉": "サワー各種 1杯サービス！",
+  "🍊": "強制実費：ヤスと乾杯🍊",
+  "🍒": "強制実費：テキーラ×1🍒",
+  "💣": "強制実費：ハブーラ×2💣"
+};
+
+/* ==== トロトロ回転 ==== */
+function slowSpin(reel, finalSymbol, stopDelay) {
   return new Promise(resolve => {
-    setTimeout(() => {
-      let speed = 120; // 最初からゆっくり
-      let angle = 0;
+    let speed = 80; // 最初から遅め
+    let angle = 0;
+    let cycles = 0;
 
-      const interval = setInterval(() => {
-        reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        angle += 10;
-        reel.style.transform = `rotate(${angle}deg)`;
+    const interval = setInterval(() => {
+      reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      angle += 6;
+      reel.style.transform = `rotate(${angle}deg)`;
 
-        // 減速をさらにゆるく
-        speed += 8;
+      cycles++;
+      if (cycles % 18 === 0) speed += 20; // 徐々に減速
 
-        if (speed >= 400) {
-          clearInterval(interval);
-          reel.style.transform = "rotate(0deg)";
-          reel.textContent = finalSymbol;
-          resolve();
-        }
-      }, speed);
-    }, startDelay);
+      if (cycles * speed > stopDelay) {
+        clearInterval(interval);
+        reel.style.transform = "rotate(0deg)";
+        reel.textContent = finalSymbol;
+        resolve();
+      }
+    }, speed);
   });
 }
 
+/* ==== 回すボタン ==== */
 document.getElementById("spinBtn").addEventListener("click", async () => {
-  const result = document.getElementById("result");
-  result.textContent = "";
+  document.getElementById("result").textContent = "";
 
-  // 均等確率で図柄を選択（揃える）
   const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
 
-  // 左 → 中 → 右 の順に回転開始（トロトロ）
-  await slowSpin(document.getElementById("reel1"), finalSymbol, 0);
-  await slowSpin(document.getElementById("reel2"), finalSymbol, 600);
-  await slowSpin(document.getElementById("reel3"), finalSymbol, 1200);
+  // 全リールがまず回転開始
+  slowSpin(document.getElementById("reel1"), finalSymbol, 3000);
+  slowSpin(document.getElementById("reel2"), finalSymbol, 4500);
+  await slowSpin(document.getElementById("reel3"), finalSymbol, 6000);
 
-  result.textContent = "🎉 BIG WIN!! 🎉";
+  // 景品表示
+  document.getElementById("result").textContent = 
+    `🎉 BIG WIN!! 🎉\n${prizes[finalSymbol]}`;
 });
 </script>
 
