@@ -13,6 +13,7 @@ body {
   padding: 20px;
 }
 
+/* タイトル */
 h1 {
   margin: 0;
   color: #000;
@@ -20,16 +21,33 @@ h1 {
   font-weight: bold;
 }
 
+/* シーサー左右配置 */
+.shisa-left, .shisa-right {
+  font-size: 60px;
+  position: absolute;
+  top: 120px;
+}
+
+.shisa-left {
+  left: 10px;
+}
+
+.shisa-right {
+  right: 10px;
+}
+
+/* スロット枠 */
 .slot-frame {
-  margin: 20px auto;
+  margin: 40px auto 20px auto;
   background: #e7f9ff;
   border: 12px solid #8b5a2b;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 320px;
   height: 140px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative;
 }
 
 .reel {
@@ -42,9 +60,9 @@ h1 {
   justify-content: center;
   align-items: center;
   font-size: 60px;
-  transition: transform 0.1s linear;
 }
 
+/* ボタン */
 #spinBtn {
   padding: 15px 40px;
   font-size: 22px;
@@ -66,6 +84,10 @@ h1 {
 
 <h1>ISHIGAKI<br>あしびなぁ〜</h1>
 
+<!-- 左右にシーサー -->
+<div class="shisa-left">🦁</div>
+<div class="shisa-right">🦁</div>
+
 <div class="slot-frame">
   <div class="reel" id="reel1">🍒</div>
   <div class="reel" id="reel2">🍒</div>
@@ -77,33 +99,32 @@ h1 {
 <button id="spinBtn">押す</button>
 
 <script>
-/* ===== 図柄（均等確率） ===== */
+/* === 図柄 === */
 const symbols = ["7️⃣", "🅱️", "🍉", "🍊", "🍒", "💣"];
 
-/* ===== ゆっくり滑らかに回転して止まる ===== */
-function smoothSpin(reel, finalSymbol, delay) {
+/* === トロトロ回転演出 === */
+async function slowSpin(reel, finalSymbol, startDelay) {
   return new Promise(resolve => {
-    let speed = 40;         // 初速
-    let counter = 0;
+    setTimeout(() => {
+      let speed = 120; // 最初からゆっくり
+      let angle = 0;
 
-    const interval = setInterval(() => {
-      // ランダム絵柄を表示
-      reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const interval = setInterval(() => {
+        reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        angle += 10;
+        reel.style.transform = `rotate(${angle}deg)`;
 
-      // 徐々に減速
-      counter++;
-      if (counter % 10 === 0) speed += 20; // 緩やかに減速
+        // 減速をさらにゆるく
+        speed += 8;
 
-      reel.style.transform = `rotate(${counter * 20}deg)`;
-
-      // 一定以上遅くなったら停止
-      if (speed >= 300) {
-        clearInterval(interval);
-        reel.style.transform = "rotate(0deg)";
-        reel.textContent = finalSymbol; // 最後に揃える
-        resolve();
-      }
-    }, speed);
+        if (speed >= 400) {
+          clearInterval(interval);
+          reel.style.transform = "rotate(0deg)";
+          reel.textContent = finalSymbol;
+          resolve();
+        }
+      }, speed);
+    }, startDelay);
   });
 }
 
@@ -111,13 +132,13 @@ document.getElementById("spinBtn").addEventListener("click", async () => {
   const result = document.getElementById("result");
   result.textContent = "";
 
-  // すべて均等確率で1つ選ぶ（必ず揃う）
+  // 均等確率で図柄を選択（揃える）
   const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
 
-  // リールを順番にゆっくり回転
-  await smoothSpin(document.getElementById("reel1"), finalSymbol, 0);
-  await smoothSpin(document.getElementById("reel2"), finalSymbol, 200);
-  await smoothSpin(document.getElementById("reel3"), finalSymbol, 400);
+  // 左 → 中 → 右 の順に回転開始（トロトロ）
+  await slowSpin(document.getElementById("reel1"), finalSymbol, 0);
+  await slowSpin(document.getElementById("reel2"), finalSymbol, 600);
+  await slowSpin(document.getElementById("reel3"), finalSymbol, 1200);
 
   result.textContent = "🎉 BIG WIN!! 🎉";
 });
