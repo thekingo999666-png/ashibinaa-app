@@ -42,6 +42,7 @@ h1 {
   justify-content: center;
   align-items: center;
   font-size: 60px;
+  transition: transform 0.1s linear;
 }
 
 #spinBtn {
@@ -79,24 +80,27 @@ h1 {
 /* ===== 図柄（均等確率） ===== */
 const symbols = ["7️⃣", "🅱️", "🍉", "🍊", "🍒", "💣"];
 
-/* ===== ゆっくり全回転して止まる関数 ===== */
-function spinReelSmooth(reelElement, finalSymbol) {
-  return new Promise((resolve) => {
-    let speed = 50;   // 初速（速い）
-    let count = 0;
+/* ===== ゆっくり滑らかに回転して止まる ===== */
+function smoothSpin(reel, finalSymbol, delay) {
+  return new Promise(resolve => {
+    let speed = 40;         // 初速
+    let counter = 0;
 
     const interval = setInterval(() => {
-      // ランダム表示しながら減速
-      reelElement.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-      count++;
+      // ランダム絵柄を表示
+      reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
 
-      // 徐々に遅くする
-      if (count % 15 === 0) speed += 40;
+      // 徐々に減速
+      counter++;
+      if (counter % 10 === 0) speed += 20; // 緩やかに減速
 
-      if (speed >= 400) {
+      reel.style.transform = `rotate(${counter * 20}deg)`;
+
+      // 一定以上遅くなったら停止
+      if (speed >= 300) {
         clearInterval(interval);
-        // 最後に揃える
-        reelElement.textContent = finalSymbol;
+        reel.style.transform = "rotate(0deg)";
+        reel.textContent = finalSymbol; // 最後に揃える
         resolve();
       }
     }, speed);
@@ -107,13 +111,13 @@ document.getElementById("spinBtn").addEventListener("click", async () => {
   const result = document.getElementById("result");
   result.textContent = "";
 
-  // 均等確率で1つ選ぶ（ハズレなし）
-  const selected = symbols[Math.floor(Math.random() * symbols.length)];
+  // すべて均等確率で1つ選ぶ（必ず揃う）
+  const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
 
-  // リールをゆっくり回す
-  await spinReelSmooth(document.getElementById("reel1"), selected);
-  await spinReelSmooth(document.getElementById("reel2"), selected);
-  await spinReelSmooth(document.getElementById("reel3"), selected);
+  // リールを順番にゆっくり回転
+  await smoothSpin(document.getElementById("reel1"), finalSymbol, 0);
+  await smoothSpin(document.getElementById("reel2"), finalSymbol, 200);
+  await smoothSpin(document.getElementById("reel3"), finalSymbol, 400);
 
   result.textContent = "🎉 BIG WIN!! 🎉";
 });
