@@ -6,7 +6,6 @@
 <title>あしびなぁスロット</title>
 
 <style>
-/* ===== スタイル ===== */
 body {
   background: linear-gradient(#6ec6ff, #b682ff);
   text-align: center;
@@ -77,46 +76,46 @@ h1 {
 <button id="spinBtn">押す</button>
 
 <script>
-/* ===== JS（絵文字版絵柄） ===== */
+/* ===== 図柄（均等確率） ===== */
+const symbols = ["7️⃣", "🅱️", "🍉", "🍊", "🍒", "💣"];
 
-/* 絵柄リスト（写真なし版） */
-const symbols = [
-  "7️⃣",   // 7
-  "🅱️",  // BAR の代用（赤いB）
-  "🍉",   // スイカ
-  "🍊",   // オレンジ
-  "🍒",   // さくらんぼ
-  "💣"    // 爆弾
-];
-
-function spinReel(reelElement) {
+/* ===== ゆっくり全回転して止まる関数 ===== */
+function spinReelSmooth(reelElement, finalSymbol) {
   return new Promise((resolve) => {
+    let speed = 50;   // 初速（速い）
     let count = 0;
 
     const interval = setInterval(() => {
+      // ランダム表示しながら減速
       reelElement.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       count++;
 
-      if (count > 20) {
+      // 徐々に遅くする
+      if (count % 15 === 0) speed += 40;
+
+      if (speed >= 400) {
         clearInterval(interval);
-        resolve(reelElement.textContent);
+        // 最後に揃える
+        reelElement.textContent = finalSymbol;
+        resolve();
       }
-    }, 80);
+    }, speed);
   });
 }
 
 document.getElementById("spinBtn").addEventListener("click", async () => {
-  document.getElementById("result").textContent = "";
+  const result = document.getElementById("result");
+  result.textContent = "";
 
-  const r1 = await spinReel(document.getElementById("reel1"));
-  const r2 = await spinReel(document.getElementById("reel2"));
-  const r3 = await spinReel(document.getElementById("reel3"));
+  // 均等確率で1つ選ぶ（ハズレなし）
+  const selected = symbols[Math.floor(Math.random() * symbols.length)];
 
-  if (r1 === r2 && r2 === r3) {
-    document.getElementById("result").textContent = "🎉 BIG WIN!! 🎉";
-  } else {
-    document.getElementById("result").textContent = "ハズレ…";
-  }
+  // リールをゆっくり回す
+  await spinReelSmooth(document.getElementById("reel1"), selected);
+  await spinReelSmooth(document.getElementById("reel2"), selected);
+  await spinReelSmooth(document.getElementById("reel3"), selected);
+
+  result.textContent = "🎉 BIG WIN!! 🎉";
 });
 </script>
 
