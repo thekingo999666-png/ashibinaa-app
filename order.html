@@ -100,7 +100,58 @@ document.getElementById("sendLine").onclick=()=>{
  let memo=document.getElementById("memoBox").value.trim();
  let text=`【店内注文】\n席：${seat}\n\n【フード】\n${food||"なし"}\n【ドリンク】\n${drink||"なし"}\n\n【メモ】\n${memo||"なし"}`;
 
- window.location.href=`https://line.me/R/oaMessage/@213funlp/?text=${encodeURIComponent(text)}`;
+ document.getElementById("sendLine").onclick = async () => {
+  let seat = document.getElementById("seatSelect").value;
+  if (!seat) {
+    alert("席を選んでください");
+    return;
+  }
+
+  let food = "", drink = "";
+  document.querySelectorAll(".category").forEach(cat => {
+    let title = cat.querySelector(".category-title").innerText;
+    cat.querySelectorAll(".item").forEach(item => {
+      let q = Number(item.querySelector(".qty").value);
+      if (q > 0) {
+        let name = item.querySelector(".item-name").innerText;
+        let isDrink = (
+          title.includes("ビール") || title.includes("ウイスキー") ||
+          title.includes("バーボン") || title.includes("ショット") ||
+          title.includes("カクテル") || title.includes("焼酎") ||
+          title.includes("日本酒") || title.includes("茶割り") ||
+          title.includes("酎ハイ") || title.includes("泡盛") ||
+          title.includes("石垣島のお酒") || title.includes("ソフトドリンク")
+        );
+
+        if (isDrink) drink += `${name} × ${q}\n`;
+        else food += `${name} × ${q}\n`;
+      }
+    });
+  });
+
+  if (!food && !drink) {
+    alert("注文がありません");
+    return;
+  }
+
+  let memo = document.getElementById("memoBox").value.trim();
+
+  // Worker に送るテキスト
+  let text =
+    `【店内注文】\n席：${seat}\n\n【フード】\n${food || "なし"}\n【ドリンク】\n${drink || "なし"}\n\n【メモ】\n${memo || "なし"}`;
+
+  // ▼ ▼ ▼ ここが Workers に送る部分 ▼ ▼ ▼
+  const resp = await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text })
+  });
+
+  if (resp.ok) {
+    alert("注文を送信しました！");
+  } else {
+    alert("送信に失敗しました…");
+  }
 };
   /* ==========================================================
     言語切替（追加）
