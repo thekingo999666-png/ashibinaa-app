@@ -22,6 +22,21 @@ header {
   font-size: 1.4rem;
   font-weight: bold;
   border-bottom: 3px solid #f5a623;
+  position: relative;
+}
+
+/* 言語切替ボタン */
+#langToggle {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: #f5a623;
+  color: #111;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* ---------- カテゴリ ---------- */
@@ -40,7 +55,7 @@ header {
   background: #222;
 }
 
-/* ---------- 商品カード ---------- */
+/* ---------- メニュー項目 ---------- */
 .item {
   padding: 12px;
   border-bottom: 1px solid #444;
@@ -64,42 +79,45 @@ header {
   text-align: center;
 }
 
-/* ---------- 注文リスト ---------- */
-#orderList {
-  background: #000;
-  padding: 14px;
-  margin-top: 20px;
-  border-top: 2px solid #f5a623;
+/* ---------- 注文履歴 ---------- */
+#historyBox {
+  margin: 14px;
+  padding: 12px;
+  background: #222;
+  border: 1px solid #555;
+  border-radius: 8px;
 }
 
-.order-title {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  border-left: 4px solid #f5a623;
-  padding-left: 8px;
+/* ---------- PIN モーダル ---------- */
+#pinModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 8000;
 }
 
-.order-item {
-  padding: 8px 0;
-  border-bottom: 1px solid #333;
-}
-
-/* ---------- 注文ボタン ---------- */
-.order-button {
-  display: block;
-  width: 90%;
-  margin: 20px auto;
-  padding: 14px;
-  font-size: 1.2rem;
-  background: #f5a623;
+#pinBox {
+  background: #fff;
   color: #111;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
+  padding: 20px;
+  width: 80%;
+  max-width: 320px;
+  border-radius: 12px;
+  text-align: center;
 }
 
-/* ---------- 席選択モーダル ---------- */
+#pinInput {
+  width: 70%;
+  padding: 10px;
+  font-size: 1.1rem;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ---------- 席選択 モーダル ---------- */
 #seatModal {
   position: fixed;
   inset: 0;
@@ -132,6 +150,7 @@ header {
   cursor: pointer;
 }
 
+/* ---------- 要望欄 ---------- */
 #memoBox {
   width: 90%;
   margin: 20px auto;
@@ -139,15 +158,75 @@ header {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #666;
+  background: #222;
+  color: #fff;
+}
+
+/* ---------- 注文リスト ---------- */
+#orderListBox {
+  background: #000;
+  padding: 14px;
+  margin-top: 20px;
+  border-top: 2px solid #f5a623;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+
+.del-btn {
+  background: #f33;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ---------- 注文ボタン ---------- */
+.order-button {
+  display: block;
+  width: 90%;
+  margin: 20px auto;
+  padding: 14px;
+  font-size: 1.2rem;
+  background: #f5a623;
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<header>店内注文</header>
+<header>
+  店内注文
+  <button id="langToggle">EN</button>
+</header>
 
-<!-- hidden seat select -->
+<!-- PIN管理 -->
+<div id="pinModal">
+  <div id="pinBox">
+    <h2>PIN入力</h2>
+    <input type="password" id="pinInput" placeholder="PIN" />
+    <button onclick="checkPin()">OK</button>
+  </div>
+</div>
+
+<!-- 履歴 -->
+<div id="historyBox">
+  <h3>注文履歴</h3>
+  <div id="historyList"></div>
+  <button id="clearHistoryBtn" style="display:none;" onclick="clearHistory()">履歴クリア</button>
+</div>
+
+<!-- 席選択 -->
 <select id="seatSelect" style="display:none;">
   <option value="カウンター1">カウンター1</option>
   <option value="カウンター2">カウンター2</option>
@@ -159,7 +238,6 @@ header {
   <option value="座敷">座敷</option>
 </select>
 
-<!-- seat modal -->
 <div id="seatModal">
   <div id="seatBox">
     <h2>席を選択してください</h2>
@@ -174,992 +252,1128 @@ header {
   </div>
 </div>
 
-<textarea id="memoBox" placeholder="メモ（焼き加減・アレルギーなど）"></textarea>
+<!-- 要望欄 -->
+<textarea id="memoBox" placeholder="要望があればご記入ください"></textarea>
 
-<!-- 注文リストエリア -->
-<div id="orderList">
-  <div class="order-title">注文リスト</div>
-  <div id="orderItems"></div>
+<!-- 注文リスト -->
+<div id="orderListBox">
+  <h3>注文リスト</h3>
+  <div id="orderList"></div>
 </div>
-
-<!-- ▼ メニュー開始（ここに Part2 が入る） -->
 <!-- ============================
-     フードメニュー
+     ▼ メニュー一覧（HTML生成部）
 ============================ -->
 
 <!-- ⭐ オススメ -->
 <div class="category">
-  <div class="category-title">⭐ オススメ</div>
+  <div class="category-title" onclick="toggleCategory(this)">⭐ オススメ</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('石垣牛ハンバーグ','food')">
-      <span class="item-name">石垣牛ハンバーグ</span>
+    <div class="item" onclick="addItem('石垣牛ハンバーグ')">
+      <span class="item-name" id="name-石垣牛ハンバーグ">石垣牛ハンバーグ</span>
       <span class="qty" id="qty-石垣牛ハンバーグ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('島らっきょ餃子','food')">
-      <span class="item-name">島らっきょ餃子</span>
+    <div class="item" onclick="addItem('島らっきょ餃子')">
+      <span class="item-name" id="name-島らっきょ餃子">島らっきょ餃子</span>
       <span class="qty" id="qty-島らっきょ餃子">0</span>
     </div>
-
-    <div class="item" onclick="addItem('もずくキムチ','food')">
-      <span class="item-name">もずくキムチ</span>
+    <div class="item" onclick="addItem('もずくキムチ')">
+      <span class="item-name" id="name-もずくキムチ">もずくキムチ</span>
       <span class="qty" id="qty-もずくキムチ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('がじゅカレー','food')">
-      <span class="item-name">がじゅカレー</span>
+    <div class="item" onclick="addItem('がじゅカレー')">
+      <span class="item-name" id="name-がじゅカレー">がじゅカレー</span>
       <span class="qty" id="qty-がじゅカレー">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- ﾁｮﾒﾁｮﾒシリーズ -->
 <div class="category">
-  <div class="category-title">ﾁｮﾒﾁｮﾒシリーズ</div>
+  <div class="category-title" onclick="toggleCategory(this)">ﾁｮﾒﾁｮﾒシリーズ</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('きゅうりチョメ','food')">
-      <span class="item-name">きゅうりチョメ</span>
+    <div class="item" onclick="addItem('きゅうりチョメ')">
+      <span class="item-name" id="name-きゅうりチョメ">きゅうりチョメ</span>
       <span class="qty" id="qty-きゅうりチョメ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('チーズチョメ','food')">
-      <span class="item-name">チーズチョメ</span>
+    <div class="item" onclick="addItem('チーズチョメ')">
+      <span class="item-name" id="name-チーズチョメ">チーズチョメ</span>
       <span class="qty" id="qty-チーズチョメ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ナスチョメ','food')">
-      <span class="item-name">ナスチョメ</span>
+    <div class="item" onclick="addItem('ナスチョメ')">
+      <span class="item-name" id="name-ナスチョメ">ナスチョメ</span>
       <span class="qty" id="qty-ナスチョメ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ジャガイモチョメ','food')">
-      <span class="item-name">ジャガイモチョメ</span>
+    <div class="item" onclick="addItem('ジャガイモチョメ')">
+      <span class="item-name" id="name-ジャガイモチョメ">ジャガイモチョメ</span>
       <span class="qty" id="qty-ジャガイモチョメ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ピーマンチョメ','food')">
-      <span class="item-name">ピーマンチョメ</span>
-      <span class="qty" id="qty-Pピーマンチョメ">0</span>
+    <div class="item" onclick="addItem('ピーマンチョメ')">
+      <span class="item-name" id="name-ピーマンチョメ">ピーマンチョメ</span>
+      <span class="qty" id="qty-ピーマンチョメ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('サバ缶チョメ','food')">
-      <span class="item-name">サバ缶チョメ</span>
+    <div class="item" onclick="addItem('サバ缶チョメ')">
+      <span class="item-name" id="name-サバ缶チョメ">サバ缶チョメ</span>
       <span class="qty" id="qty-サバ缶チョメ">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- さっぱり -->
 <div class="category">
-  <div class="category-title">さっぱり</div>
+  <div class="category-title" onclick="toggleCategory(this)">さっぱり</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('島らっきょ','food')">
-      <span class="item-name">島らっきょ</span>
+    <div class="item" onclick="addItem('島らっきょ')">
+      <span class="item-name" id="name-島らっきょ">島らっきょ</span>
       <span class="qty" id="qty-島らっきょ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('島らっきょクリームチーズベーコン','food')">
-      <span class="item-name">島らっきょクリームチーズベーコン</span>
+    <div class="item" onclick="addItem('島らっきょクリームチーズベーコン')">
+      <span class="item-name" id="name-島らっきょクリームチーズベーコン">島らっきょクリームチーズベーコン</span>
       <span class="qty" id="qty-島らっきょクリームチーズベーコン">0</span>
     </div>
-
-    <div class="item" onclick="addItem('梅水晶','food')">
-      <span class="item-name">梅水晶</span>
+    <div class="item" onclick="addItem('梅水晶')">
+      <span class="item-name" id="name-梅水晶">梅水晶</span>
       <span class="qty" id="qty-梅水晶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ゴーヤスライス','food')">
-      <span class="item-name">ゴーヤスライス</span>
+    <div class="item" onclick="addItem('ゴーヤスライス')">
+      <span class="item-name" id="name-ゴーヤスライス">ゴーヤスライス</span>
       <span class="qty" id="qty-ゴーヤスライス">0</span>
     </div>
-
-    <div class="item" onclick="addItem('塩辛 各','food')">
-      <span class="item-name">塩辛 各</span>
+    <div class="item" onclick="addItem('塩辛 各')">
+      <span class="item-name" id="name-塩辛各">塩辛 各</span>
       <span class="qty" id="qty-塩辛各">0</span>
     </div>
-
-    <div class="item" onclick="addItem('塩辛3種盛り','food')">
-      <span class="item-name">塩辛3種盛り</span>
+    <div class="item" onclick="addItem('塩辛3種盛り')">
+      <span class="item-name" id="name-塩辛3種盛り">塩辛3種盛り</span>
       <span class="qty" id="qty-塩辛3種盛り">0</span>
     </div>
-
-    <div class="item" onclick="addItem('海ぶどう','food')">
-      <span class="item-name">海ぶどう</span>
+    <div class="item" onclick="addItem('海ぶどう')">
+      <span class="item-name" id="name-海ぶどう">海ぶどう</span>
       <span class="qty" id="qty-海ぶどう">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- チャンプル -->
 <div class="category">
-  <div class="category-title">チャンプル</div>
+  <div class="category-title" onclick="toggleCategory(this)">チャンプル</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('ゴーヤチャンプル','food')">
-      <span class="item-name">ゴーヤチャンプル</span>
+    <div class="item" onclick="addItem('ゴーヤチャンプル')">
+      <span class="item-name" id="name-ゴーヤチャンプル">ゴーヤチャンプル</span>
       <span class="qty" id="qty-ゴーヤチャンプル">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ソーメンチャンプル','food')">
-      <span class="item-name">ソーメンチャンプル</span>
+    <div class="item" onclick="addItem('ソーメンチャンプル')">
+      <span class="item-name" id="name-ソーメンチャンプル">ソーメンチャンプル</span>
       <span class="qty" id="qty-ソーメンチャンプル">0</span>
     </div>
-
-    <div class="item" onclick="addItem('豆腐チャンプル','food')">
-      <span class="item-name">豆腐チャンプル</span>
+    <div class="item" onclick="addItem('豆腐チャンプル')">
+      <span class="item-name" id="name-豆腐チャンプル">豆腐チャンプル</span>
       <span class="qty" id="qty-豆腐チャンプル">0</span>
     </div>
-
-    <div class="item" onclick="addItem('フーチャンプル','food')">
-      <span class="item-name">フーチャンプル</span>
+    <div class="item" onclick="addItem('フーチャンプル')">
+      <span class="item-name" id="name-フーチャンプル">フーチャンプル</span>
       <span class="qty" id="qty-フーチャンプル">0</span>
     </div>
-
-    <div class="item" onclick="addItem('らっきょチャンプル','food')">
-      <span class="item-name">らっきょチャンプル</span>
+    <div class="item" onclick="addItem('らっきょチャンプル')">
+      <span class="item-name" id="name-らっきょチャンプル">らっきょチャンプル</span>
       <span class="qty" id="qty-らっきょチャンプル">0</span>
     </div>
-
-    <div class="item" onclick="addItem('カラシナチャンプル','food')">
-      <span class="item-name">カラシナチャンプル</span>
+    <div class="item" onclick="addItem('カラシナチャンプル')">
+      <span class="item-name" id="name-カラシナチャンプル">カラシナチャンプル</span>
       <span class="qty" id="qty-カラシナチャンプル">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- シリシリ -->
 <div class="category">
-  <div class="category-title">シリシリ</div>
+  <div class="category-title" onclick="toggleCategory(this)">シリシリ</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('人参シリシリ','food')">
-      <span class="item-name">人参シリシリ</span>
+    <div class="item" onclick="addItem('人参シリシリ')">
+      <span class="item-name" id="name-人参シリシリ">人参シリシリ</span>
       <span class="qty" id="qty-人参シリシリ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('パパイヤシリシリ','food')">
-      <span class="item-name">パパイヤシリシリ</span>
+    <div class="item" onclick="addItem('パパイヤシリシリ')">
+      <span class="item-name" id="name-パパイヤシリシリ">パパイヤシリシリ</span>
       <span class="qty" id="qty-パパイヤシリシリ">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 玉子 -->
 <div class="category">
-  <div class="category-title">玉子</div>
+  <div class="category-title" onclick="toggleCategory(this)">玉子</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('ポークと玉子','food')">
-      <span class="item-name">ポークと玉子</span>
+    <div class="item" onclick="addItem('ポークと玉子')">
+      <span class="item-name" id="name-ポークと玉子">ポークと玉子</span>
       <span class="qty" id="qty-ポークと玉子">0</span>
     </div>
-
-    <div class="item" onclick="addItem('だし巻き','food')">
-      <span class="item-name">だし巻き</span>
+    <div class="item" onclick="addItem('だし巻き')">
+      <span class="item-name" id="name-だし巻き">だし巻き</span>
       <span class="qty" id="qty-だし巻き">0</span>
     </div>
-
-    <div class="item" onclick="addItem('目玉焼き','food')">
-      <span class="item-name">目玉焼き</span>
+    <div class="item" onclick="addItem('目玉焼き')">
+      <span class="item-name" id="name-目玉焼き">目玉焼き</span>
       <span class="qty" id="qty-目玉焼き">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 揚げ物（唐揚げ） -->
 <div class="category">
-  <div class="category-title">揚げ物（唐揚げ）</div>
+  <div class="category-title" onclick="toggleCategory(this)">揚げ物（唐揚げ）</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('鶏の唐揚げ','food')">
-      <span class="item-name">鶏の唐揚げ</span>
+    <div class="item" onclick="addItem('鶏の唐揚げ')">
+      <span class="item-name" id="name-鶏の唐揚げ">鶏の唐揚げ</span>
       <span class="qty" id="qty-鶏の唐揚げ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('タコ唐揚げ','food')">
-      <span class="item-name">タコ唐揚げ</span>
+    <div class="item" onclick="addItem('タコ唐揚げ')">
+      <span class="item-name" id="name-タコ唐揚げ">タコ唐揚げ</span>
       <span class="qty" id="qty-タコ唐揚げ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('イカ唐揚げ','food')">
-      <span class="item-name">イカ唐揚げ</span>
+    <div class="item" onclick="addItem('イカ唐揚げ')">
+      <span class="item-name" id="name-イカ唐揚げ">イカ唐揚げ</span>
       <span class="qty" id="qty-イカ唐揚げ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('エビ唐揚げ','food')">
-      <span class="item-name">エビ唐揚げ</span>
+    <div class="item" onclick="addItem('エビ唐揚げ')">
+      <span class="item-name" id="name-エビ唐揚げ">エビ唐揚げ</span>
       <span class="qty" id="qty-エビ唐揚げ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('チーズの棒','food')">
-      <span class="item-name">チーズの棒</span>
+    <div class="item" onclick="addItem('チーズの棒')">
+      <span class="item-name" id="name-チーズの棒">チーズの棒</span>
       <span class="qty" id="qty-チーズの棒">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 揚げ物（他） -->
 <div class="category">
-  <div class="category-title">揚げ物</div>
+  <div class="category-title" onclick="toggleCategory(this)">揚げ物</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('カーリーフライ','food')">
-      <span class="item-name">カーリーフライ</span>
+    <div class="item" onclick="addItem('カーリーフライ')">
+      <span class="item-name" id="name-カーリーフライ">カーリーフライ</span>
       <span class="qty" id="qty-カーリーフライ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('タコスボール','food')">
-      <span class="item-name">タコスボール</span>
+    <div class="item" onclick="addItem('タコスボール')">
+      <span class="item-name" id="name-タコスボール">タコスボール</span>
       <span class="qty" id="qty-タコスボール">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 天ぷら -->
 <div class="category">
-  <div class="category-title">天ぷら</div>
+  <div class="category-title" onclick="toggleCategory(this)">天ぷら</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('天ぷら お任せ3種','food')">
-      <span class="item-name">天ぷら お任せ3種</span>
+    <div class="item" onclick="addItem('天ぷら お任せ3種')">
+      <span class="item-name" id="name-天ぷら3種">天ぷら お任せ3種</span>
       <span class="qty" id="qty-天ぷら3種">0</span>
     </div>
-
-    <div class="item" onclick="addItem('天ぷら お任せ5種','food')">
-      <span class="item-name">天ぷら お任せ5種</span>
+    <div class="item" onclick="addItem('天ぷら お任せ5種')">
+      <span class="item-name" id="name-天ぷら5種">天ぷら お任せ5種</span>
       <span class="qty" id="qty-天ぷら5種">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- そば -->
 <div class="category">
-  <div class="category-title">そば</div>
+  <div class="category-title" onclick="toggleCategory(this)">そば</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('ピリ辛エビトマト','food')">
-      <span class="item-name">ピリ辛エビトマト</span>
+    <div class="item" onclick="addItem('ピリ辛エビトマト')">
+      <span class="item-name" id="name-ピリ辛エビトマト">ピリ辛エビトマト</span>
       <span class="qty" id="qty-ピリ辛エビトマト">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ぽなペティート','food')">
-      <span class="item-name">ぽなペティート</span>
+    <div class="item" onclick="addItem('ぽなペティート')">
+      <span class="item-name" id="name-ぽなペティート">ぽなペティート</span>
       <span class="qty" id="qty-ぽなペティート">0</span>
     </div>
-
-    <div class="item" onclick="addItem('あぐ〜ペペロン','food')">
-      <span class="item-name">あぐ〜ペペロン</span>
+    <div class="item" onclick="addItem('あぐ〜ペペロン')">
+      <span class="item-name" id="name-あぐ〜ペペロン">あぐ〜ペペロン</span>
       <span class="qty" id="qty-あぐ〜ペペロン">0</span>
     </div>
-
-    <div class="item" onclick="addItem('本日の気まぐれ','food')">
-      <span class="item-name">本日の気まぐれ</span>
+    <div class="item" onclick="addItem('本日の気まぐれ')">
+      <span class="item-name" id="name-本日の気まぐれ">本日の気まぐれ</span>
       <span class="qty" id="qty-本日の気まぐれ">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 男爺のつまみ -->
 <div class="category">
-  <div class="category-title">男爺のつまみ</div>
+  <div class="category-title" onclick="toggleCategory(this)">男爺のつまみ</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('たちつてと','food')">
-      <span class="item-name">たちつてと</span>
+    <div class="item" onclick="addItem('たちつてと')">
+      <span class="item-name" id="name-たちつてと">たちつてと</span>
       <span class="qty" id="qty-たちつてと">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ポチギ','food')">
-      <span class="item-name">ポチギ</span>
+    <div class="item" onclick="addItem('ポチギ')">
+      <span class="item-name" id="name-ポチギ">ポチギ</span>
       <span class="qty" id="qty-ポチギ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('らふて〜','food')">
-      <span class="item-name">らふて〜</span>
+    <div class="item" onclick="addItem('らふて〜')">
+      <span class="item-name" id="name-らふて〜">らふて〜</span>
       <span class="qty" id="qty-らふて〜">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ナーベラ','food')">
-      <span class="item-name">ナーベラ</span>
+    <div class="item" onclick="addItem('ナーベラ')">
+      <span class="item-name" id="name-ナーベラ">ナーベラ</span>
       <span class="qty" id="qty-ナーベラ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('島豆腐','food')">
-      <span class="item-name">島豆腐</span>
+    <div class="item" onclick="addItem('島豆腐')">
+      <span class="item-name" id="name-島豆腐">島豆腐</span>
       <span class="qty" id="qty-島豆腐">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- ご飯もの -->
 <div class="category">
-  <div class="category-title">ご飯もの</div>
+  <div class="category-title" onclick="toggleCategory(this)">ご飯もの</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('がじゅ丼','food')">
-      <span class="item-name">がじゅ丼</span>
+    <div class="item" onclick="addItem('がじゅ丼')">
+      <span class="item-name" id="name-がじゅ丼">がじゅ丼</span>
       <span class="qty" id="qty-がじゅ丼">0</span>
     </div>
-
-    <div class="item" onclick="addItem('らふて〜丼','food')">
-      <span class="item-name">らふて〜丼</span>
+    <div class="item" onclick="addItem('らふて〜丼')">
+      <span class="item-name" id="name-らふて〜丼">らふて〜丼</span>
       <span class="qty" id="qty-らふて〜丼">0</span>
     </div>
-
-    <div class="item" onclick="addItem('焼き飯（らふて〜・らっきょ）','food')">
-      <span class="item-name">焼き飯（らふて〜・らっきょ）</span>
+    <div class="item" onclick="addItem('焼き飯（らふて〜・らっきょ）')">
+      <span class="item-name" id="name-焼き飯">焼き飯（らふて〜・らっきょ）</span>
       <span class="qty" id="qty-焼き飯">0</span>
     </div>
-
-    <div class="item" onclick="addItem('島焼きそば（塩・シークヮーサー）','food')">
-      <span class="item-name">島焼きそば（塩・シークヮーサー）</span>
+    <div class="item" onclick="addItem('島焼きそば（塩・シークヮーサー）')">
+      <span class="item-name" id="name-島焼きそば">島焼きそば（塩・シークヮーサー）</span>
       <span class="qty" id="qty-島焼きそば">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ちゃんぽん','food')">
-      <span class="item-name">ちゃんぽん</span>
+    <div class="item" onclick="addItem('ちゃんぽん')">
+      <span class="item-name" id="name-ちゃんぽん">ちゃんぽん</span>
       <span class="qty" id="qty-ちゃんぽん">0</span>
     </div>
-
   </div>
 </div>
 
-<!-- そば（ソーキ・テビチ） -->
+<!-- そば（ソーキ） -->
 <div class="category">
-  <div class="category-title">そば（ソーキ・テビチ）</div>
+  <div class="category-title" onclick="toggleCategory(this)">そば（ソーキ・テビチ）</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('ソーキそば','food')">
-      <span class="item-name">ソーキそば</span>
+    <div class="item" onclick="addItem('ソーキそば')">
+      <span class="item-name" id="name-ソーキそば">ソーキそば</span>
       <span class="qty" id="qty-ソーキそば">0</span>
     </div>
-
-    <div class="item" onclick="addItem('テビチそば','food')">
-      <span class="item-name">テビチそば</span>
+    <div class="item" onclick="addItem('テビチそば')">
+      <span class="item-name" id="name-テビチそば">テビチそば</span>
       <span class="qty" id="qty-テビチそば">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- リゾット -->
 <div class="category">
-  <div class="category-title">リゾット</div>
+  <div class="category-title" onclick="toggleCategory(this)">リゾット</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('チーズリゾット','food')">
-      <span class="item-name">チーズリゾット</span>
+    <div class="item" onclick="addItem('チーズリゾット')">
+      <span class="item-name" id="name-チーズリゾット">チーズリゾット</span>
       <span class="qty" id="qty-チーズリゾット">0</span>
     </div>
-
-    <div class="item" onclick="addItem('イカ墨リゾット','food')">
-      <span class="item-name">イカ墨リゾット</span>
+    <div class="item" onclick="addItem('イカ墨リゾット')">
+      <span class="item-name" id="name-イカ墨リゾット">イカ墨リゾット</span>
       <span class="qty" id="qty-イカ墨リゾット">0</span>
     </div>
-
-    <div class="item" onclick="addItem('チーズトマトリゾット','food')">
-      <span class="item-name">チーズトマトリゾット</span>
+    <div class="item" onclick="addItem('チーズトマトリゾット')">
+      <span class="item-name" id="name-チーズトマトリゾット">チーズトマトリゾット</span>
       <span class="qty" id="qty-チーズトマトリゾット">0</span>
     </div>
-
   </div>
 </div>
+
 <!-- ============================
-     ドリンクメニュー
+       ▼ ドリンク
 ============================ -->
 
 <!-- ビール -->
 <div class="category">
-  <div class="category-title">ビール</div>
+  <div class="category-title" onclick="toggleCategory(this)">ビール</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('生ビール','drink')">
-      <span class="item-name">生ビール</span>
+    <div class="item" onclick="addItem('生ビール')">
+      <span class="item-name" id="name-生ビール">生ビール</span>
       <span class="qty" id="qty-生ビール">0</span>
     </div>
-
-    <div class="item" onclick="addItem('瓶ビール','drink')">
-      <span class="item-name">瓶ビール</span>
+    <div class="item" onclick="addItem('瓶ビール')">
+      <span class="item-name" id="name-瓶ビール">瓶ビール</span>
       <span class="qty" id="qty-瓶ビール">0</span>
     </div>
-
-    <div class="item" onclick="addItem('クリアフリー（ノンアル）','drink')">
-      <span class="item-name">クリアフリー（ノンアル）</span>
+    <div class="item" onclick="addItem('クリアフリー（ノンアル）')">
+      <span class="item-name" id="name-クリアフリー">クリアフリー（ノンアル）</span>
       <span class="qty" id="qty-クリアフリー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ビアボール','drink')">
-      <span class="item-name">ビアボール</span>
+    <div class="item" onclick="addItem('ビアボール')">
+      <span class="item-name" id="name-ビアボール">ビアボール</span>
       <span class="qty" id="qty-ビアボール">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- ウイスキー -->
 <div class="category">
-  <div class="category-title">ウイスキー</div>
+  <div class="category-title" onclick="toggleCategory(this)">ウイスキー</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('角ハイボール','drink')">
-      <span class="item-name">角ハイボール</span>
+    <div class="item" onclick="addItem('角ハイボール')">
+      <span class="item-name" id="name-角ハイボール">角ハイボール</span>
       <span class="qty" id="qty-角ハイボール">0</span>
     </div>
-
-    <div class="item" onclick="addItem('碧（あお）','drink')">
-      <span class="item-name">碧（あお）</span>
+    <div class="item" onclick="addItem('碧（あお）')">
+      <span class="item-name" id="name-碧">碧（あお）</span>
       <span class="qty" id="qty-碧">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- バーボン -->
 <div class="category">
-  <div class="category-title">バーボン</div>
+  <div class="category-title" onclick="toggleCategory(this)">バーボン</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('マッケンナー','drink')">
-      <span class="item-name">マッケンナー</span>
+    <div class="item" onclick="addItem('マッケンナー')">
+      <span class="item-name" id="name-マッケンナー">マッケンナー</span>
       <span class="qty" id="qty-マッケンナー">0</span>
     </div>
-
   </div>
 </div>
 
-<!-- テキーラ・ショット（統合） -->
+<!-- テキーラ・ショット -->
 <div class="category">
-  <div class="category-title">ショット / テキーラ</div>
+  <div class="category-title" onclick="toggleCategory(this)">ショット / テキーラ</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('レポサド1800（テキーラ）','drink')">
-      <span class="item-name">レポサド1800（テキーラ）</span>
+    <div class="item" onclick="addItem('レポサド1800（テキーラ）')">
+      <span class="item-name" id="name-レポサド1800">レポサド1800（テキーラ）</span>
       <span class="qty" id="qty-レポサド1800">0</span>
     </div>
-
-    <div class="item" onclick="addItem('どなん','drink')">
-      <span class="item-name">どなん</span>
+    <div class="item" onclick="addItem('どなん')">
+      <span class="item-name" id="name-どなん">どなん</span>
       <span class="qty" id="qty-どなん">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ハブ酒','drink')">
-      <span class="item-name">ハブ酒</span>
+    <div class="item" onclick="addItem('ハブ酒')">
+      <span class="item-name" id="name-ハブ酒">ハブ酒</span>
       <span class="qty" id="qty-ハブ酒">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ハブーラ','drink')">
-      <span class="item-name">ハブーラ</span>
+    <div class="item" onclick="addItem('ハブーラ')">
+      <span class="item-name" id="name-ハブーラ">ハブーラ</span>
       <span class="qty" id="qty-ハブーラ">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- カクテル -->
 <div class="category">
-  <div class="category-title">カクテル</div>
+  <div class="category-title" onclick="toggleCategory(this)">カクテル</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('カシスソーダ','drink')">
-      <span class="item-name">カシスソーダ</span>
+    <div class="item" onclick="addItem('カシスソーダ')">
+      <span class="item-name" id="name-カシスソーダ">カシスソーダ</span>
       <span class="qty" id="qty-カシスソーダ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('カシスオレンジ','drink')">
-      <span class="item-name">カシスオレンジ</span>
+    <div class="item" onclick="addItem('カシスオレンジ')">
+      <span class="item-name" id="name-カシスオレンジ">カシスオレンジ</span>
       <span class="qty" id="qty-カシスオレンジ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ピーチオレンジ','drink')">
-      <span class="item-name">ピーチオレンジ</span>
+    <div class="item" onclick="addItem('ピーチオレンジ')">
+      <span class="item-name" id="name-ピーチオレンジ">ピーチオレンジ</span>
       <span class="qty" id="qty-ピーチオレンジ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ピーチウーロン','drink')">
-      <span class="item-name">ピーチウーロン</span>
+    <div class="item" onclick="addItem('ピーチウーロン')">
+      <span class="item-name" id="name-ピーチウーロン">ピーチウーロン</span>
       <span class="qty" id="qty-ピーチウーロン">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 焼酎 -->
 <div class="category">
-  <div class="category-title">焼酎</div>
+  <div class="category-title" onclick="toggleCategory(this)">焼酎</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('黒霧島','drink')">
-      <span class="item-name">黒霧島</span>
+    <div class="item" onclick="addItem('黒霧島')">
+      <span class="item-name" id="name-黒霧島">黒霧島</span>
       <span class="qty" id="qty-黒霧島">0</span>
     </div>
-
-    <div class="item" onclick="addItem('二階堂','drink')">
-      <span class="item-name">二階堂</span>
+    <div class="item" onclick="addItem('二階堂')">
+      <span class="item-name" id="name-二階堂">二階堂</span>
       <span class="qty" id="qty-二階堂">0</span>
     </div>
-
-    <div class="item" onclick="addItem('金宮','drink')">
-      <span class="item-name">金宮</span>
+    <div class="item" onclick="addItem('金宮')">
+      <span class="item-name" id="name-金宮">金宮</span>
       <span class="qty" id="qty-金宮">0</span>
     </div>
-
-    <div class="item" onclick="addItem('黒糖焼酎','drink')">
-      <span class="item-name">黒糖焼酎</span>
+    <div class="item" onclick="addItem('黒糖焼酎')">
+      <span class="item-name" id="name-黒糖焼酎">黒糖焼酎</span>
       <span class="qty" id="qty-黒糖焼酎">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 日本酒 -->
 <div class="category">
-  <div class="category-title">日本酒</div>
+  <div class="category-title" onclick="toggleCategory(this)">日本酒</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('夜の帝王','drink')">
-      <span class="item-name">夜の帝王</span>
+    <div class="item" onclick="addItem('夜の帝王')">
+      <span class="item-name" id="name-夜の帝王">夜の帝王</span>
       <span class="qty" id="qty-夜の帝王">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 茶割り -->
 <div class="category">
-  <div class="category-title">茶割り</div>
+  <div class="category-title" onclick="toggleCategory(this)">茶割り</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('ウーロンハイ','drink')">
-      <span class="item-name">ウーロンハイ</span>
+    <div class="item" onclick="addItem('ウーロンハイ')">
+      <span class="item-name" id="name-ウーロンハイ">ウーロンハイ</span>
       <span class="qty" id="qty-ウーロンハイ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('緑茶ハイ','drink')">
-      <span class="item-name">緑茶ハイ</span>
+    <div class="item" onclick="addItem('緑茶ハイ')">
+      <span class="item-name" id="name-緑茶ハイ">緑茶ハイ</span>
       <span class="qty" id="qty-緑茶ハイ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('JJ','drink')">
-      <span class="item-name">JJ</span>
+    <div class="item" onclick="addItem('JJ')">
+      <span class="item-name" id="name-JJ">JJ</span>
       <span class="qty" id="qty-JJ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('JR','drink')">
-      <span class="item-name">JR</span>
+    <div class="item" onclick="addItem('JR')">
+      <span class="item-name" id="name-JR">JR</span>
       <span class="qty" id="qty-JR">0</span>
     </div>
-
-    <div class="item" onclick="addItem('MM','drink')">
-      <span class="item-name">MM</span>
+    <div class="item" onclick="addItem('MM')">
+      <span class="item-name" id="name-MM">MM</span>
       <span class="qty" id="qty-MM">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ヒゲ茶ハイ','drink')">
-      <span class="item-name">ヒゲ茶ハイ</span>
+    <div class="item" onclick="addItem('ヒゲ茶ハイ')">
+      <span class="item-name" id="name-ヒゲ茶ハイ">ヒゲ茶ハイ</span>
       <span class="qty" id="qty-ヒゲ茶ハイ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('無糖紅茶ハイ','drink')">
-      <span class="item-name">無糖紅茶ハイ</span>
+    <div class="item" onclick="addItem('無糖紅茶ハイ')">
+      <span class="item-name" id="name-無糖紅茶ハイ">無糖紅茶ハイ</span>
       <span class="qty" id="qty-無糖紅茶ハイ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('さんぴん茶ハイ','drink')">
-      <span class="item-name">さんぴん茶ハイ</span>
+    <div class="item" onclick="addItem('さんぴん茶ハイ')">
+      <span class="item-name" id="name-さんぴん茶ハイ">さんぴん茶ハイ</span>
       <span class="qty" id="qty-さんぴん茶ハイ">0</span>
     </div>
-
   </div>
 </div>
 
-<!-- 酎ハイ / サワー -->
+<!-- 酎ハイ・サワー -->
 <div class="category">
-  <div class="category-title">酎ハイ・サワー</div>
+  <div class="category-title" onclick="toggleCategory(this)">酎ハイ・サワー</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('しょっぱい梅サワー','drink')">
-      <span class="item-name">しょっぱい梅サワー</span>
+    <div class="item" onclick="addItem('しょっぱい梅サワー')">
+      <span class="item-name" id="name-しょっぱい梅サワー">しょっぱい梅サワー</span>
       <span class="qty" id="qty-しょっぱい梅サワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('すっきりトマトサワー','drink')">
-      <span class="item-name">すっきりトマトサワー</span>
+    <div class="item" onclick="addItem('すっきりトマトサワー')">
+      <span class="item-name" id="name-すっきりトマトサワー">すっきりトマトサワー</span>
       <span class="qty" id="qty-すっきりトマトサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ホワイトサワー','drink')">
-      <span class="item-name">ホワイトサワー</span>
+    <div class="item" onclick="addItem('ホワイトサワー')">
+      <span class="item-name" id="name-ホワイトサワー">ホワイトサワー</span>
       <span class="qty" id="qty-ホワイトサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('巨峰サワー','drink')">
-      <span class="item-name">巨峰サワー</span>
+    <div class="item" onclick="addItem('巨峰サワー')">
+      <span class="item-name" id="name-巨峰サワー">巨峰サワー</span>
       <span class="qty" id="qty-巨峰サワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('プレーンサワー','drink')">
-      <span class="item-name">プレーンサワー</span>
+    <div class="item" onclick="addItem('プレーンサワー')">
+      <span class="item-name" id="name-プレーンサワー">プレーンサワー</span>
       <span class="qty" id="qty-プレーンサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('シークヮーサーサワー','drink')">
-      <span class="item-name">シークヮーサーサワー</span>
+    <div class="item" onclick="addItem('シークヮーサーサワー')">
+      <span class="item-name" id="name-シークヮーサーサワー">シークヮーサーサワー</span>
       <span class="qty" id="qty-シークヮーサーサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('グレープフルーツサワー','drink')">
-      <span class="item-name">グレープフルーツサワー</span>
+    <div class="item" onclick="addItem('グレープフルーツサワー')">
+      <span class="item-name" id="name-グレープフルーツサワー">グレープフルーツサワー</span>
       <span class="qty" id="qty-グレープフルーツサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('バイスサワー','drink')">
-      <span class="item-name">バイスサワー</span>
+    <div class="item" onclick="addItem('バイスサワー')">
+      <span class="item-name" id="name-バイスサワー">バイスサワー</span>
       <span class="qty" id="qty-バイスサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('レモンサワー','drink')">
-      <span class="item-name">レモンサワー</span>
+    <div class="item" onclick="addItem('レモンサワー')">
+      <span class="item-name" id="name-レモンサワー">レモンサワー</span>
       <span class="qty" id="qty-レモンサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ガリサワー','drink')">
-      <span class="item-name">ガリサワー</span>
+    <div class="item" onclick="addItem('ガリサワー')">
+      <span class="item-name" id="name-ガリサワー">ガリサワー</span>
       <span class="qty" id="qty-ガリサワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('クエン酸サワー','drink')">
-      <span class="item-name">クエン酸サワー</span>
+    <div class="item" onclick="addItem('クエン酸サワー')">
+      <span class="item-name" id="name-クエン酸サワー">クエン酸サワー</span>
       <span class="qty" id="qty-クエン酸サワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('男梅サワー','drink')">
-      <span class="item-name">男梅サワー</span>
+    <div class="item" onclick="addItem('男梅サワー')">
+      <span class="item-name" id="name-男梅サワー">男梅サワー</span>
       <span class="qty" id="qty-男梅サワー">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ピリ辛トマトハイ','drink')">
-      <span class="item-name">ピリ辛トマトハイ</span>
+    <div class="item" onclick="addItem('ピリ辛トマトハイ')">
+      <span class="item-name" id="name-ピリ辛トマトハイ">ピリ辛トマトハイ</span>
       <span class="qty" id="qty-ピリ辛トマトハイ">0</span>
     </div>
-
   </div>
 </div>
 
-<!-- 泡盛（統合） -->
+<!-- 泡盛 -->
 <div class="category">
-  <div class="category-title">泡盛</div>
+  <div class="category-title" onclick="toggleCategory(this)">泡盛</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('残波 白','drink')">
-      <span class="item-name">残波 白</span>
+    <div class="item" onclick="addItem('残波 白')">
+      <span class="item-name" id="name-残波白">残波 白</span>
       <span class="qty" id="qty-残波白">0</span>
     </div>
-
-    <div class="item" onclick="addItem('残波 黒','drink')">
-      <span class="item-name">残波 黒</span>
+    <div class="item" onclick="addItem('残波 黒')">
+      <span class="item-name" id="name-残波黒">残波 黒</span>
       <span class="qty" id="qty-残波黒">0</span>
     </div>
-
-    <div class="item" onclick="addItem('菊之露','drink')">
-      <span class="item-name">菊之露</span>
+    <div class="item" onclick="addItem('菊之露')">
+      <span class="item-name" id="name-菊之露">菊之露</span>
       <span class="qty" id="qty-菊之露">0</span>
     </div>
-
-    <div class="item" onclick="addItem('久米仙','drink')">
-      <span class="item-name">久米仙</span>
+    <div class="item" onclick="addItem('久米仙')">
+      <span class="item-name" id="name-久米仙">久米仙</span>
       <span class="qty" id="qty-久米仙">0</span>
     </div>
-
-    <div class="item" onclick="addItem('久米仙 古酒35°','drink')">
-      <span class="item-name">久米仙 古酒35°</span>
+    <div class="item" onclick="addItem('久米仙 古酒35°')">
+      <span class="item-name" id="name-久米仙古酒">久米仙 古酒35°</span>
       <span class="qty" id="qty-久米仙古酒">0</span>
     </div>
-
-    <div class="item" onclick="addItem('春雨','drink')">
-      <span class="item-name">春雨</span>
+    <div class="item" onclick="addItem('春雨')">
+      <span class="item-name" id="name-春雨">春雨</span>
       <span class="qty" id="qty-春雨">0</span>
     </div>
-
-    <div class="item" onclick="addItem('古里','drink')">
-      <span class="item-name">古里</span>
+    <div class="item" onclick="addItem('古里')">
+      <span class="item-name" id="name-古里">古里</span>
       <span class="qty" id="qty-古里">0</span>
     </div>
-
-    <div class="item" onclick="addItem('菊之露VIP','drink')">
-      <span class="item-name">菊之露VIP</span>
+    <div class="item" onclick="addItem('菊之露VIP')">
+      <span class="item-name" id="name-菊之露VIP">菊之露VIP</span>
       <span class="qty" id="qty-菊之露VIP">0</span>
     </div>
-
-    <div class="item" onclick="addItem('琉球王朝','drink')">
-      <span class="item-name">琉球王朝</span>
+    <div class="item" onclick="addItem('琉球王朝')">
+      <span class="item-name" id="name-琉球王朝">琉球王朝</span>
       <span class="qty" id="qty-琉球王朝">0</span>
     </div>
-
-    <div class="item" onclick="addItem('請福','drink')">
-      <span class="item-name">請福</span>
+    <div class="item" onclick="addItem('請福')">
+      <span class="item-name" id="name-請福">請福</span>
       <span class="qty" id="qty-請福">0</span>
     </div>
-
-    <div class="item" onclick="addItem('八重泉','drink')">
-      <span class="item-name">八重泉</span>
+    <div class="item" onclick="addItem('八重泉')">
+      <span class="item-name" id="name-八重泉">八重泉</span>
       <span class="qty" id="qty-八重泉">0</span>
     </div>
-
-    <div class="item" onclick="addItem('黒真珠','drink')">
-      <span class="item-name">黒真珠</span>
+    <div class="item" onclick="addItem('黒真珠')">
+      <span class="item-name" id="name-黒真珠">黒真珠</span>
       <span class="qty" id="qty-黒真珠">0</span>
     </div>
-
-    <div class="item" onclick="addItem('玉の露','drink')">
-      <span class="item-name">玉の露</span>
+    <div class="item" onclick="addItem('玉の露')">
+      <span class="item-name" id="name-玉の露">玉の露</span>
       <span class="qty" id="qty-玉の露">0</span>
     </div>
-
-    <div class="item" onclick="addItem('おもと','drink')">
-      <span class="item-name">おもと</span>
+    <div class="item" onclick="addItem('おもと')">
+      <span class="item-name" id="name-おもと">おもと</span>
       <span class="qty" id="qty-おもと">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- 石垣島のお酒 -->
 <div class="category">
-  <div class="category-title">石垣島のお酒</div>
+  <div class="category-title" onclick="toggleCategory(this)">石垣島のお酒</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('IMUGE. 25°','drink')">
-      <span class="item-name">IMUGE. 25°</span>
+    <div class="item" onclick="addItem('IMUGE. 25°')">
+      <span class="item-name" id="name-IMUGE25">IMUGE. 25°</span>
       <span class="qty" id="qty-IMUGE25">0</span>
     </div>
-
-    <div class="item" onclick="addItem('IMUGE. 37°','drink')">
-      <span class="item-name">IMUGE. 37°</span>
+    <div class="item" onclick="addItem('IMUGE. 37°')">
+      <span class="item-name" id="name-IMUGE37">IMUGE. 37°</span>
       <span class="qty" id="qty-IMUGE37">0</span>
     </div>
-
-    <div class="item" onclick="addItem('島ラム','drink')">
-      <span class="item-name">島ラム</span>
+    <div class="item" onclick="addItem('島ラム')">
+      <span class="item-name" id="name-島ラム">島ラム</span>
       <span class="qty" id="qty-島ラム">0</span>
     </div>
-
   </div>
 </div>
 
 <!-- ソフトドリンク -->
 <div class="category">
-  <div class="category-title">ソフトドリンク</div>
+  <div class="category-title" onclick="toggleCategory(this)">ソフトドリンク</div>
   <div class="category-content">
-
-    <div class="item" onclick="addItem('コーラ','drink')">
-      <span class="item-name">コーラ</span>
+    <div class="item" onclick="addItem('コーラ')">
+      <span class="item-name" id="name-コーラ">コーラ</span>
       <span class="qty" id="qty-コーラ">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ジンジャーエール','drink')">
-      <span class="item-name">ジンジャーエール</span>
+    <div class="item" onclick="addItem('ジンジャーエール')">
+      <span class="item-name" id="name-ジンジャーエール">ジンジャーエール</span>
       <span class="qty" id="qty-ジンジャーエール">0</span>
     </div>
-
-    <div class="item" onclick="addItem('さんぴん茶','drink')">
-      <span class="item-name">さんぴん茶</span>
+    <div class="item" onclick="addItem('さんぴん茶')">
+      <span class="item-name" id="name-さんぴん茶">さんぴん茶</span>
       <span class="qty" id="qty-さんぴん茶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ウーロン茶','drink')">
-      <span class="item-name">ウーロン茶</span>
+    <div class="item" onclick="addItem('ウーロン茶')">
+      <span class="item-name" id="name-ウーロン茶">ウーロン茶</span>
       <span class="qty" id="qty-ウーロン茶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('緑茶','drink')">
-      <span class="item-name">緑茶</span>
+    <div class="item" onclick="addItem('緑茶')">
+      <span class="item-name" id="name-緑茶">緑茶</span>
       <span class="qty" id="qty-緑茶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('ヒゲ茶','drink')">
-      <span class="item-name">ヒゲ茶</span>
+    <div class="item" onclick="addItem('ヒゲ茶')">
+      <span class="item-name" id="name-ヒゲ茶">ヒゲ茶</span>
       <span class="qty" id="qty-ヒゲ茶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('無糖紅茶','drink')">
-      <span class="item-name">無糖紅茶</span>
+    <div class="item" onclick="addItem('無糖紅茶')">
+      <span class="item-name" id="name-無糖紅茶">無糖紅茶</span>
       <span class="qty" id="qty-無糖紅茶">0</span>
     </div>
-
-    <div class="item" onclick="addItem('オレンジジュース','drink')">
-      <span class="item-name">オレンジジュース</span>
+    <div class="item" onclick="addItem('オレンジジュース')">
+      <span class="item-name" id="name-オレンジジュース">オレンジジュース</span>
       <span class="qty" id="qty-オレンジジュース">0</span>
     </div>
-
-    <div class="item" onclick="addItem('トマトジュース','drink')">
-      <span class="item-name">トマトジュース</span>
+    <div class="item" onclick="addItem('トマトジュース')">
+      <span class="item-name" id="name-トマトジュース">トマトジュース</span>
       <span class="qty" id="qty-トマトジュース">0</span>
     </div>
-
-    <div class="item" onclick="addItem('マンゴージュース','drink')">
-      <span class="item-name">マンゴージュース</span>
+    <div class="item" onclick="addItem('マンゴージュース')">
+      <span class="item-name" id="name-マンゴージュース">マンゴージュース</span>
       <span class="qty" id="qty-マンゴージュース">0</span>
     </div>
-
-    <div class="item" onclick="addItem('パイナップルジュース','drink')">
-      <span class="item-name">パイナップルジュース</span>
+    <div class="item" onclick="addItem('パイナップルジュース')">
+      <span class="item-name" id="name-パイナップルジュース">パイナップルジュース</span>
       <span class="qty" id="qty-パイナップルジュース">0</span>
     </div>
-
-    <div class="item" onclick="addItem('パッションフルーツジュース','drink')">
-      <span class="item-name">パッションフルーツジュース</span>
+    <div class="item" onclick="addItem('パッションフルーツジュース')">
+      <span class="item-name" id="name-パッションフルーツジュース">パッションフルーツジュース</span>
       <span class="qty" id="qty-パッションフルーツジュース">0</span>
     </div>
-
   </div>
 </div>
+
+<!-- 注文ボタン -->
+<button class="order-button" onclick="sendOrder()">注文を送信</button>
+
+<!-- ======================================
+      ▼ メニュー定義（全データ）
+====================================== -->
 <script>
-/* ================================
-   注文データを保存する配列
-================================ */
-let orderList = [];
+const menuData = [
+  /* フード index:1〜56 （すべて前メッセージの通り） */
+  { jp:"石垣牛ハンバーグ", en:"Ishigaki Beef Hamburg Steak", type:"food", index:1 },
+  { jp:"島らっきょ餃子", en:"Island Shallot Dumplings", type:"food", index:2 },
+  { jp:"もずくキムチ", en:"Mozuku Seaweed Kimchi", type:"food", index:3 },
+  { jp:"がじゅカレー", en:"Gaju Curry", type:"food", index:4 },
 
-/* ================================
-   1）商品タップ → 数量＋1
-================================ */
-function addItem(name, category) {
-  // 既に注文リストにあるか確認
-  let item = orderList.find(i => i.name === name);
+  { jp:"きゅうりチョメ", en:"Cucumber Chome", type:"food", index:5 },
+  { jp:"チーズチョメ", en:"Cheese Chome", type:"food", index:6 },
+  { jp:"ナスチョメ", en:"Eggplant Chome", type:"food", index:7 },
+  { jp:"ジャガイモチョメ", en:"Potato Chome", type:"food", index:8 },
+  { jp:"ピーマンチョメ", en:"Green Pepper Chome", type:"food", index:9 },
+  { jp:"サバ缶チョメ", en:"Canned Mackerel Chome", type:"food", index:10 },
 
-  if (item) {
-    // 既存 → 数量だけ増やす
-    item.qty++;
+  { jp:"島らっきょ", en:"Island Shallot", type:"food", index:11 },
+  { jp:"島らっきょクリームチーズベーコン", en:"Shallot w/ Cream Cheese & Bacon", type:"food", index:12 },
+  { jp:"梅水晶", en:"Plum Crystal", type:"food", index:13 },
+  { jp:"ゴーヤスライス", en:"Goya Slices", type:"food", index:14 },
+  { jp:"塩辛 各", en:"Salted Seafood", type:"food", index:15 },
+  { jp:"塩辛3種盛り", en:"Salted Trio Plate", type:"food", index:16 },
+  { jp:"海ぶどう", en:"Sea Grapes", type:"food", index:17 },
+
+  { jp:"ゴーヤチャンプル", en:"Goya Champuru", type:"food", index:18 },
+  { jp:"ソーメンチャンプル", en:"Somen Champuru", type:"food", index:19 },
+  { jp:"豆腐チャンプル", en:"Tofu Champuru", type:"food", index:20 },
+  { jp:"フーチャンプル", en:"Fu Champuru", type:"food", index:21 },
+  { jp:"らっきょチャンプル", en:"Shallot Champuru", type:"food", index:22 },
+  { jp:"カラシナチャンプル", en:"Karashina Champuru", type:"food", index:23 },
+
+  { jp:"人参シリシリ", en:"Carrot Shirishiri", type:"food", index:24 },
+  { jp:"パパイヤシリシリ", en:"Papaya Shirishiri", type:"food", index:25 },
+
+  { jp:"ポークと玉子", en:"Pork & Egg", type:"food", index:26 },
+  { jp:"だし巻き", en:"Japanese Omelet", type:"food", index:27 },
+  { jp:"目玉焼き", en:"Fried Egg", type:"food", index:28 },
+
+  { jp:"鶏の唐揚げ", en:"Fried Chicken", type:"food", index:29 },
+  { jp:"タコ唐揚げ", en:"Fried Octopus", type:"food", index:30 },
+  { jp:"イカ唐揚げ", en:"Fried Squid", type:"food", index:31 },
+  { jp:"エビ唐揚げ", en:"Fried Shrimp", type:"food", index:32 },
+  { jp:"チーズの棒", en:"Cheese Sticks", type:"food", index:33 },
+
+  { jp:"カーリーフライ", en:"Curly Fries", type:"food", index:34 },
+  { jp:"タコスボール", en:"Taco Balls", type:"food", index:35 },
+
+  { jp:"天ぷら お任せ3種", en:"Tempura – 3 kinds", type:"food", index:36 },
+  { jp:"天ぷら お任せ5種", en:"Tempura – 5 kinds", type:"food", index:37 },
+
+  { jp:"ピリ辛エビトマト", en:"Spicy Shrimp Tomato Soba", type:"food", index:38 },
+  { jp:"ぽなペティート", en:"Pona Petite", type:"food", index:39 },
+  { jp:"あぐ〜ペペロン", en:"Agu Pork Peperoncino", type:"food", index:40 },
+  { jp:"本日の気まぐれ", en:"Today's Special", type:"food", index:41 },
+
+  { jp:"たちつてと", en:"Tachitsuteto", type:"food", index:42 },
+  { jp:"ポチギ", en:"Pochigi Sausage", type:"food", index:43 },
+  { jp:"らふて〜", en:"Rafute", type:"food", index:44 },
+  { jp:"ナーベラ", en:"Nabera", type:"food", index:45 },
+  { jp:"島豆腐", en:"Island Tofu", type:"food", index:46 },
+
+  { jp:"がじゅ丼", en:"Gaju Bowl", type:"food", index:47 },
+  { jp:"らふて〜丼", en:"Rafute Bowl", type:"food", index:48 },
+  { jp:"焼き飯（らふて〜・らっきょ）", en:"Fried Rice (Rafute / Shallot)", type:"food", index:49 },
+  { jp:"島焼きそば（塩・シークヮーサー）", en:"Island Yakisoba", type:"food", index:50 },
+  { jp:"ちゃんぽん", en:"Champon", type:"food", index:51 },
+
+  { jp:"ソーキそば", en:"Soki Soba", type:"food", index:52 },
+  { jp:"テビチそば", en:"Tebichi Soba", type:"food", index:53 },
+
+  { jp:"チーズリゾット", en:"Cheese Risotto", type:"food", index:54 },
+  { jp:"イカ墨リゾット", en:"Squid Ink Risotto", type:"food", index:55 },
+  { jp:"チーズトマトリゾット", en:"Cheese Tomato Risotto", type:"food", index:56 },
+
+  
+  /* ▼▼ ドリンク index:101〜170 ▼▼ */
+  { jp:"生ビール", en:"Draft Beer", type:"drink", index:101 },
+  { jp:"瓶ビール", en:"Bottled Beer", type:"drink", index:102 },
+  { jp:"クリアフリー（ノンアル）", en:"Clear Free", type:"drink", index:103 },
+  { jp:"ビアボール", en:"Beer Ball", type:"drink", index:104 },
+
+  { jp:"角ハイボール", en:"Kaku Highball", type:"drink", index:105 },
+  { jp:"碧（あお）", en:"Ao Whisky", type:"drink", index:106 },
+
+  { jp:"マッケンナー", en:"McKenna Bourbon", type:"drink", index:107 },
+
+  { jp:"レポサド1800（テキーラ）", en:"Tequila Reposado 1800", type:"drink", index:108 },
+  { jp:"どなん", en:"Donan Shot", type:"drink", index:109 },
+  { jp:"ハブ酒", en:"Habu Liquor", type:"drink", index:110 },
+  { jp:"ハブーラ", en:"Habura", type:"drink", index:111 },
+
+  { jp:"カシスソーダ", en:"Cassis Soda", type:"drink", index:112 },
+  { jp:"カシスオレンジ", en:"Cassis Orange", type:"drink", index:113 },
+  { jp:"ピーチオレンジ", en:"Peach Orange", type:"drink", index:114 },
+  { jp:"ピーチウーロン", en:"Peach Oolong", type:"drink", index:115 },
+
+  { jp:"黒霧島", en:"Kuro Kirishima", type:"drink", index:116 },
+  { jp:"二階堂", en:"Nikaido", type:"drink", index:117 },
+  { jp:"金宮", en:"Kinmiya", type:"drink", index:118 },
+  { jp:"黒糖焼酎", en:"Kokuto Shochu", type:"drink", index:119 },
+
+  { jp:"夜の帝王", en:"Yoru no Teiou", type:"drink", index:120 },
+
+  { jp:"ウーロンハイ", en:"Oolong Highball", type:"drink", index:121 },
+  { jp:"緑茶ハイ", en:"Green Tea Highball", type:"drink", index:122 },
+  { jp:"JJ", en:"JJ Highball", type:"drink", index:123 },
+  { jp:"JR", en:"JR Highball", type:"drink", index:124 },
+  { jp:"MM", en:"MM Highball", type:"drink", index:125 },
+  { jp:"ヒゲ茶ハイ", en:"Hige Tea Highball", type:"drink", index:126 },
+  { jp:"無糖紅茶ハイ", en:"Unsweetened Tea Highball", type:"drink", index:127 },
+  { jp:"さんぴん茶ハイ", en:"Sanpin Tea Highball", type:"drink", index:128 },
+
+  { jp:"しょっぱい梅サワー", en:"Salty Plum Sour", type:"drink", index:129 },
+  { jp:"すっきりトマトサワー", en:"Tomato Sour", type:"drink", index:130 },
+  { jp:"ホワイトサワー", en:"White Sour", type:"drink", index:131 },
+  { jp:"巨峰サワー", en:"Grape Sour", type:"drink", index:132 },
+  { jp:"プレーンサワー", en:"Plain Sour", type:"drink", index:133 },
+  { jp:"シークヮーサーサワー", en:"Shikuwasa Sour", type:"drink", index:134 },
+  { jp:"グレープフルーツサワー", en:"Grapefruit Sour", type:"drink", index:135 },
+  { jp:"バイスサワー", en:"Weiss Sour", type:"drink", index:136 },
+  { jp:"レモンサワー", en:"Lemon Sour", type:"drink", index:137 },
+  { jp:"ガリサワー", en:"Gari Sour", type:"drink", index:138 },
+  { jp:"クエン酸サワー", en:"Citric Sour", type:"drink", index:139 },
+  { jp:"男梅サワー", en:"Otoko Ume Sour", type:"drink", index:140 },
+  { jp:"ピリ辛トマトハイ", en:"Spicy Tomato Highball", type:"drink", index:141 },
+
+  { jp:"残波 白", en:"Zanpa White", type:"drink", index:142 },
+  { jp:"残波 黒", en:"Zanpa Black", type:"drink", index:143 },
+  { jp:"菊之露", en:"Kikunotsuyu", type:"drink", index:144 },
+  { jp:"久米仙", en:"Kumesen", type:"drink", index:145 },
+  { jp:"久米仙 古酒35°", en:"Kumesen Koshu", type:"drink", index:146 },
+  { jp:"春雨", en:"Haruame", type:"drink", index:147 },
+  { jp:"古里", en:"Furusato", type:"drink", index:148 },
+  { jp:"菊之露VIP", en:"Kikunotsuyu VIP", type:"drink", index:149 },
+  { jp:"琉球王朝", en:"Ryukyu Dynasty", type:"drink", index:150 },
+  { jp:"請福", en:"Seifuku", type:"drink", index:151 },
+  { jp:"八重泉", en:"Yaesen", type:"drink", index:152 },
+  { jp:"黒真珠", en:"Black Pearl", type:"drink", index:153 },
+  { jp:"玉の露", en:"Tamanotsuyu", type:"drink", index:154 },
+  { jp:"おもと", en:"Omoto", type:"drink", index:155 },
+
+  { jp:"IMUGE. 25°", en:"IMUGE 25°", type:"drink", index:156 },
+  { jp:"IMUGE. 37°", en:"IMUGE 37°", type:"drink", index:157 },
+  { jp:"島ラム", en:"Island Rum", type:"drink", index:158 },
+
+  { jp:"コーラ", en:"Cola", type:"drink", index:159 },
+  { jp:"ジンジャーエール", en:"Ginger Ale", type:"drink", index:160 },
+  { jp:"さんぴん茶", en:"Sanpin Tea", type:"drink", index:161 },
+  { jp:"ウーロン茶", en:"Oolong Tea", type:"drink", index:162 },
+  { jp:"緑茶", en:"Green Tea", type:"drink", index:163 },
+  { jp:"ヒゲ茶", en:"Hige Tea", type:"drink", index:164 },
+  { jp:"無糖紅茶", en:"Unsweetened Black Tea", type:"drink", index:165 },
+  { jp:"オレンジジュース", en:"Orange Juice", type:"drink", index:166 },
+  { jp:"トマトジュース", en:"Tomato Juice", type:"drink", index:167 },
+  { jp:"マンゴージュース", en:"Mango Juice", type:"drink", index:168 },
+  { jp:"パイナップルジュース", en:"Pineapple Juice", type:"drink", index:169 },
+  { jp:"パッションフルーツジュース", en:"Passion Fruit Juice", type:"drink", index:170 }
+];
+<script>
+/* ==========================================
+   ▼ UI 言語
+========================================== */
+let currentLang = "jp";
+
+/* ==========================================
+   ▼ 注文データ
+========================================== */
+let orderList = [];  // { jp, en, type, qty, index }
+
+/* ==========================================
+   ▼ カテゴリ開閉
+========================================== */
+function toggleCategory(el) {
+  const content = el.nextElementSibling;
+  const key = "cat-" + el.innerText;
+
+  if (content.style.display === "block") {
+    content.style.display = "none";
+    localStorage.setItem(key, "0");
   } else {
-    // 新規 → リストへ追加
+    content.style.display = "block";
+    localStorage.setItem(key, "1");
+  }
+}
+
+/* ==========================================
+   ▼ メニュー追加
+========================================== */
+function addItem(nameJP) {
+  const menu = menuData.find(m => m.jp === nameJP);
+  if (!menu) return;
+
+  let exist = orderList.find(o => o.jp === menu.jp);
+
+  if (exist) {
+    exist.qty++;
+  } else {
     orderList.push({
-      name: name,
+      jp: menu.jp,
+      en: menu.en,
+      type: menu.type,
       qty: 1,
-      category: category
+      index: menu.index
     });
   }
 
-  // 数量表示更新
-  updateQtyDisplay(name);
+  updateQty(menu.jp);
   updateOrderList();
 }
 
-/* ================================
-   数量表示の更新
-================================ */
-function updateQtyDisplay(name) {
-  const id = "qty-" + name.replace(/[\s\(\)°・]/g, "");
+/* ==========================================
+   ▼ 数量表示
+========================================== */
+function updateQty(nameJP) {
+  const id = "qty-" + nameJP.replace(/[\s\(\)°・]/g, "");
   const el = document.getElementById(id);
-  if (el) {
-    let item = orderList.find(i => i.name === name);
-    el.textContent = item ? item.qty : 0;
-  }
+  const obj = orderList.find(o => o.jp === nameJP);
+  if (el) el.textContent = obj ? obj.qty : 0;
 }
 
-/* ================================
-   2）注文リスト表示（右下の注文一覧）
-================================ */
+/* ==========================================
+   ▼ 注文リスト更新
+========================================== */
 function updateOrderList() {
-  const list = document.getElementById("orderList");
-  list.innerHTML = "";
+  const box = document.getElementById("orderList");
+  box.innerHTML = "";
 
-  orderList.forEach((i, index) => {
+  orderList.forEach((o, i) => {
     const row = document.createElement("div");
     row.className = "order-row";
     row.innerHTML = `
-      <span>${i.name}</span>
-      <span>x${i.qty}</span>
-      <button class="del-btn" onclick="removeItem(${index})">削除</button>
+      <span>${o.jp} ×${o.qty}</span>
+      <button class="del-btn" onclick="removeItem(${i})">削除</button>
     `;
-    list.appendChild(row);
+    box.appendChild(row);
   });
 }
 
-/* ================================
-   3）削除ボタン（数量1なら消す）
-================================ */
-function removeItem(index) {
-  const item = orderList[index];
+/* ==========================================
+   ▼ 削除（マイナス）
+========================================== */
+function removeItem(i) {
+  const item = orderList[i];
+  if (!item) return;
 
-  // 数量1 → 完全削除
-  if (item.qty === 1) {
-    orderList.splice(index, 1);
-  } else {
-    // 数量だけ減らす
+  if (item.qty > 1) {
     item.qty--;
+  } else {
+    orderList.splice(i, 1);
   }
 
-  updateQtyDisplay(item.name);
+  updateQty(item.jp);
   updateOrderList();
 }
 
-/* ================================
-   4）注文送信（LINE 連携などに使える）
-================================ */
-function sendOrder() {
+/* ==========================================
+   ▼ 席の決定
+========================================== */
+function selectSeat(seat) {
+  document.getElementById("seatSelect").value = seat;
+  document.getElementById("seatModal").style.display = "none";
+}
+
+/* ==========================================
+   ▼ 注文送信（LINE → Workers）
+========================================== */
+async function sendOrder() {
   if (orderList.length === 0) {
-    alert("注文がありません！");
+    alert("注文がありません");
     return;
   }
 
-  let text = "【注文内容】\n";
-  orderList.forEach(i => {
-    text += `${i.name} × ${i.qty}\n`;
-  });
-
-  // 席番号
   const seat = document.getElementById("seatSelect").value;
-  text = `席：${seat}\n\n` + text;
+  const memo = document.getElementById("memoBox").value.trim();
 
-  // メモ
-  const memo = document.getElementById("memoBox").value;
-  if (memo.trim() !== "") {
-    text += `\n【メモ】\n${memo}`;
+  let foods = orderList.filter(o => o.type === "food").sort((a,b)=>a.index-b.index);
+  let drinks = orderList.filter(o => o.type === "drink").sort((a,b)=>a.index-b.index);
+
+  let text = `席：${seat}\n\n`;
+
+  // フード
+  if (foods.length > 0) {
+    text += "【フード】\n";
+    foods.forEach(f => text += `${f.jp} × ${f.qty}\n`);
+    text += "\n";
   }
 
-  // Cloudflare Worker に送信
-  fetch("https://odd-shshape-3114.ashibinaa-izakaya.workers.dev/order", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ message: text })
-  })
-  .then(res => res.json())
-  .then(data => {
+  // ドリンク
+  if (drinks.length > 0) {
+    text += "【ドリンク】\n";
+    drinks.forEach(d => text += `${d.jp} × ${d.qty}\n`);
+    text += "\n";
+  }
+
+  // 要望
+  if (memo !== "") {
+    text += "【要望】\n" + memo + "\n";
+  }
+
+  saveHistory(text);
+
+  // ------- Workerへ送信 --------
+  try {
+    await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text })
+    });
+
     alert("注文を送信しました！");
     clearOrder();
-  })
-  .catch(err => {
-    alert("送信エラー：Worker の設定を確認してください");
+
+  } catch(e) {
+    alert("送信エラー（Worker設定を確認）");
+  }
+}
+
+/* ==========================================
+   ▼ 注文クリア
+========================================== */
+function clearOrder() {
+  orderList = [];
+  document.getElementById("orderList").innerHTML = "";
+  document.querySelectorAll(".qty").forEach(q => q.textContent = "0");
+  document.getElementById("memoBox").value = "";
+}
+
+/* ==========================================
+   ▼ 履歴保存
+========================================== */
+function saveHistory(txt) {
+  let list = JSON.parse(localStorage.getItem("history") || "[]");
+  list.push({ time: Date.now(), text: txt });
+  localStorage.setItem("history", JSON.stringify(list));
+  renderHistory();
+}
+
+/* ==========================================
+   ▼ 履歴表示
+========================================== */
+function renderHistory() {
+  let list = JSON.parse(localStorage.getItem("history") || "[]");
+  const box = document.getElementById("historyList");
+  box.innerHTML = "";
+
+  list.forEach(h => {
+    const div = document.createElement("div");
+    div.style.borderBottom = "1px solid #444";
+    div.style.padding = "6px 0";
+    div.innerText =
+      new Date(h.time).toLocaleString() +
+      "\n" +
+      h.text;
+    box.appendChild(div);
   });
 }
 
+/* ==========================================
+   ▼ PINチェック（5923）
+========================================== */
+function checkPin() {
+  const pin = document.getElementById("pinInput").value;
 
-/* ================================
-   5）全クリア
-================================ */
-function clearOrder() {
-  orderList = [];
-  document.querySelectorAll(".qty").forEach(q => q.textContent = 0);
-  updateOrderList();
+  if (pin === "5923") {
+    document.getElementById("clearHistoryBtn").style.display = "block";
+    alert("管理モード ON");
+    document.getElementById("pinModal").style.display = "none";
+  } else {
+    alert("PINが違います");
+  }
 }
 
-/* ================================
-   ページ読み込み時 初期化
-================================ */
+/* ==========================================
+   ▼ 履歴削除
+========================================== */
+function clearHistory() {
+  localStorage.removeItem("history");
+  renderHistory();
+  alert("履歴を削除しました");
+}
+
+/* ==========================================
+   ▼ 言語切替（表示だけ）
+========================================== */
+function toggleLang() {
+  currentLang = currentLang === "jp" ? "en" : "jp";
+  document.getElementById("langToggle").innerText =
+    currentLang === "jp" ? "EN" : "JP";
+
+  menuData.forEach(m => {
+    const id = "name-" + m.jp.replace(/[\s\(\)°・]/g, "");
+    const elem = document.getElementById(id);
+    if (elem) elem.innerText = currentLang === "jp" ? m.jp : m.en;
+  });
+}
+
+/* ==========================================
+   ▼ 初期化
+========================================== */
 document.addEventListener("DOMContentLoaded", () => {
-  updateOrderList();
+  renderHistory();
+  document.getElementById("langToggle").onclick = toggleLang;
+
+  // 右上タップ → PIN起動（3連続）
+  let tap = 0;
+  document.querySelector("header").addEventListener("click", () => {
+    tap++;
+    if (tap >= 3) {
+      tap = 0;
+      document.getElementById("pinModal").style.display = "flex";
+    }
+    setTimeout(() => tap = 0, 1200);
+  });
 });
 </script>
+
+</body>
+</html>
