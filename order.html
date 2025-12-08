@@ -1,170 +1,707 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>店内注文 - あしびなぁ</title>
-<style>
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;margin:0;background:#fff;color:#111;}
-header{padding:16px;text-align:center;background:#fff;border-bottom:3px solid #f5a623;font-size:1.4rem;font-weight:bold;}
-.category{border-bottom:1px solid #ddd;}
-.category-title{padding:14px;background:#fff;cursor:pointer;font-size:1.1rem;border-left:4px solid #f5a623;}
-.category-content{display:none;background:#fafafa;padding:10px 14px 20px;}
-.item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;}
-.qty-box select{padding:4px;font-size:1rem;}
-.order-button{display:block;width:90%;margin:30px auto;padding:14px;background:#f5a623;color:#fff;border-radius:8px;font-size:1.2rem;cursor:pointer;border:none;}
-#seatModal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;z-index:5000;}
-#seatBox{background:#fff;padding:20px;width:80%;max-width:360px;border-radius:10px;}
-.seat-btn{width:100%;padding:12px;margin:6px 0;background:#f5a623;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;}
-#memoBox{width:90%;margin:20px auto;display:block;padding:10px;font-size:1rem;border:1px solid #ccc;border-radius:6px;}
-</style>
+  <meta charset="utf-8">
+  <title>店内オーダー｜居酒屋あしびなぁ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      margin: 0;
+      color: #f5f5f5;
+      background: #111;
+    }
+
+    /* 言語切り替え */
+    .lang-jp .en { display: none; }
+    .lang-en .jp { display: none; }
+
+    header {
+      background: #000;
+      padding: 14px;
+      text-align: center;
+      font-size: 1.3rem;
+      color: #ffd700;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #333;
+    }
+
+    main {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      margin-top: 18px;
+      font-size: 1.1rem;
+      padding-left: 8px;
+      border-left: 4px solid #ffd700;
+    }
+
+    .card {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .price {
+      float: right;
+      font-weight: bold;
+    }
+
+    /* 黒金カテゴリ */
+    .category {
+      background: #000;
+      color: #ffd700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #ffd700;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    /* タブ */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      border-radius: 999px;
+      border: 1px solid #555;
+      background: #222;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #ffd700;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* 席ボタン */
+    .seat-box {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .seat-btn {
+      background: #333;
+      color: #fff;
+      border: 1px solid #666;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 6px;
+      display: inline-block;
+    }
+    .seat-btn.active {
+      background: #ffd700;
+      color: #000;
+      border-color: #ffd700;
+    }
+
+    /* 注文ボタン */
+    .order-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background: #06c755;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+  </style>
 </head>
-<body>
 
-<header>店内注文</header>
+<body class="lang-jp">
 
-<select id="seatSelect" style="display:none;">
-  <option value="カウンター1">カウンター1</option>
-  <option value="カウンター2">カウンター2</option>
-  <option value="カウンター3">カウンター3</option>
-  <option value="テーブル1">テーブル1</option>
-  <option value="テーブル2">テーブル2</option>
-  <option value="スタンド1">スタンド1</option>
-  <option value="スタンド2">スタンド2</option>
-  <option value="座敷">座敷</option>
-</select>
+<header>
+  <span class="jp">店内オーダー</span>
+  <span class="en">In-store Order</span>
+</header>
 
-<div id="seatModal">
-  <div id="seatBox">
-    <h2>席を選択してください</h2>
-    <button class="seat-btn" onclick="selectSeat('カウンター1')">カウンター1</button>
-    <button class="seat-btn" onclick="selectSeat('カウンター2')">カウンター2</button>
-    <button class="seat-btn" onclick="selectSeat('カウンター3')">カウンター3</button>
-    <button class="seat-btn" onclick="selectSeat('テーブル1')">テーブル1</button>
-    <button class="seat-btn" onclick="selectSeat('テーブル2')">テーブル2</button>
-    <button class="seat-btn" onclick="selectSeat('スタンド1')">スタンド1</button>
-    <button class="seat-btn" onclick="selectSeat('スタンド2')">スタンド2</button>
-    <button class="seat-btn" onclick="selectSeat('座敷')">座敷</button>
+<main>
+
+  <!-- 席選択 -->
+  <div class="section-title">
+    <span class="jp">席番号を選択</span>
+    <span class="en">Select Your Seat</span>
   </div>
-</div>
 
-<textarea id="memoBox" placeholder="メモ（焼き加減・アレルギーなど）"></textarea>
+  <div class="seat-box" id="seatBox">
+    <div class="seat-btn" data-seat="カウンター1">C1</div>
+    <div class="seat-btn" data-seat="カウンター2">C2</div>
+    <div class="seat-btn" data-seat="カウンター3">C3</div>
+    <div class="seat-btn" data-seat="カウンター4">C4</div>
+    <div class="seat-btn" data-seat="テーブル1">T1</div>
+    <div class="seat-btn" data-seat="テーブル2">T2</div>
+  </div>
 
-<div id="menuArea">
-<div class="category"><div class="category-title">⭐ オススメ</div><div class="category-content"><div class="item"><div class="item-name">石垣牛ハンバーグ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島らっきょ餃子</div><div class="qty-box"></div></div><div class="item"><div class="item-name">もずくキムチ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">がじゅカレー</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ﾁｮﾒﾁｮﾒシリーズ</div><div class="category-content"><div class="item"><div class="item-name">きゅうりチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ナスチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ジャガイモチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーマンチョメ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">サバ缶チョメ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">さっぱり</div><div class="category-content"><div class="item"><div class="item-name">島らっきょ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島らっきょクリームチーズベーコン</div><div class="qty-box"></div></div><div class="item"><div class="item-name">梅水晶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ゴーヤスライス</div><div class="qty-box"></div></div><div class="item"><div class="item-name">塩辛 各</div><div class="qty-box"></div></div><div class="item"><div class="item-name">塩辛3種盛り</div><div class="qty-box"></div></div><div class="item"><div class="item-name">海ぶどう</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">チャンプル</div><div class="category-content"><div class="item"><div class="item-name">ゴーヤチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ソーメンチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">豆腐チャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">フーチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らっきょチャンプル</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カラシナチャンプル</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">シリシリ</div><div class="category-content"><div class="item"><div class="item-name">人参シリシリ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パパイヤシリシリ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">玉子</div><div class="category-content"><div class="item"><div class="item-name">ポークと玉子</div><div class="qty-box"></div></div><div class="item"><div class="item-name">だし巻き</div><div class="qty-box"></div></div><div class="item"><div class="item-name">目玉焼き</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">揚げ物</div><div class="category-content"><div class="item"><div class="item-name">鶏の唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">タコ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">イカ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">エビ唐揚げ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズの棒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カーリーフライ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">タコスボール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">天ぷら お任せ3種</div><div class="qty-box"></div></div><div class="item"><div class="item-name">天ぷら お任せ5種</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">そば</div><div class="category-content"><div class="item"><div class="item-name">ピリ辛エビトマト</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ぽなペティート</div><div class="qty-box"></div></div><div class="item"><div class="item-name">あぐ〜ペペロン</div><div class="qty-box"></div></div><div class="item"><div class="item-name">本日の気まぐれ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ソーキそば</div><div class="qty-box"></div></div><div class="item"><div class="item-name">テビチそば</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島焼きそば（塩・シークヮーサー）</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">男爺のつまみ</div><div class="category-content"><div class="item"><div class="item-name">たちつてと</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ポチギ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らふて〜</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ナーベラ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島豆腐</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ご飯もの</div><div class="category-content"><div class="item"><div class="item-name">がじゅ丼</div><div class="qty-box"></div></div><div class="item"><div class="item-name">らふて〜丼</div><div class="qty-box"></div></div><div class="item"><div class="item-name">焼き飯（らふて〜・らっきょ）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ちゃんぽん</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズリゾット</div><div class="qty-box"></div></div><div class="item"><div class="item-name">イカ墨リゾット</div><div class="qty-box"></div></div><div class="item"><div class="item-name">チーズトマトリゾット</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ビール</div><div class="category-content"><div class="item"><div class="item-name">生ビール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">瓶ビール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">クリアフリー（ノンアル）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ビアボール</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ウイスキー</div><div class="category-content"><div class="item"><div class="item-name">角ハイボール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">碧（あお）</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">バーボン</div><div class="category-content"><div class="item"><div class="item-name">マッケンナー</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ショット</div><div class="category-content"><div class="item"><div class="item-name">レポサド1800（テキーラ）</div><div class="qty-box"></div></div><div class="item"><div class="item-name">どなん</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ハブ酒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ハブーラ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">カクテル</div><div class="category-content"><div class="item"><div class="item-name">カシスソーダ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">カシスオレンジ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーチオレンジ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピーチウーロン</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">焼酎</div><div class="category-content"><div class="item"><div class="item-name">黒霧島</div><div class="qty-box"></div></div><div class="item"><div class="item-name">二階堂</div><div class="qty-box"></div></div><div class="item"><div class="item-name">金宮</div><div class="qty-box"></div></div><div class="item"><div class="item-name">黒糖焼酎</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">日本酒</div><div class="category-content"><div class="item"><div class="item-name">夜の帝王</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">茶割り</div><div class="category-content"><div class="item"><div class="item-name">ウーロンハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">緑茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">JJ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">JR</div><div class="qty-box"></div></div><div class="item"><div class="item-name">MM</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ヒゲ茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">無糖紅茶ハイ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">さんぴん茶ハイ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">酎ハイ・サワー</div><div class="category-content"><div class="item"><div class="item-name">しょっぱい梅サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">すっきりトマトサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ホワイトサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">巨峰サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">プレーンサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">シークヮーサーサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">グレープフルーツサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">バイスサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">レモンサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ガリサワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">クエン酸サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">男梅サワー</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ピリ辛トマトハイ</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">泡盛</div><div class="category-content"><div class="item"><div class="item-name">残波 白</div><div class="qty-box"></div></div><div class="item"><div class="item-name">残波 黒</div><div class="qty-box"></div></div><div class="item"><div class="item-name">菊之露</div><div class="qty-box"></div></div><div class="item"><div class="item-name">久米仙</div><div class="qty-box"></div></div><div class="item"><div class="item-name">久米仙 古酒35°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">春雨</div><div class="qty-box"></div></div><div class="item"><div class="item-name">古里</div><div class="qty-box"></div></div><div class="item"><div class="item-name">菊之露VIP</div><div class="qty-box"></div></div><div class="item"><div class="item-name">琉球王朝</div><div class="qty-box"></div></div><div class="item"><div class="item-name">請福</div><div class="qty-box"></div></div><div class="item"><div class="item-name">八重泉</div><div class="qty-box"></div></div><div class="item"><div class="item-name">黒真珠</div><div class="qty-box"></div></div><div class="item"><div class="item-name">玉の露</div><div class="qty-box"></div></div><div class="item"><div class="item-name">おもと</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">石垣島のお酒</div><div class="category-content"><div class="item"><div class="item-name">IMUGE. 25°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">IMUGE. 37°</div><div class="qty-box"></div></div><div class="item"><div class="item-name">島ラム</div><div class="qty-box"></div></div></div></div><div class="category"><div class="category-title">ソフトドリンク</div><div class="category-content"><div class="item"><div class="item-name">コーラ</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ジンジャーエール</div><div class="qty-box"></div></div><div class="item"><div class="item-name">さんぴん茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ウーロン茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">緑茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">ヒゲ茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">無糖紅茶</div><div class="qty-box"></div></div><div class="item"><div class="item-name">オレンジジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">トマトジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">マンゴージュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パイナップルジュース</div><div class="qty-box"></div></div><div class="item"><div class="item-name">パッションフルーツジュース</div><div class="qty-box"></div></div></div></div>
+  <script>
+    // 席選択処理
+    let selectedSeat = "";
+    document.querySelectorAll(".seat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".seat-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedSeat = btn.dataset.seat;
+      });
+    });
+  </script>
+
+  <!-- タブ -->
+  <div class="tabs">
+    <div class="tab active" data-tab="food"><span class="jp">フード</span><span class="en">Food</span></div>
+    <div class="tab" data-tab="drink"><span class="jp">ドリンク</span><span class="en">Drinks</span></div>
+    <div class="tab" data-tab="history"><span class="jp">履歴</span><span class="en">History</span></div>
+  </div>
+
+  <script>
+    // タブ切替
+    const tabButtons = document.querySelectorAll(".tab");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+      });
+    });
+  </script>
+
+  <!-- ここからメニュー Part② を入れる -->
+<!-- ========================= -->
+<!-- フードメニュー Part②     -->
+<!-- ========================= -->
+
+<div id="tab-food" class="tab-content active">
+
+  <!-- オススメ -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">オススメ</span>
+      <span class="en category">Recommended</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">石垣牛ハンバーグ（自家製タレ）</span>
+    <span class="en">Ishigaki Beef Hamburg Steak</span>
+    <span class="price">¥1600</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">島らっきょ餃子</span>
+    <span class="en">Shima Rakkyou Gyoza</span>
+    <span class="price">¥600</span>
+  </div></div>
+
+  <!-- チョメチョメシリーズ -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ﾁｮﾒﾁｮﾒシリーズ</span>
+      <span class="en category">Chome-Chome Series</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">きゅうりチョメ</span><span class="en">Cucumber Chome</span><span class="price">¥300</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">チーズチョメ</span><span class="en">Cheese Chome</span><span class="price">¥500</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">ナスチョメ</span><span class="en">Nasu Chome</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">ジャガイモチョメ</span><span class="en">Potato Chome</span><span class="price">¥500</span></div></div>
+
+  <!-- さっぱり系 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">さっぱりなやつ</span>
+      <span class="en category">Refreshing Snacks</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">島らっきょ</span><span class="en">Shima Rakkyou</span><span class="price">¥500</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">海ぶどう</span><span class="en">Sea Grapes</span><span class="price">¥600</span></div></div>
+
+  <!-- チャンプル -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">チャンプル</span>
+      <span class="en category">Champuru</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">ゴーヤチャンプル</span><span class="en">Goya Champuru</span><span class="price">¥800</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">ソーメンチャンプル</span><span class="en">Somen Champuru</span><span class="price">¥800</span></div></div>
+
+  <!-- シリシリ -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">シリシリ</span>
+      <span class="en category">Shirishiri</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">人参シリシリ</span><span class="en">Carrot Shirishiri</span><span class="price">¥600</span></div></div>
+
+  <!-- 玉子系 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">玉子</span>
+      <span class="en category">Egg Dishes</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">ポーク玉子</span><span class="en">Pork & Egg</span><span class="price">¥700</span></div></div>
+
+  <!-- 揚げ物（唐揚げ＋天ぷら統合済） -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">揚げ物</span>
+      <span class="en category">Fried Snacks</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">鶏の唐揚げ</span><span class="en">Fried Chicken</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">タコ唐揚げ</span><span class="en">Fried Octopus</span><span class="price">¥500</span></div></div>
+
+  <!-- そば（島そば＋そば系統合） -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">そば</span>
+      <span class="en category">Soba</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">ソーキそば</span><span class="en">Soki Soba</span><span class="price">¥800</span></div></div>
+
+  <!-- ご飯物＋リゾット統合 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ご飯・リゾット</span>
+      <span class="en category">Rice / Risotto</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">がじゅ丼</span><span class="en">Gaju Rice Bowl</span><span class="price">¥800</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">チーズリゾット</span><span class="en">Cheese Risotto</span><span class="price">¥900</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">イカ墨リゾット</span><span class="en">Squid Ink Risotto</span><span class="price">¥900</span></div></div>
+
 </div>
-<button id="sendLine" class="order-button">注文する</button>
+<!-- ========================= -->
+<!-- ドリンクメニュー Part③   -->
+<!-- ========================= -->
+
+<div id="tab-drink" class="tab-content">
+
+  <div class="section-title">
+    <span class="jp">ドリンクメニュー</span>
+    <span class="en">Drink Menu</span>
+  </div>
+
+  <!-- ビール -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ビール</span>
+      <span class="en category">Beer</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">生ビール</span><span class="en">Draft Beer</span><span class="price">¥700</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">瓶ビール</span><span class="en">Bottled Beer</span><span class="price">¥700</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">ビアボール</span><span class="en">Beer Ball</span><span class="price">¥600</span>
+  </div></div>
+
+  <!-- ハイボール / ウイスキー -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ハイボール・ウイスキー</span>
+      <span class="en category">Highball / Whisky</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">角ハイボール</span><span class="en">Kaku Highball</span><span class="price">¥600</span></div></div>
+
+  <div class="card"><div class="card-title"><span class="jp">碧（AO）</span><span class="en">Ao Whisky</span><span class="price">¥850</span></div></div>
+
+  <!-- バーボン -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">バーボン</span>
+      <span class="en category">Bourbon</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">マッケンナー</span><span class="en">Mckenna</span><span class="price">¥880</span></div></div>
+
+  <!-- テキーラ & ショット 統合 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ショット・テキーラ</span>
+      <span class="en category">Shots & Tequila</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">レポサド1800（テキーラ）</span><span class="en">Reposado 1800 (Tequila)</span><span class="price">¥1200</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">どなん（ショット）</span><span class="en">Donan Shot</span><span class="price">¥1200</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">ハブ酒</span><span class="en">Habu Liquor Shot</span><span class="price">¥1200</span>
+  </div></div>
+
+  <div class="card"><div class="card-title">
+    <span class="jp">ハブーラ</span><span class="en">Habura Shot</span><span class="price">¥1400</span>
+  </div></div>
+
+  <!-- カクテル -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">カクテル</span>
+      <span class="en category">Cocktails</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">カシスソーダ</span><span class="en">Cassis Soda</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">カシスオレンジ</span><span class="en">Cassis Orange</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">ピーチオレンジ</span><span class="en">Peach Orange</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">ピーチウーロン</span><span class="en">Peach Oolong</span><span class="price">¥600</span></div></div>
+
+  <!-- 焼酎 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">焼酎</span>
+      <span class="en category">Shochu</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">黒霧島</span><span class="en">Kurokirishima</span><span class="price">¥550</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">二階堂</span><span class="en">Nikaido</span><span class="price">¥550</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">金宮</span><span class="en">Kinmiya</span><span class="price">¥550</span></div></div>
+
+  <!-- 沖縄の泡盛（残波・菊の露など → 統合カテゴリ） -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">沖縄の泡盛</span>
+      <span class="en category">Okinawan Awamori</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">残波 白</span><span class="en">Zanpa White</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">残波 黒</span><span class="en">Zanpa Black</span><span class="price">¥550</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">菊之露</span><span class="en">Kikunotsuyu</span><span class="price">¥550</span></div></div>
+
+  <!-- 八重山泡盛も統合（カテゴリを1つに） -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">八重山の泡盛</span>
+      <span class="en category">Yaeyama Awamori</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">請福</span><span class="en">Seifuku</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">八重泉</span><span class="en">Yaesen</span><span class="price">¥600</span></div></div>
+  <div class="card"><div class="card-title"><span class="jp">黒真珠</span><span class="en">Black Pearl</span><span class="price">¥880</span></div></div>
+
+  <!-- ソフトドリンク -->
+  <div class="card">
+    <div class="card-title">
+      <span class="jp category">ソフトドリンク</span>
+      <span class="en category">Soft Drinks</span>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="jp">各種</span><span class="en">Assorted</span><span class="price">¥400</span></div></div>
+
+</div>
+<!-- ========================= -->
+<!-- 🍺 注文処理スクリプト Part④ -->
+<!-- ========================= -->
 
 <script>
-// category toggle
-document.querySelectorAll(".category-title").forEach(t=>{
- t.addEventListener("click",()=>{let c=t.nextElementSibling;c.style.display=c.style.display==="block"?"none":"block";});
-});
-
-// qty
-document.querySelectorAll(".qty-box").forEach(b=>{
- let s=document.createElement("select");
- s.classList.add("qty");
- for(let i=0;i<=5;i++){let o=document.createElement("option");o.value=i;o.text=i;s.appendChild(o);}
- b.appendChild(s);
-});
-
-function selectSeat(s){document.getElementById("seatSelect").value=s;document.getElementById("seatModal").style.display="none";}
-window.onload=()=>{document.getElementById("seatModal").style.display="flex";};
-
-document.getElementById("sendLine").onclick=()=>{
- let seat=document.getElementById("seatSelect").value;
- if(!seat){alert("席を選んでください");return;}
-
- let food="", drink="";
- document.querySelectorAll(".category").forEach(cat=>{
-   let title=cat.querySelector(".category-title").innerText;
-   cat.querySelectorAll(".item").forEach(item=>{
-     let q=Number(item.querySelector(".qty").value);
-     if(q>0){
-       let name=item.querySelector(".item-name").innerText;
-       let isDrink = (
-         title.includes("ビール")||title.includes("ウイスキー")||title.includes("バーボン")||
-         title.includes("ショット")||title.includes("カクテル")||title.includes("焼酎")||
-         title.includes("日本酒")||title.includes("茶割り")||title.includes("酎ハイ")||
-         title.includes("泡盛")||title.includes("石垣島のお酒")||title.includes("ソフトドリンク")
-       );
-       if(isDrink) drink += name+" × "+q+"\n";
-       else food += name+" × "+q+"\n";
-     }
-   });
- });
-
- if(!food && !drink){alert("注文がありません");return;}
-
- let memo=document.getElementById("memoBox").value.trim();
- let text=`【店内注文】\n席：${seat}\n\n【フード】\n${food||"なし"}\n【ドリンク】\n${drink||"なし"}\n\n【メモ】\n${memo||"なし"}`;
-
- document.getElementById("sendLine").onclick = async () => {
-  let seat = document.getElementById("seatSelect").value;
-  if (!seat) {
-    alert("席を選んでください");
-    return;
-  }
-
-  let food = "", drink = "";
-  document.querySelectorAll(".category").forEach(cat => {
-    let title = cat.querySelector(".category-title").innerText;
-    cat.querySelectorAll(".item").forEach(item => {
-      let q = Number(item.querySelector(".qty").value);
-      if (q > 0) {
-        let name = item.querySelector(".item-name").innerText;
-        let isDrink = (
-          title.includes("ビール") || title.includes("ウイスキー") ||
-          title.includes("バーボン") || title.includes("ショット") ||
-          title.includes("カクテル") || title.includes("焼酎") ||
-          title.includes("日本酒") || title.includes("茶割り") ||
-          title.includes("酎ハイ") || title.includes("泡盛") ||
-          title.includes("石垣島のお酒") || title.includes("ソフトドリンク")
-        );
-
-        if (isDrink) drink += `${name} × ${q}\n`;
-        else food += `${name} × ${q}\n`;
-      }
-    });
-  });
-
-  if (!food && !drink) {
-    alert("注文がありません");
-    return;
-  }
-
-  let memo = document.getElementById("memoBox").value.trim();
-
-  // Worker に送るテキスト
-  let text =
-    `【店内注文】\n席：${seat}\n\n【フード】\n${food || "なし"}\n【ドリンク】\n${drink || "なし"}\n\n【メモ】\n${memo || "なし"}`;
-
-  // ▼ ▼ ▼ ここが Workers に送る部分 ▼ ▼ ▼
-  const resp = await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text })
-  });
-
-  if (resp.ok) {
-    alert("注文を送信しました！");
-  } else {
-    alert("送信に失敗しました…");
-  }
-};
-  /* ==========================================================
-    言語切替（追加）
-========================================================== */
+// ★ 言語切り替え
 document.getElementById("langJp").addEventListener("click", () => {
   document.body.classList.remove("lang-en");
   document.body.classList.add("lang-jp");
 });
-
 document.getElementById("langEn").addEventListener("click", () => {
   document.body.classList.remove("lang-jp");
   document.body.classList.add("lang-en");
 });
-</script>
 
-</body></html>
+// ===================================
+// 席番号の取得
+// ===================================
+function getSeatNumber() {
+  const seat = document.querySelector("input[name='seat']:checked");
+  return seat ? seat.value : "未選択";
+}
+
+// ===================================
+// 注文リストの管理
+// ===================================
+let orderList = [];
+
+function addOrder(nameJp, nameEn, price) {
+  orderList.push({ nameJp, nameEn, price });
+  renderOrderList();
+}
+
+// 注文一覧を描画
+function renderOrderList() {
+  const box = document.getElementById("orderItems");
+  box.innerHTML = "";
+
+  orderList.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.innerHTML = `
+      <span>${item.nameJp}（¥${item.price}）</span>
+      <button onclick="removeOrder(${i})">削除</button>
+    `;
+    box.appendChild(div);
+  });
+
+  document.getElementById("totalPrice").innerText =
+    orderList.reduce((sum, i) => sum + Number(i.price), 0);
+}
+
+// 注文削除
+function removeOrder(i) {
+  orderList.splice(i, 1);
+  renderOrderList();
+}
+
+// ===================================
+// LINEへ送るメッセージを生成（日本語固定）
+// ===================================
+function generateOrderText() {
+  const seat = getSeatNumber();
+  let text = `【席番号】${seat}\n\n【注文内容】\n`;
+
+  orderList.forEach(i => {
+    text += `・${i.nameJp}（¥${i.price}）\n`;
+  });
+
+  text += `\n合計：¥${orderList.reduce((s, i) => s + Number(i.price), 0)}`;
+
+  return encodeURIComponent(text);
+}
+
+// ===================================
+// LINE送信
+// ===================================
+function sendToLine() {
+  if (orderList.length === 0) {
+    alert("注文がありません");
+    return;
+  }
+
+  const text = generateOrderText();
+  const url = "https://line.me/R/share?text=" + text;
+  window.open(url, "_blank");
+
+  saveHistory();
+}
+
+// ===================================
+// 注文履歴保存（ローカルストレージ）
+// ===================================
+function saveHistory() {
+  const now = new Date();
+  const seat = getSeatNumber();
+
+  const historyItem = {
+    time: now.toLocaleString(),
+    seat,
+    items: orderList,
+    total: orderList.reduce((s, i) => s + Number(i.price), 0),
+  };
+
+  let history = JSON.parse(localStorage.getItem("ashibinaa_orders") || "[]");
+  history.push(historyItem);
+  localStorage.setItem("ashibinaa_orders", JSON.stringify(history));
+
+  orderList = [];
+  renderOrderList();
+  alert("注文を記録しました！");
+}
+
+// ===================================
+// 履歴表示
+// ===================================
+function showHistory() {
+  let history = JSON.parse(localStorage.getItem("ashibinaa_orders") || "[]");
+
+  let text = "【注文履歴】\n\n";
+  history.forEach(h => {
+    text += `■ ${h.time}（席：${h.seat}）\n`;
+    h.items.forEach(i => {
+      text += ` - ${i.nameJp}（¥${i.price}）\n`;
+    });
+    text += ` 合計：¥${h.total}\n\n`;
+  });
+
+  alert(text);
+}
+
+</script>
+<!-- ========================= -->
+<!-- 🍺 注文処理スクリプト Part④ -->
+<!-- ========================= -->
+
+<script>
+// ★ 言語切り替え
+document.getElementById("langJp").addEventListener("click", () => {
+  document.body.classList.remove("lang-en");
+  document.body.classList.add("lang-jp");
+});
+document.getElementById("langEn").addEventListener("click", () => {
+  document.body.classList.remove("lang-jp");
+  document.body.classList.add("lang-en");
+});
+
+// ===================================
+// 席番号の取得
+// ===================================
+function getSeatNumber() {
+  const seat = document.querySelector("input[name='seat']:checked");
+  return seat ? seat.value : "未選択";
+}
+
+// ===================================
+// 注文リストの管理
+// ===================================
+let orderList = [];
+
+function addOrder(nameJp, nameEn, price) {
+  orderList.push({ nameJp, nameEn, price });
+  renderOrderList();
+}
+
+// 注文一覧を描画
+function renderOrderList() {
+  const box = document.getElementById("orderItems");
+  box.innerHTML = "";
+
+  orderList.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.innerHTML = `
+      <span>${item.nameJp}（¥${item.price}）</span>
+      <button onclick="removeOrder(${i})">削除</button>
+    `;
+    box.appendChild(div);
+  });
+
+  document.getElementById("totalPrice").innerText =
+    orderList.reduce((sum, i) => sum + Number(i.price), 0);
+}
+
+// 注文削除
+function removeOrder(i) {
+  orderList.splice(i, 1);
+  renderOrderList();
+}
+
+// ===================================
+// LINEへ送るメッセージを生成（日本語固定）
+// ===================================
+function generateOrderText() {
+  const seat = getSeatNumber();
+  let text = `【席番号】${seat}\n\n【注文内容】\n`;
+
+  orderList.forEach(i => {
+    text += `・${i.nameJp}（¥${i.price}）\n`;
+  });
+
+  text += `\n合計：¥${orderList.reduce((s, i) => s + Number(i.price), 0)}`;
+
+  return encodeURIComponent(text);
+}
+
+// ===================================
+// LINE送信
+// ===================================
+function sendToLine() {
+  if (orderList.length === 0) {
+    alert("注文がありません");
+    return;
+  }
+
+  const text = generateOrderText();
+  const url = "https://line.me/R/share?text=" + text;
+  window.open(url, "_blank");
+
+  saveHistory();
+}
+
+// ===================================
+// 注文履歴保存（ローカルストレージ）
+// ===================================
+function saveHistory() {
+  const now = new Date();
+  const seat = getSeatNumber();
+
+  const historyItem = {
+    time: now.toLocaleString(),
+    seat,
+    items: orderList,
+    total: orderList.reduce((s, i) => s + Number(i.price), 0),
+  };
+
+  let history = JSON.parse(localStorage.getItem("ashibinaa_orders") || "[]");
+  history.push(historyItem);
+  localStorage.setItem("ashibinaa_orders", JSON.stringify(history));
+
+  orderList = [];
+  renderOrderList();
+  alert("注文を記録しました！");
+}
+
+// ===================================
+// 履歴表示
+// ===================================
+function showHistory() {
+  let history = JSON.parse(localStorage.getItem("ashibinaa_orders") || "[]");
+
+  let text = "【注文履歴】\n\n";
+  history.forEach(h => {
+    text += `■ ${h.time}（席：${h.seat}）\n`;
+    h.items.forEach(i => {
+      text += ` - ${i.nameJp}（¥${i.price}）\n`;
+    });
+    text += ` 合計：¥${h.total}\n\n`;
+  });
+
+  alert(text);
+}
+
+</script>
