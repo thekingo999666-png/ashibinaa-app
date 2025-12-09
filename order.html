@@ -1,45 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>店内注文 - あしびなぁ</title>
 
 <style>
-/* ===============================
-   全体テーマ
-================================*/
+/* =============================== */
+/* UI 全体テーマ（前回UIを完全維持） */
+/* =============================== */
 body {
   margin: 0;
   padding: 0;
   background: #0b0c10;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic";
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ===============================
-   ヘッダー
-================================*/
+/* 左右 50% - 50% */
+#leftMenu {
+  width: 50%;
+  overflow-y: scroll;
+  padding-bottom: 80px;
+  border-right: 1px solid #1ba7d9;
+}
+#rightOrder {
+  width: 50%;
+  overflow-y: scroll;
+  padding: 10px;
+  padding-bottom: 80px;
+}
+
+/* ヘッダー */
 header {
   background: linear-gradient(90deg,#0a0f1c,#0b3048 40%,#0a0f1c);
   padding: 16px;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   border-bottom: 2px solid #1ba7d9;
   text-shadow: 0 0 6px rgba(27,167,217,0.6);
 }
 
-/* ===============================
-   大カテゴリ
-================================*/
+/* カテゴリカード */
 .category-card {
-  margin: 16px;
-  padding: 18px;
+  margin: 12px;
+  padding: 16px;
   background: radial-gradient(circle at top,#1b3b52,#0c1117);
   border: 2px solid #e6c15d;
-  border-radius: 14px;
-  font-size: 1.35rem;
+  border-radius: 12px;
+  font-size: 1.25rem;
   cursor: pointer;
   text-align: center;
   transition: 0.25s;
@@ -48,31 +61,27 @@ header {
   transform: translateY(-3px);
 }
 
-/* ===============================
-   サブカテゴリ
-================================*/
+/* サブカテゴリ */
 .subcategory {
-  margin: 10px 16px;
-  padding: 14px;
+  margin: 8px 12px;
+  padding: 10px;
   border-left: 5px solid #e6c15d;
   background: #0d141b;
   border-radius: 6px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 .sub-box {
   display: none;
-  margin: 6px 16px 14px 16px;
-  padding: 10px;
+  margin: 4px 12px 12px 12px;
+  padding: 8px;
   background: #0a0f14;
   border-radius: 10px;
 }
 
-/* ===============================
-   商品行
-================================*/
+/* 商品行 */
 .item-row {
-  padding: 14px;
+  padding: 12px;
   border-bottom: 1px solid #1d2932;
   display: flex;
   justify-content: space-between;
@@ -86,15 +95,44 @@ header {
   color: #1a1a1a;
   padding: 4px 10px;
   border-radius: 8px;
-  min-width: 32px;
+  min-width: 30px;
   text-align: center;
   font-weight: bold;
-  transition: 0.15s;
 }
 
-/* ===============================
-   固定注文ボタン
-================================*/
+/* 注文リスト */
+.order-item {
+  background: #11161c;
+  padding: 10px;
+  border: 1px solid #1ba7d9;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.order-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.order-btn {
+  background: #1ba7d9;
+  color: #000;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 合計表示 */
+#totalPrice {
+  font-size: 1.3rem;
+  padding: 10px;
+  text-align: right;
+  font-weight: bold;
+  border-top: 2px solid #1ba7d9;
+}
+
+/* 注文ボタン */
 #orderButton {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -109,9 +147,7 @@ header {
   z-index: 5000;
 }
 
-/* ===============================
-   席選択モーダル
-================================*/
+/* 席選択モーダル */
 #seatModal {
   position: fixed;
   inset: 0;
@@ -142,9 +178,7 @@ header {
   font-weight: bold;
 }
 
-/* ===============================
-   注文完了演出
-================================*/
+/* 注文完了 */
 #doneBanner {
   position: fixed;
   top: 30%;
@@ -160,16 +194,11 @@ header {
   border: 1px solid #e6c15d;
   z-index: 7000;
 }
-
 </style>
 </head>
 <body>
 
-<header>店内注文 - あしびなぁ</header>
-
-<!-- ===============================
-     席選択（最初に必ず表示）
-================================-->
+<!-- 席選択 -->
 <div id="seatModal">
   <div id="seatBox">
     <h2>席を選択してください</h2>
@@ -184,182 +213,251 @@ header {
   </div>
 </div>
 
-<!-- 注文完了演出 -->
 <div id="doneBanner">✨ ご注文を送信しました！ ✨</div>
 
-<!-- ===============================
-     メニュー全体
-================================-->
-<div id="menuContainer" style="display:none; padding-bottom:80px;">
+<!-- 左エリア：メニュー -->
+<div id="leftMenu">
+  <header>店内注文 - あしびなぁ</header>
 
+  <!-- ========== フードカテゴリ ========== -->
+  <div class="category-card" onclick="toggleMain('food')">🍽 フード</div>
+  <div id="food" class="main-box">
 
-<!-- ========== フード ========== -->
-<div class="category-card" onclick="toggleMain('food')">🍽 フード</div>
-<div id="food" class="main-box">
+    <!-- オススメ -->
+    <div class="subcategory" onclick="toggleSub('osusume')">⭐ オススメ</div>
+    <div id="osusume" class="sub-box">
+      <div class="item-row" onclick="addItem('石垣牛ハンバーグ',1600)">石垣牛ハンバーグ</div>
+      <div class="item-row" onclick="addItem('島らっきょ餃子',600)">島らっきょ餃子</div>
+      <div class="item-row" onclick="addItem('もずくキムチ',600)">もずくキムチ</div>
+      <div class="item-row" onclick="addItem('がじゅカレー',900)">がじゅカレー</div>
+    </div>
 
-  <!-- オススメ -->
-  <div class="subcategory" onclick="toggleSub('osusume')">⭐ オススメ</div>
-  <div id="osusume" class="sub-box">
-    <div class="item-row" onclick="addItem('石垣牛ハンバーグ','ishigaki')">石垣牛ハンバーグ <span id="qty-ishigaki" class="qty">0</span></div>
+    <!-- さっぱり -->
+    <div class="subcategory" onclick="toggleSub('sappari')">さっぱり</div>
+    <div id="sappari" class="sub-box">
+      <div class="item-row" onclick="addItem('島らっきょ',500)">島らっきょ</div>
+      <div class="item-row" onclick="addItem('海ぶどう',600)">海ぶどう</div>
+    </div>
 
-    <div class="item-row" onclick="addItem('島らっきょ餃子','gyoza')">島らっきょ餃子 <span id="qty-gyoza" class="qty">0</span></div>
+    <!-- 揚げ物（唐揚げ + 天ぷら 統合） -->
+    <div class="subcategory" onclick="toggleSub('fry')">揚げ物</div>
+    <div id="fry" class="sub-box">
+      <div class="item-row" onclick="addItem('鶏の唐揚げ',600)">鶏の唐揚げ</div>
+      <div class="item-row" onclick="addItem('タコ唐揚げ',500)">タコ唐揚げ</div>
+      <div class="item-row" onclick="addItem('イカ唐揚げ',500)">イカ唐揚げ</div>
+      <div class="item-row" onclick="addItem('エビ唐揚げ',500)">エビ唐揚げ</div>
+      <div class="item-row" onclick="addItem('チーズの棒',500)">チーズの棒</div>
+      <div class="item-row" onclick="addItem('カーリーフライ',600)">カーリーフライ</div>
+      <div class="item-row" onclick="addItem('タコスボール',600)">タコスボール</div>
+      <div class="item-row" onclick="addItem('天ぷら お任せ3種',1000)">天ぷら お任せ3種</div>
+      <div class="item-row" onclick="addItem('天ぷら お任せ5種',1500)">天ぷら お任せ5種</div>
+    </div>
 
-    <div class="item-row" onclick="addItem('もずくキムチ','mozuku')">もずくキムチ <span id="qty-mozuku" class="qty">0</span></div>
+    <!-- 島そばで（島焼きそば統合） -->
+    <div class="subcategory" onclick="toggleSub('soba')">島そばで</div>
+    <div id="soba" class="sub-box">
+      <div class="item-row" onclick="addItem('ピリ辛エビトマト',800)">ピリ辛エビトマト</div>
+      <div class="item-row" onclick="addItem('ぽなペティート',800)">ぽなペティート</div>
+      <div class="item-row" onclick="addItem('あぐ〜ペペロン',800)">あぐ〜ペペロン</div>
+      <div class="item-row" onclick="addItem('本日の気まぐれ',800)">本日の気まぐれ</div>
+      <div class="item-row" onclick="addItem('島焼きそば（塩・シークヮーサー）',800)">島焼きそば（塩・シークヮーサー）</div>
+    </div>
 
-    <div class="item-row" onclick="addItem('がじゅカレー','gaju')">がじゅカレー <span id="qty-gaju" class="qty">0</span></div>
+    <!-- ご飯物（リゾット 統合） -->
+    <div class="subcategory" onclick="toggleSub('rice')">ご飯物</div>
+    <div id="rice" class="sub-box">
+      <div class="item-row" onclick="addItem('がじゅ丼',800)">がじゅ丼</div>
+      <div class="item-row" onclick="addItem('らふて〜丼',800)">らふて〜丼</div>
+      <div class="item-row" onclick="addItem('焼き飯（らふて〜・らっきょ）',800)">焼き飯（らふて〜・らっきょ）</div>
+      <div class="item-row" onclick="addItem('ちゃんぽん',800)">ちゃんぽん</div>
+      <div class="item-row" onclick="addItem('ソーキそば',800)">ソーキそば</div>
+      <div class="item-row" onclick="addItem('テビチそば',1000)">テビチそば</div>
+      <div class="item-row" onclick="addItem('チーズリゾット',900)">チーズリゾット</div>
+      <div class="item-row" onclick="addItem('イカ墨リゾット',900)">イカ墨リゾット</div>
+      <div class="item-row" onclick="addItem('チーズトマトリゾット',1000)">チーズトマトリゾット</div>
+    </div>
+
   </div>
 
+  <!-- ========== ドリンクカテゴリ ========== -->
+  <div class="category-card" onclick="toggleMain('drink')">🍹 ドリンク</div>
+  <div id="drink" class="main-box">
 
-  <!-- さっぱり -->
-  <div class="subcategory" onclick="toggleSub('sappari')">さっぱり</div>
-  <div id="sappari" class="sub-box">
-    <div class="item-row" onclick="addItem('島らっきょ','rakyo')">島らっきょ <span id="qty-rakyo" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('海ぶどう','uni')">海ぶどう <span id="qty-uni" class="qty">0</span></div>
+    <!-- ショット（テキーラ最上段） -->
+    <div class="subcategory" onclick="toggleSub('shot')">ショット</div>
+    <div id="shot" class="sub-box">
+      <div class="item-row" onclick="addItem('レポサド1800（テキーラ）',1200)">レポサド1800（テキーラ）</div>
+      <div class="item-row" onclick="addItem('どなん',1200)">どなん</div>
+      <div class="item-row" onclick="addItem('ハブ酒',1200)">ハブ酒</div>
+      <div class="item-row" onclick="addItem('ハブーラ',1400)">ハブーラ</div>
+    </div>
+
+    <!-- ビール -->
+    <div class="subcategory" onclick="toggleSub('beer')">ビール</div>
+    <div id="beer" class="sub-box">
+      <div class="item-row" onclick="addItem('生ビール',700)">生ビール</div>
+      <div class="item-row" onclick="addItem('瓶ビール',700)">瓶ビール</div>
+      <div class="item-row" onclick="addItem('クリアフリー',550)">クリアフリー</div>
+      <div class="item-row" onclick="addItem('ビアボール',600)">ビアボール</div>
+    </div>
+
+    <!-- カクテル -->
+    <div class="subcategory" onclick="toggleSub('cocktail')">カクテル</div>
+    <div id="cocktail" class="sub-box">
+      <div class="item-row" onclick="addItem('カシスソーダ',600)">カシスソーダ</div>
+      <div class="item-row" onclick="addItem('カシスオレンジ',600)">カシスオレンジ</div>
+      <div class="item-row" onclick="addItem('ピーチオレンジ',600)">ピーチオレンジ</div>
+      <div class="item-row" onclick="addItem('ピーチウーロン',600)">ピーチウーロン</div>
+    </div>
+
+    <!-- 茶割り -->
+    <div class="subcategory" onclick="toggleSub('tea')">茶割り</div>
+    <div id="tea" class="sub-box">
+      <div class="item-row" onclick="addItem('ウーロンハイ',550)">ウーロンハイ</div>
+      <div class="item-row" onclick="addItem('緑茶ハイ',550)">緑茶ハイ</div>
+      <div class="item-row" onclick="addItem('無糖紅茶ハイ',550)">無糖紅茶ハイ</div>
+      <div class="item-row" onclick="addItem('さんぴん茶ハイ',550)">さんぴん茶ハイ</div>
+      <div class="item-row" onclick="addItem('ヒゲ茶ハイ',550)">ヒゲ茶ハイ</div>
+    </div>
+
+    <!-- ソフトドリンク -->
+    <div class="subcategory" onclick="toggleSub('soft')">ソフトドリンク</div>
+    <div id="soft" class="sub-box">
+      <div class="item-row" onclick="addItem('コーラ',400)">コーラ</div>
+      <div class="item-row" onclick="addItem('ジンジャーエール',400)">ジンジャーエール</div>
+      <div class="item-row" onclick="addItem('さんぴん茶',400)">さんぴん茶</div>
+      <div class="item-row" onclick="addItem('緑茶',400)">緑茶</div>
+      <div class="item-row" onclick="addItem('無糖紅茶',400)">無糖紅茶</div>
+      <div class="item-row" onclick="addItem('烏龍茶',400)">烏龍茶</div>
+    </div>
+
   </div>
-
-  <!-- 揚げ物 -->
-  <div class="subcategory" onclick="toggleSub('fry')">揚げ物</div>
-  <div id="fry" class="sub-box">
-    <div class="item-row" onclick="addItem('鶏の唐揚げ','karaage')">鶏の唐揚げ <span class="qty" id="qty-karaage">0</span></div>
-    <div class="item-row" onclick="addItem('天ぷら3種','temp3')">天ぷら3種 <span class="qty" id="qty-temp3">0</span></div>
-  </div>
-
-  <!-- ご飯 -->
-  <div class="subcategory" onclick="toggleSub('rice')">ご飯もの</div>
-  <div id="rice" class="sub-box">
-    <div class="item-row" onclick="addItem('がじゅ丼','gajudon')">がじゅ丼 <span class="qty" id="qty-gajudon">0</span></div>
-    <div class="item-row" onclick="addItem('チーズリゾット','cheese_riso')">チーズリゾット <span class="qty" id="qty-cheese_riso">0</span></div>
-  </div>
-
 </div>
 
-
-<!-- ========== ドリンク ========== -->
-<div class="category-card" onclick="toggleMain('drink')">🍹 ドリンク</div>
-
-<div id="drink" class="main-box">
-
-  <div class="subcategory" onclick="toggleSub('beer')">ビール</div>
-  <div id="beer" class="sub-box">
-    <div class="item-row" onclick="addItem('生ビール','nama')">生ビール <span class="qty" id="qty-nama">0</span></div>
-  </div>
-
-  <div class="subcategory" onclick="toggleSub('shot')">ショット / テキーラ</div>
-  <div id="shot" class="sub-box">
-    <div class="item-row" onclick="addItem('レポサド1800（テキーラ）','repo')">レポサド1800 <span class="qty" id="qty-repo">0</span></div>
-    <div class="item-row" onclick="addItem('どなん','donan')">どなん <span class="qty" id="qty-donan">0</span></div>
-  </div>
-
+<!-- 右エリア：注文リスト -->
+<div id="rightOrder">
+  <header>注文リスト</header>
+  <div id="orderList"></div>
+  <div id="totalPrice">合計：0 円</div>
 </div>
 
-</div>
-
-
-<!-- 固定注文ボタン -->
+<!-- 注文ボタン -->
 <div id="orderButton" onclick="submitOrder()">注文する</div>
-
-
 
 <script>
 /* ===============================
    席選択
 ================================*/
 let seat = "";
-let order = {};
+let order = {}; // { name, price, qty }
 
 function selectSeat(s) {
   seat = s;
   document.getElementById("seatModal").style.display = "none";
-  document.getElementById("menuContainer").style.display = "block";
 }
 
 /* ===============================
-   大カテゴリ表示切替
+   カテゴリ折りたたみ
 ================================*/
 function toggleMain(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
-
-/* ===============================
-   サブカテゴリ表示切替
-================================*/
 function toggleSub(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
 /* ===============================
-   メニュー追加
+   商品追加
 ================================*/
-function addItem(name, id) {
-  if (!order[id]) order[id] = { name: name, qty: 0 };
+function addItem(name, price) {
+  if (!order[name]) {
+    order[name] = { price: price, qty: 0 };
+  }
+  order[name].qty++;
 
-  order[id].qty++;
-
-  const qtyEl = document.getElementById("qty-" + id);
-  qtyEl.innerText = order[id].qty;
-  qtyEl.style.transform = "scale(1.25)";
-  setTimeout(() => qtyEl.style.transform = "scale(1)", 150);
+  renderOrderList();
 }
 
 /* ===============================
-   注文内容作成（フードとドリンク分類）
+   注文リスト描画
 ================================*/
-function buildOrderData() {
-  const foodList = [];
-  const drinkList = [];
+function renderOrderList() {
+  const list = document.getElementById("orderList");
+  list.innerHTML = "";
 
-  Object.keys(order).forEach(id => {
-    const item = order[id];
-    if (item.qty > 0) {
-      const obj = { name: item.name, qty: item.qty };
-      if (isDrink(id)) drinkList.push(obj);
-      else foodList.push(obj);
-    }
+  let total = 0;
+
+  Object.keys(order).forEach(name => {
+    const item = order[name];
+    if (item.qty <= 0) return;
+
+    total += item.price * item.qty;
+
+    const div = document.createElement("div");
+    div.className = "order-item";
+
+    div.innerHTML = `
+      <div><b>${name}</b> × ${item.qty}　${item.price * item.qty}円</div>
+      <div class="order-controls">
+        <div class="order-btn" onclick="chgQty('${name}', -1)">－</div>
+        <div class="order-btn" onclick="chgQty('${name}', 1)">＋</div>
+        <div class="order-btn" onclick="removeItem('${name}')">削除</div>
+      </div>
+    `;
+    list.appendChild(div);
   });
 
-  return {
-    seat: seat,
-    food: foodList,
-    drink: drinkList
-  };
+  document.getElementById("totalPrice").innerText = `合計：${total} 円`;
 }
 
-/* ドリンク判定（IDで判定） */
-function isDrink(id) {
-  return ["nama","repo","donan"].includes(id);
+/* 数量変更 */
+function chgQty(name, diff) {
+  order[name].qty += diff;
+  if (order[name].qty <= 0) delete order[name];
+  renderOrderList();
+}
+
+/* 削除 */
+function removeItem(name) {
+  delete order[name];
+  renderOrderList();
 }
 
 /* ===============================
    注文送信
 ================================*/
 async function submitOrder() {
-  if (!seat) return alert("席が選択されていません");
+  if (!seat) {
+    alert("席が選ばれていません。");
+    return;
+  }
 
-  const data = buildOrderData();  // ← seat / food / drink の JSON を作成
+  let text = `席：${seat}\n`;
+
+  let total = 0;
+
+  Object.keys(order).forEach(name => {
+    const item = order[name];
+    total += item.price * item.qty;
+    text += `・${name} × ${item.qty}（${item.price * item.qty}円）\n`;
+  });
+
+  text += `\n合計：${total} 円`;
 
   await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(data)
+    body: JSON.stringify({ text })
   });
 
   const banner = document.getElementById("doneBanner");
   banner.style.display = "block";
   setTimeout(()=> banner.style.display="none", 1800);
 
-  resetOrders();
-}
-/* ===============================
-   注文リセット
-================================*/
-function resetOrders() {
-  Object.values(order).forEach(item => {
-    const id = Object.keys(order).find(key => order[key]===item);
-    document.getElementById("qty-"+id).innerText = 0;
-  });
   order = {};
+  renderOrderList();
 }
 
 </script>
