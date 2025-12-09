@@ -999,7 +999,7 @@ async function submitOrder() {
   renderHistory();
 
   // Workers に送信
-  await fetch("/order", {
+  await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text })
