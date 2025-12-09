@@ -510,14 +510,44 @@ function buildOrderText() {
 async function submitOrder() {
   if (!seat) return alert("席が選択されていません");
 
-  const text = buildOrderText();
+  async function submitOrder() {
+  if (!seat) {
+    alert("席が選択されていません");
+    return;
+  }
+
+  // フードとドリンク分類
+  const foodList = [];
+  const drinkList = [];
+
+  Object.keys(order).forEach(name => {
+    const qty = order[name];
+    if (qty > 0) {
+      const item = { name, qty };
+      if (isDrink(name)) drinkList.push(item);
+      else foodList.push(item);
+    }
+  });
+
+  const data = {
+    seat: seat,
+    food: foodList,
+    drink: drinkList
+  };
 
   await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ text })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
   });
 
+  // 完了演出
+  const banner = document.getElementById("doneBanner");
+  banner.style.display = "block";
+  setTimeout(() => banner.style.display = "none", 1800);
+
+  resetOrders();
+}
   const banner = document.getElementById("doneBanner");
   banner.style.display = "block";
   setTimeout(() => banner.style.display = "none", 1800);
