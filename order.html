@@ -507,15 +507,46 @@ function buildOrderText() {
 }
 
 /* 注文送信 */
+// ===== 注文送信 =====
 async function submitOrder() {
-  if (!seat) return alert("席が選択されていません");
-
-  async function submitOrder() {
   if (!seat) {
     alert("席が選択されていません");
     return;
   }
 
+  // フードとドリンク分類
+  const foodList = [];
+  const drinkList = [];
+
+  Object.keys(order).forEach(name => {
+    const qty = order[name];
+    if (qty > 0) {
+      const item = { name, qty };
+      if (isDrink(name)) drinkList.push(item);
+      else foodList.push(item);
+    }
+  });
+
+  const data = {
+    seat: seat,
+    food: foodList,
+    drink: drinkList
+  };
+
+  // ===== Worker へ送信 =====
+  await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  // ===== 完了演出 =====
+  const banner = document.getElementById("doneBanner");
+  banner.style.display = "block";
+  setTimeout(() => banner.style.display = "none", 1500);
+
+  resetOrders();
+}
   // フードとドリンク分類
   const foodList = [];
   const drinkList = [];
