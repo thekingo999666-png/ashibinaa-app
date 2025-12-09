@@ -552,28 +552,57 @@ function buildOrderText() {
    ドリンクかどうか判定（ID で判別）
 ================================*/
 function isDrink(id) {
-  return (
-    id.startsWith("beer_") ||
-    id === "kakuhigh" || id === "ao" ||
-    id === "mckenna" ||
-    id === "reposado" ||
-    id === "donan" || id === "habushu" || id === "habura" ||
-    id.startsWith("cassis") || id.startsWith("peach") ||
-    id === "kurokirishima" || id === "nikaido" ||
-    id === "kinmiya" || id === "kokuto" ||
-    id === "yotateio" ||
-    id.includes("high") || id.includes("tea") ||
-    id.includes("sour") ||
-    id.startsWith("zanpa_") || id.startsWith("kikuno") ||
-    id.startsWith("kumesen") || id === "harusame" || id === "furusato" ||
-    id === "ryukyu" ||
-    id.startsWith("seifuku") || id === "kaku" ||
-    id.startsWith("yae_") ||
-    id.startsWith("imuge") || id === "islandrum" ||
-    id === "cola" || id === "ginger" || id === "sanpin_tea" ||
-    id === "greentea" || id === "unsweettea" ||
-    id === "oolong"
-  );
+  const drinkIds = [
+    // ビール
+    "beer_nama","beer_bottle","beer_free","beer_ball",
+
+    // ウイスキー
+    "kakuhigh","ao",
+
+    // バーボン
+    "mckenna",
+
+    // テキーラ（独立）
+    "reposado",
+
+    // ショット
+    "donan","habushu","habura",
+
+    // カクテル
+    "cassissoda","cassisorange","peachorange","peachoolong",
+
+    // 焼酎
+    "kurokirishima","nikaido","kinmiya","kokuto",
+
+    // 日本酒
+    "yotateio",
+
+    // 茶割り
+    "oolonghigh","greenteahigh","jj","jr","mm","higetea","unsweettea_high","sanpin_high",
+
+    // サワー
+    "ume_sour","tomato_sour","white_sour","grape_sour","plain_sour",
+    "shikuwasa_sour","grapefruit_sour","weiss_sour","lemon_sour",
+    "gari_sour","citric_sour","otoko_sour","spicytomato_high",
+
+    // 泡盛
+    "zanpa_white","zanpa_black","kikuno","kumesen","kumesen35",
+    "harusame","furusato","kikuno_vip","ryukyu",
+
+    // 泡盛リキュール
+    "seifuku_yuzu","seifuku_ginger","seifuku_shikuwasa","kaku_liqueur",
+
+    // 八重山泡盛
+    "yae_seifuku","yae_yaesen","yae_blackpearl","yae_tama","yae_omoto",
+
+    // 石垣島のお酒
+    "imuge25","imuge37","islandrum",
+
+    // ソフトドリンク
+    "cola","ginger","sanpin","greentea","unsweettea","oolong"
+  ];
+
+  return drinkIds.includes(id);
 }
 
 
