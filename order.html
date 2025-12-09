@@ -306,18 +306,25 @@ function addItem(name, id) {
 /* ===============================
    注文内容作成（フードとドリンク分類）
 ================================*/
-function buildOrderText() {
-  let text = `【席】${seat}\n\n`;
-
-  let food = "【フード】\n";
-  let drink = "【ドリンク】\n";
+function buildOrderData() {
+  const foodList = [];
+  const drinkList = [];
 
   Object.keys(order).forEach(id => {
     const item = order[id];
     if (item.qty > 0) {
-      if (isDrink(id)) drink += `${item.name} × ${item.qty}\n`;
-      else food += `${item.name} × ${item.qty}\n`;
+      const obj = { name: item.name, qty: item.qty };
+      if (isDrink(id)) drinkList.push(obj);
+      else foodList.push(obj);
     }
+  });
+
+  return {
+    seat: seat,
+    food: foodList,
+    drink: drinkList
+  };
+}
   });
 
   return food + "\n" + drink;
