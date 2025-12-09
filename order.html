@@ -412,57 +412,63 @@ header {
 
 <script>
 let seat = "";
-let order = {}; // 商品名 → 数量
+let order = {}; // id → { name, qty }
 
+/* 席選択 */
 function selectSeat(s) {
   seat = s;
   document.getElementById("seatModal").style.display = "none";
   document.getElementById("menuContainer").style.display = "block";
 }
 
+/* メインカテゴリ開閉 */
 function toggleMain(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
+/* サブカテゴリ開閉 */
 function toggleSub(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-function addItem(name) {
-  if (!order[name]) order[name] = 0;
-  order[name]++;
+/* ---- 注文追加（内部IDと表示名の両方扱う） ---- */
+function addItem(id, displayName) {
+  if (!order[id]) {
+    order[id] = { name: displayName, qty: 0 };
+  }
+  order[id].qty++;
 
-  const qtyEl = document.getElementById("qty-" + name);
-  qtyEl.innerText = order[name];
+  const qtyEl = document.getElementById("qty-" + id);
+  qtyEl.innerText = order[id].qty;
   qtyEl.style.transform = "scale(1.25)";
   setTimeout(() => qtyEl.style.transform = "scale(1)", 150);
 }
 
-/* ドリンク判定 */
-function isDrink(name) {
-  const drinks = [
-    "生ビール","瓶ビール","クリアフリー","ビアボール",
-    "角ハイボール","碧（あお）","マッケンナー",
-    "レポサド1800","どなん","ハブ酒","ハブーラ",
-    "カシスソーダ","カシスオレンジ","ピーチオレンジ","ピーチウーロン",
-    "黒霧島","二階堂","金宮","黒糖焼酎",
-    "夜の帝王",
-    "ウーロンハイ","緑茶ハイ","JJ","JR","MM","ヒゲ茶ハイ","無糖紅茶ハイ","さんぴん茶ハイ",
-    "しょっぱい梅サワー","すっきりトマトサワー","ホワイトサワー","巨峰サワー",
-    "プレーンサワー","シークヮーサーサワー","グレープフルーツサワー","バイスサワー",
-    "レモンサワー","ガリサワー","クエン酸サワー","男梅サワー","ピリ辛トマトハイ",
-    "残波 白","残波 黒","菊之露","久米仙","久米仙 古酒35°","春雨","古里","菊之露VIP","琉球王朝",
-    "請福 ゆず","請福 生姜レモン","請福 シークヮーサー","格",
-    "請福","八重泉","黒真珠","玉の露","おもと",
-    "IMUGE. 25°","IMUGE. 37°","島ラム",
-    "コーラ","ジンジャーエール","さんぴん茶","緑茶","無糖紅茶","烏龍茶"
+/* ---- ドリンク判定（内部IDで判定） ---- */
+function isDrink(id) {
+  const drinkIds = [
+    "beer_nama","beer_bin","beer_clear","beer_ball",
+    "high_kaku","high_ao","high_mack",
+    "teq_reposado",
+    "cock_cass_soda","cock_cass_orange","cock_peach_orange","cock_peach_oolong",
+    "sho_kuro","sho_nikaido","sho_kinmiya","sho_kokuto","sho_teio",
+    "sour_oolong","sour_green","sour_jj","sour_jr","sour_mm","sour_hige","sour_muto","sour_sanpin",
+    "sour_shoppai","sour_tomato","sour_white","sour_kyoho","sour_plain","sour_shiku",
+    "sour_gf","sour_baisu","sour_lemon","sour_gari","sour_citric","sour_otoko","sour_piri",
+    "awa_zanpa_white","awa_zanpa_black","awa_kikunotsuyu","awa_kumesen","awa_kusu35",
+    "awa_harusame","awa_furusato","awa_kiku_vip","awa_ryukyu",
+    "awa_seifuku","awa_seifuku_yuzu","awa_seifuku_shoga","awa_seifuku_shiku",
+    "awa_kaku","awa_yaesen","awa_kuro","awa_tama","awa_omoto",
+    "other_imuge25","other_imuge37","other_shimaram",
+    "soft_cola","soft_ginger","soft_sanpin","soft_green","soft_muto","soft_oolong"
   ];
-  return drinks.includes(name);
+
+  return drinkIds.includes(id);
 }
 
-/* ===== 完成版 submitOrder — 二重定義なし ===== */
+/* ---- 送信処理 ---- */
 async function submitOrder() {
   if (!seat) {
     alert("席を選択してください");
@@ -472,11 +478,10 @@ async function submitOrder() {
   const foodList = [];
   const drinkList = [];
 
-  Object.keys(order).forEach(name => {
-    const qty = order[name];
-    if (qty > 0) {
-      const item = { name, qty };
-      if (isDrink(name)) drinkList.push(item);
+  Object.keys(order).forEach(id => {
+    const item = order[id];
+    if (item.qty > 0) {
+      if (isDrink(id)) drinkList.push(item);
       else foodList.push(item);
     }
   });
@@ -505,9 +510,10 @@ async function submitOrder() {
   resetOrders();
 }
 
+/* ---- リセット ---- */
 function resetOrders() {
-  Object.keys(order).forEach(name => {
-    const el = document.getElementById("qty-" + name);
+  Object.keys(order).forEach(id => {
+    const el = document.getElementById("qty-" + id);
     if (el) el.innerText = 0;
   });
   order = {};
