@@ -341,22 +341,20 @@ function isDrink(id) {
 async function submitOrder() {
   if (!seat) return alert("席が選択されていません");
 
-  const text = buildOrderText();
+  const data = buildOrderData();  // ← seat / food / drink の JSON を作成
 
   await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ text })
+    body: JSON.stringify(data)
   });
 
-  // 完了演出
   const banner = document.getElementById("doneBanner");
   banner.style.display = "block";
   setTimeout(()=> banner.style.display="none", 1800);
 
   resetOrders();
 }
-
 /* ===============================
    注文リセット
 ================================*/
