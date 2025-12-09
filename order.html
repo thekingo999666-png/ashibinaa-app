@@ -531,7 +531,7 @@ function buildOrderText() {
 
   Object.keys(order).forEach(id => {
     const item = order[id];
-    if (item.qty <= 0) return;
+    if (!item || item.qty <= 0) return;
 
     if (isDrink(id)) {
       drinkText += `・${item.name} × ${item.qty}\n`;
