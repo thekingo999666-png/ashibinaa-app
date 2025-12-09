@@ -485,11 +485,11 @@ async function submitOrder() {
   };
 
   try {
-    await fetch("https://odd-shgen-be-3114.ashibinaa-izakaya.workers.dev/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
+   await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data)
+});
   } catch (e) {
     alert("送信エラー：" + e);
     return;
