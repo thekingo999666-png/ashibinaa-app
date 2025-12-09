@@ -6,9 +6,6 @@
 <title>店内注文 - あしびなぁ</title>
 
 <style>
-/* ===============================
-   全体テーマ
-================================*/
 body {
   margin: 0;
   padding: 0;
@@ -17,9 +14,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic";
 }
 
-/* ===============================
-   ヘッダー
-================================*/
+/* --- ヘッダー --- */
 header {
   background: linear-gradient(90deg,#0a0f1c,#0b3048 40%,#0a0f1c);
   padding: 16px;
@@ -30,9 +25,7 @@ header {
   text-shadow: 0 0 6px rgba(27,167,217,0.6);
 }
 
-/* ===============================
-   カテゴリボタン
-================================*/
+/* --- カテゴリカード --- */
 .category-card {
   margin: 16px;
   padding: 18px;
@@ -44,13 +37,9 @@ header {
   text-align: center;
   transition: 0.25s;
 }
-.category-card:hover {
-  transform: translateY(-3px);
-}
+.category-card:hover { transform: translateY(-3px); }
 
-/* ===============================
-   サブカテゴリ
-================================*/
+/* --- サブカテゴリ --- */
 .subcategory {
   margin: 10px 16px;
   padding: 14px;
@@ -68,9 +57,7 @@ header {
   border-radius: 10px;
 }
 
-/* ===============================
-   商品行
-================================*/
+/* --- 商品一行 --- */
 .item-row {
   padding: 14px;
   border-bottom: 1px solid #1d2932;
@@ -78,9 +65,8 @@ header {
   justify-content: space-between;
   cursor: pointer;
 }
-.item-row:hover {
-  background: rgba(27,167,217,0.15);
-}
+.item-row:hover { background: rgba(27,167,217,0.15); }
+
 .qty {
   background: linear-gradient(120deg,#e6c15d,#b8923b);
   color: #1a1a1a;
@@ -92,9 +78,7 @@ header {
   transition: 0.15s;
 }
 
-/* ===============================
-   固定注文ボタン
-================================*/
+/* --- 注文ボタン --- */
 #orderButton {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -109,9 +93,7 @@ header {
   z-index: 5000;
 }
 
-/* ===============================
-   席選択モーダル
-================================*/
+/* --- 席選択モーダル --- */
 #seatModal {
   position: fixed;
   inset: 0;
@@ -133,8 +115,8 @@ header {
 .seat-btn {
   width: 100%;
   padding: 14px;
-  font-size: 1.15rem;
   margin: 6px 0;
+  font-size: 1.15rem;
   background: linear-gradient(120deg,#0a6fa9,#12a8d9);
   border-radius: 10px;
   border: 1px solid #e6c15d;
@@ -142,9 +124,7 @@ header {
   font-weight: bold;
 }
 
-/* ===============================
-   注文完了演出
-================================*/
+/* --- 完了バナー --- */
 #doneBanner {
   position: fixed;
   top: 30%;
@@ -156,7 +136,6 @@ header {
   text-align: center;
   font-size: 1.4rem;
   display: none;
-  backdrop-filter: blur(6px);
   border: 1px solid #e6c15d;
   z-index: 7000;
 }
@@ -166,9 +145,9 @@ header {
 
 <header>店内注文 - あしびなぁ</header>
 
-<!-- ===============================
-     席選択（最初に必ず表示）
-================================-->
+<!-- ==========================
+     席選択
+=========================== -->
 <div id="seatModal">
   <div id="seatBox">
     <h2>席を選択してください</h2>
@@ -183,447 +162,362 @@ header {
   </div>
 </div>
 
-<!-- 注文完了演出 -->
 <div id="doneBanner">✨ ご注文を送信しました！ ✨</div>
 
-<!-- ===============================
-     メニュー全体（ここから Part2）
-================================-->
+<!-- ==========================
+     メニュー本体
+=========================== -->
 <div id="menuContainer" style="display:none; padding-bottom:80px;">
-<!-- ======================= -->
-<!--     フードカテゴリ       -->
-<!-- ======================= -->
+
+<!-----------------------------------------------------
+                フード
+------------------------------------------------------>
 
 <div class="category-card" onclick="toggleMain('food')">🍽 フード</div>
-
 <div id="food" class="main-box">
 
-  <!-- ⭐ オススメ -->
-  <div class="subcategory" onclick="toggleSub('osusume')">⭐ オススメ</div>
-  <div id="osusume" class="sub-box">
-    <div class="item-row" onclick="addItem('石垣牛ハンバーグ','ishigaki')">石垣牛ハンバーグ <span id="qty-ishigaki" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('島らっきょ餃子','gyoza')">島らっきょ餃子 <span id="qty-gyoza" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('もずくキムチ','mozuku')">もずくキムチ <span id="qty-mozuku" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('がじゅカレー','gaju')">がじゅカレー <span id="qty-gaju" class="qty">0</span></div>
-  </div>
+<!-- オススメ -->
+<div class="subcategory" onclick="toggleSub('osusume')">⭐ オススメ</div>
+<div id="osusume" class="sub-box">
+  <div class="item-row" onclick="addItem('石垣牛ハンバーグ')">石垣牛ハンバーグ <span id="qty-石垣牛ハンバーグ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('島らっきょ餃子')">島らっきょ餃子 <span id="qty-島らっきょ餃子" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('もずくキムチ')">もずくキムチ <span id="qty-もずくキムチ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('がじゅカレー')">がじゅカレー <span id="qty-がじゅカレー" class="qty">0</span></div>
+</div>
 
-  <!-- ﾁｮﾒﾁｮﾒシリーズ -->
-  <div class="subcategory" onclick="toggleSub('chome')">ﾁｮﾒﾁｮﾒシリーズ</div>
-  <div id="chome" class="sub-box">
-    <div class="item-row" onclick="addItem('きゅうりチョメ','cucumberchome')">きゅうりチョメ <span id="qty-cucumberchome" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('チーズチョメ','cheesechome')">チーズチョメ <span id="qty-cheesechome" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ナスチョメ','nasuchome')">ナスチョメ <span id="qty-nasuchome" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ジャガイモチョメ','potatochome')">ジャガイモチョメ <span id="qty-potatochome" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ピーマンチョメ','pimanchome')">ピーマンチョメ <span id="qty-pimanchome" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('サバ缶チョメ','sabachome')">サバ缶チョメ <span id="qty-sabachome" class="qty">0</span></div>
-  </div>
+<!-- チョメチョメ -->
+<div class="subcategory" onclick="toggleSub('chome')">ﾁｮﾒﾁｮﾒシリーズ</div>
+<div id="chome" class="sub-box">
+  <div class="item-row" onclick="addItem('きゅうりチョメ')">きゅうりチョメ <span id="qty-きゅうりチョメ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('チーズチョメ')">チーズチョメ <span id="qty-チーズチョメ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ナスチョメ')">ナスチョメ <span id="qty-ナスチョメ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ジャガイモチョメ')">ジャガイモチョメ <span id="qty-ジャガイモチョメ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ピーマンチョメ')">ピーマンチョメ <span id="qty-ピーマンチョメ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('サバ缶チョメ')">サバ缶チョメ <span id="qty-サバ缶チョメ" class="qty">0</span></div>
+</div>
 
-  <!-- さっぱり -->
-  <div class="subcategory" onclick="toggleSub('sappari')">さっぱり</div>
-  <div id="sappari" class="sub-box">
-    <div class="item-row" onclick="addItem('島らっきょ','rakyo')">島らっきょ <span id="qty-rakyo" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('島らっきょクリームチーズベーコン','rakyoCream')">島らっきょクリームチーズベーコン <span id="qty-rakyoCream" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('梅水晶','ume')">梅水晶 <span id="qty-ume" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ゴーヤスライス','goyaslice')">ゴーヤスライス <span id="qty-goyaslice" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('塩辛 各','shiokara')">塩辛 各 <span id="qty-shiokara" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('塩辛 3種盛り','shiokara3')">塩辛 3種盛り <span id="qty-shiokara3" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('海ぶどう','umibudo')">海ぶどう <span id="qty-umibudo" class="qty">0</span></div>
-  </div>
+<!-- さっぱり -->
+<div class="subcategory" onclick="toggleSub('sappari')">さっぱり</div>
+<div id="sappari" class="sub-box">
+  <div class="item-row" onclick="addItem('島らっきょ')">島らっきょ <span id="qty-島らっきょ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('島らっきょクリームチーズベーコン')">島らっきょクリームチーズベーコン 
+    <span id="qty-島らっきょクリームチーズベーコン" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('梅水晶')">梅水晶 <span id="qty-梅水晶" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ゴーヤスライス')">ゴーヤスライス <span id="qty-ゴーヤスライス" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('塩辛 各')">塩辛 各 <span id="qty-塩辛 各" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('塩辛 3種盛り')">塩辛 3種盛り <span id="qty-塩辛 3種盛り" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('海ぶどう')">海ぶどう <span id="qty-海ぶどう" class="qty">0</span></div>
+</div>
 
-  <!-- チャンプル -->
-  <div class="subcategory" onclick="toggleSub('champuru')">チャンプル</div>
-  <div id="champuru" class="sub-box">
-    <div class="item-row" onclick="addItem('ゴーヤチャンプル','goyachampuru')">ゴーヤチャンプル <span id="qty-goyachampuru" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ソーメンチャンプル','somenchampuru')">ソーメンチャンプル <span id="qty-somenchampuru" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('豆腐チャンプル','tofuchampuru')">豆腐チャンプル <span id="qty-tofuchampuru" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('フーチャンプル','fuchampuru')">フーチャンプル <span id="qty-fuchampuru" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('らっきょチャンプル','rakyochampuru')">らっきょチャンプル <span id="qty-rakyochampuru" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('カラシナチャンプル','karashinachampuru')">カラシナチャンプル <span id="qty-karashinachampuru" class="qty">0</span></div>
-  </div>
+<!-- チャンプル -->
+<div class="subcategory" onclick="toggleSub('champuru')">チャンプル</div>
+<div id="champuru" class="sub-box">
+  <div class="item-row" onclick="addItem('ゴーヤチャンプル')">ゴーヤチャンプル <span id="qty-ゴーヤチャンプル" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ソーメンチャンプル')">ソーメンチャンプル <span id="qty-ソーメンチャンプル" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('豆腐チャンプル')">豆腐チャンプル <span id="qty-豆腐チャンプル" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('フーチャンプル')">フーチャンプル <span id="qty-フーチャンプル" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('らっきょチャンプル')">らっきょチャンプル <span id="qty-らっきょチャンプル" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('カラシナチャンプル')">カラシナチャンプル <span id="qty-カラシナチャンプル" class="qty">0</span></div>
+</div>
 
-  <!-- シリシリ -->
-  <div class="subcategory" onclick="toggleSub('shirishi')">シリシリ</div>
-  <div id="shirishi" class="sub-box">
-    <div class="item-row" onclick="addItem('人参シリシリ','ninjin')">人参シリシリ <span id="qty-ninjin" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('パパイヤシリシリ','papaya')">パパイヤシリシリ <span id="qty-papaya" class="qty">0</span></div>
-  </div>
+<!-- シリシリ -->
+<div class="subcategory" onclick="toggleSub('shirishi')">シリシリ</div>
+<div id="shirishi" class="sub-box">
+  <div class="item-row" onclick="addItem('人参シリシリ')">人参シリシリ <span id="qty-人参シリシリ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('パパイヤシリシリ')">パパイヤシリシリ <span id="qty-パパイヤシリシリ" class="qty">0</span></div>
+</div>
 
-  <!-- 玉子たち -->
-  <div class="subcategory" onclick="toggleSub('tamago')">玉子</div>
-  <div id="tamago" class="sub-box">
-    <div class="item-row" onclick="addItem('ポークと玉子','porkegg')">ポークと玉子 <span id="qty-porkegg" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('だし巻き','dashimaki')">だし巻き <span id="qty-dashimaki" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('目玉焼き','friedegg')">目玉焼き <span id="qty-friedegg" class="qty">0</span></div>
-  </div>
+<!-- 揚げ物 -->
+<div class="subcategory" onclick="toggleSub('fry')">揚げ物</div>
+<div id="fry" class="sub-box">
+  <div class="item-row" onclick="addItem('鶏の唐揚げ')">鶏の唐揚げ <span id="qty-鶏の唐揚げ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('タコ唐揚げ')">タコ唐揚げ <span id="qty-タコ唐揚げ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('イカ唐揚げ')">イカ唐揚げ <span id="qty-イカ唐揚げ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('エビ唐揚げ')">エビ唐揚げ <span id="qty-エビ唐揚げ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('チーズの棒')">チーズの棒 <span id="qty-チーズの棒" class="qty">0</span></div>
 
-  <!-- 揚げ物（唐揚げ＋天ぷら統合） -->
-  <div class="subcategory" onclick="toggleSub('fry')">揚げ物</div>
-  <div id="fry" class="sub-box">
-    <div class="item-row" onclick="addItem('鶏の唐揚げ','karaage')">鶏の唐揚げ <span id="qty-karaage" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('タコ唐揚げ','takokaraage')">タコ唐揚げ <span id="qty-takokaraage" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('イカ唐揚げ','ikakaraage')">イカ唐揚げ <span id="qty-ikakaraage" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('エビ唐揚げ','ebikaraage')">エビ唐揚げ <span id="qty-ebikaraage" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('チーズの棒','cheesestick')">チーズの棒 <span id="qty-cheesestick" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('天ぷら お任せ3種')">天ぷら お任せ3種 <span id="qty-天ぷら お任せ3種" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('天ぷら お任せ5種')">天ぷら お任せ5種 <span id="qty-天ぷら お任せ5種" class="qty">0</span></div>
+</div>
 
-    <div class="item-row" onclick="addItem('天ぷら お任せ3種','temp3')">天ぷら お任せ3種 <span id="qty-temp3" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('天ぷら お任せ5種','temp5')">天ぷら お任せ5種 <span id="qty-temp5" class="qty">0</span></div>
-  </div>
+<!-- 島そば -->
+<div class="subcategory" onclick="toggleSub('soba')">島そば</div>
+<div id="soba" class="sub-box">
+  <div class="item-row" onclick="addItem('島そば')">島そば <span id="qty-島そば" class="qty">0</span></div>
+</div>
 
-  <!-- 島そば（焼きそば統合） -->
-  <div class="subcategory" onclick="toggleSub('soba')">島そば</div>
-  <div id="soba" class="sub-box">
-    <div class="item-row" onclick="addItem('島そば','shimasoba')">島そば <span id="qty-shimasoba" class="qty">0</span></div>
-  </div>
+<!-- 男爺のつまみ -->
+<div class="subcategory" onclick="toggleSub('otoko')">男爺のつまみ</div>
+<div id="otoko" class="sub-box">
+  <div class="item-row" onclick="addItem('たちつてと')">たちつてと <span id="qty-たちつてと" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ポチギ')">ポチギ <span id="qty-ポチギ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('らふてー')">らふてー <span id="qty-らふてー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ナーベラ')">ナーベラ <span id="qty-ナーベラ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('島豆腐')">島豆腐 <span id="qty-島豆腐" class="qty">0</span></div>
+</div>
 
-  <!-- 男爺のつまみ -->
-  <div class="subcategory" onclick="toggleSub('otoko')">男爺のつまみ</div>
-  <div id="otoko" class="sub-box">
-    <div class="item-row" onclick="addItem('たちつてと','tachitsuteto')">たちつてと <span id="qty-tachitsuteto" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ポチギ','pochigi')">ポチギ <span id="qty-pochigi" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('らふてー','rafute')">らふてー <span id="qty-rafute" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ナーベラ','nabera')">ナーベラ <span id="qty-nabera" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('島豆腐','shimadofu')">島豆腐 <span id="qty-shimadofu" class="qty">0</span></div>
-  </div>
+<!-- ご飯もの -->
+<div class="subcategory" onclick="toggleSub('gohan')">ご飯もの</div>
+<div id="gohan" class="sub-box">
+  <div class="item-row" onclick="addItem('がじゅ丼')">がじゅ丼 <span id="qty-がじゅ丼" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('らふてー丼')">らふてー丼 <span id="qty-らふてー丼" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('焼き飯')">焼き飯 <span id="qty-焼き飯" class="qty">0</span></div>
 
-  <!-- ご飯もの（リゾット統合済） -->
-  <div class="subcategory" onclick="toggleSub('gohan')">ご飯もの</div>
-  <div id="gohan" class="sub-box">
-    <div class="item-row" onclick="addItem('がじゅ丼','gajudon')">がじゅ丼 <span id="qty-gajudon" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('らふてー丼','rafutedon')">らふてー丼 <span id="qty-rafutedon" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('焼き飯','yakimeshi')">焼き飯 <span id="qty-yakimeshi" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('チーズリゾット')">チーズリゾット <span id="qty-チーズリゾット" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('イカ墨リゾット')">イカ墨リゾット <span id="qty-イカ墨リゾット" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('チーズトマトリゾット')">チーズトマトリゾット <span id="qty-チーズトマトリゾット" class="qty">0</span></div>
+</div>
 
-    <!-- 統合済 → 島焼きそば＝島そばカテゴリへ -->
-
-    <div class="item-row" onclick="addItem('チーズリゾット','cheeseriso')">チーズリゾット <span id="qty-cheeseriso" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('イカ墨リゾット','ikasumiriso')">イカ墨リゾット <span id="qty-ikasumiriso" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('チーズトマトリゾット','cheesetomato')">チーズトマトリゾット <span id="qty-cheesetomato" class="qty">0</span></div>
-  </div>
-
-  <!-- そばたち -->
-  <div class="subcategory" onclick="toggleSub('sobatachi')">そばたち</div>
-  <div id="sobatachi" class="sub-box">
-    <div class="item-row" onclick="addItem('ソーキそば','soki')">ソーキそば <span id="qty-soki" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('テビチそば','tebichi')">テビチそば <span id="qty-tebichi" class="qty">0</span></div>
-  </div>
+<!-- そばたち -->
+<div class="subcategory" onclick="toggleSub('sobatachi')">そばたち</div>
+<div id="sobatachi" class="sub-box">
+  <div class="item-row" onclick="addItem('ソーキそば')">ソーキそば <span id="qty-ソーキそば" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('テビチそば')">テビチそば <span id="qty-テビチそば" class="qty">0</span></div>
+</div>
 
 </div>
-<!-- ======================= -->
-<!--     ドリンクカテゴリ     -->
-<!-- ======================= -->
 
-<div class="category-card" onclick="toggleMain('drink')">🍻 ドリンク</div>
+<!-----------------------------------------------------
+                ドリンク
+------------------------------------------------------>
+
+<div class="category-card" onclick="toggleMain('drink')">🍹 ドリンク</div>
 
 <div id="drink" class="main-box">
 
-  <!-- ===== ビール ===== -->
-  <div class="subcategory" onclick="toggleSub('beer')">ビール</div>
-  <div id="beer" class="sub-box">
-    <div class="item-row" onclick="addItem('生ビール','beer_nama')">生ビール <span id="qty-beer_nama" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('瓶ビール','beer_bin')">瓶ビール <span id="qty-beer_bin" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('クリアフリー（ノンアル）','beer_clear')">クリアフリー（ノンアル） <span id="qty-beer_clear" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ビアボール','beer_ball')">ビアボール <span id="qty-beer_ball" class="qty">0</span></div>
-  </div>
+<!-- ビール -->
+<div class="subcategory" onclick="toggleSub('beer')">ビール</div>
+<div id="beer" class="sub-box">
+  <div class="item-row" onclick="addItem('生ビール')">生ビール <span id="qty-生ビール" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('瓶ビール')">瓶ビール <span id="qty-瓶ビール" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('クリアフリー')">クリアフリー <span id="qty-クリアフリー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ビアボール')">ビアボール <span id="qty-ビアボール" class="qty">0</span></div>
+</div>
 
-  <!-- ===== ウイスキー ===== -->
-  <div class="subcategory" onclick="toggleSub('whisky')">ウイスキー</div>
-  <div id="whisky" class="sub-box">
-    <div class="item-row" onclick="addItem('角ハイボール','kakuhigh')">角ハイボール <span id="qty-kakuhigh" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('碧（あお）','ao')">碧（あお） <span id="qty-ao" class="qty">0</span></div>
-  </div>
+<!-- ウイスキー -->
+<div class="subcategory" onclick="toggleSub('whisky')">ウイスキー</div>
+<div id="whisky" class="sub-box">
+  <div class="item-row" onclick="addItem('角ハイボール')">角ハイボール <span id="qty-角ハイボール" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('碧（あお）')">碧（あお） <span id="qty-碧（あお）" class="qty">0</span></div>
+</div>
 
-  <!-- ===== バーボン ===== -->
-  <div class="subcategory" onclick="toggleSub('bourbon')">バーボン</div>
-  <div id="bourbon" class="sub-box">
-    <div class="item-row" onclick="addItem('マッケンナー','mckenna')">マッケンナー <span id="qty-mckenna" class="qty">0</span></div>
-  </div>
+<!-- バーボン -->
+<div class="subcategory" onclick="toggleSub('bourbon')">バーボン</div>
+<div id="bourbon" class="sub-box">
+  <div class="item-row" onclick="addItem('マッケンナー')">マッケンナー <span id="qty-マッケンナー" class="qty">0</span></div>
+</div>
 
-  <!-- ===== テキーラ（ショットの上に移動） ===== -->
-  <div class="subcategory" onclick="toggleSub('tequila')">テキーラ</div>
-  <div id="tequila" class="sub-box">
-    <div class="item-row" onclick="addItem('レポサド1800','reposado')">レポサド1800 <span id="qty-reposado" class="qty">0</span></div>
-  </div>
+<!-- テキーラ -->
+<div class="subcategory" onclick="toggleSub('tequila')">テキーラ</div>
+<div id="tequila" class="sub-box">
+  <div class="item-row" onclick="addItem('レポサド1800')">レポサド1800 <span id="qty-レポサド1800" class="qty">0</span></div>
+</div>
 
-  <!-- ===== ショット ===== -->
-  <div class="subcategory" onclick="toggleSub('shot')">ショット</div>
-  <div id="shot" class="sub-box">
-    <div class="item-row" onclick="addItem('どなん','donan')">どなん <span id="qty-donan" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ハブ酒','habushu')">ハブ酒 <span id="qty-habushu" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ハブーラ','habura')">ハブーラ <span id="qty-habura" class="qty">0</span></div>
-  </div>
+<!-- ショット -->
+<div class="subcategory" onclick="toggleSub('shot')">ショット</div>
+<div id="shot" class="sub-box">
+  <div class="item-row" onclick="addItem('どなん')">どなん <span id="qty-どなん" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ハブ酒')">ハブ酒 <span id="qty-ハブ酒" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ハブーラ')">ハブーラ <span id="qty-ハブーラ" class="qty">0</span></div>
+</div>
 
-  <!-- ===== カクテル ===== -->
-  <div class="subcategory" onclick="toggleSub('cocktail')">カクテル</div>
-  <div id="cocktail" class="sub-box">
-    <div class="item-row" onclick="addItem('カシスソーダ','cassissoda')">カシスソーダ <span id="qty-cassissoda" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('カシスオレンジ','cassisorange')">カシスオレンジ <span id="qty-cassisorange" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ピーチオレンジ','peachorange')">ピーチオレンジ <span id="qty-peachorange" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ピーチウーロン','peachoolong')">ピーチウーロン <span id="qty-peachoolong" class="qty">0</span></div>
-  </div>
+<!-- カクテル -->
+<div class="subcategory" onclick="toggleSub('cocktail')">カクテル</div>
+<div id="cocktail" class="sub-box">
+  <div class="item-row" onclick="addItem('カシスソーダ')">カシスソーダ <span id="qty-カシスソーダ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('カシスオレンジ')">カシスオレンジ <span id="qty-カシスオレンジ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ピーチオレンジ')">ピーチオレンジ <span id="qty-ピーチオレンジ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ピーチウーロン')">ピーチウーロン <span id="qty-ピーチウーロン" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 焼酎 ===== -->
-  <div class="subcategory" onclick="toggleSub('shochu')">焼酎</div>
-  <div id="shochu" class="sub-box">
-    <div class="item-row" onclick="addItem('黒霧島','kurokirishima')">黒霧島 <span id="qty-kurokirishima" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('二階堂','nikaido')">二階堂 <span id="qty-nikaido" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('金宮','kinmiya')">金宮 <span id="qty-kinmiya" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('黒糖焼酎','kokuto')">黒糖焼酎 <span id="qty-kokuto" class="qty">0</span></div>
-  </div>
+<!-- 焼酎 -->
+<div class="subcategory" onclick="toggleSub('shochu')">焼酎</div>
+<div id="shochu" class="sub-box">
+  <div class="item-row" onclick="addItem('黒霧島')">黒霧島 <span id="qty-黒霧島" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('二階堂')">二階堂 <span id="qty-二階堂" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('金宮')">金宮 <span id="qty-金宮" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('黒糖焼酎')">黒糖焼酎 <span id="qty-黒糖焼酎" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 日本酒 ===== -->
-  <div class="subcategory" onclick="toggleSub('nihonshu')">日本酒</div>
-  <div id="nihonshu" class="sub-box">
-    <div class="item-row" onclick="addItem('夜の帝王','yotateio')">夜の帝王 <span id="qty-yotateio" class="qty">0</span></div>
-  </div>
+<!-- 日本酒 -->
+<div class="subcategory" onclick="toggleSub('nihonshu')">日本酒</div>
+<div id="nihonshu" class="sub-box">
+  <div class="item-row" onclick="addItem('夜の帝王')">夜の帝王 <span id="qty-夜の帝王" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 茶割り ===== -->
-  <div class="subcategory" onclick="toggleSub('teahigh')">茶割り</div>
-  <div id="teahigh" class="sub-box">
-    <div class="item-row" onclick="addItem('ウーロンハイ','oolonghigh')">ウーロンハイ <span id="qty-oolonghigh" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('緑茶ハイ','greenteahigh')">緑茶ハイ <span id="qty-greenteahigh" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('JJ','jj')">JJ <span id="qty-jj" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('JR','jr')">JR <span id="qty-jr" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('MM','mm')">MM <span id="qty-mm" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ヒゲ茶ハイ','higetea')">ヒゲ茶ハイ <span id="qty-higetea" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('無糖紅茶ハイ','blackteahigh')">無糖紅茶ハイ <span id="qty-blackteahigh" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('さんぴん茶ハイ','sanpin')">さんぴん茶ハイ <span id="qty-sanpin" class="qty">0</span></div>
-  </div>
+<!-- 茶割り -->
+<div class="subcategory" onclick="toggleSub('tea')">茶割り</div>
+<div id="tea" class="sub-box">
+  <div class="item-row" onclick="addItem('ウーロンハイ')">ウーロンハイ <span id="qty-ウーロンハイ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('緑茶ハイ')">緑茶ハイ <span id="qty-緑茶ハイ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('JJ')">JJ <span id="qty-JJ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('JR')">JR <span id="qty-JR" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('MM')">MM <span id="qty-MM" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ヒゲ茶ハイ')">ヒゲ茶ハイ <span id="qty-ヒゲ茶ハイ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('無糖紅茶ハイ')">無糖紅茶ハイ <span id="qty-無糖紅茶ハイ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('さんぴん茶ハイ')">さんぴん茶ハイ <span id="qty-さんぴん茶ハイ" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 酎ハイ・サワー ===== -->
-  <div class="subcategory" onclick="toggleSub('sours')">酎ハイ・サワー</div>
-  <div id="sours" class="sub-box">
-    <div class="item-row" onclick="addItem('しょっぱい梅サワー','umesour')">しょっぱい梅サワー <span id="qty-umesour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('すっきりトマトサワー','tomatosour')">すっきりトマトサワー <span id="qty-tomatosour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ホワイトサワー','whitesour')">ホワイトサワー <span id="qty-whitesour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('巨峰サワー','grapesour')">巨峰サワー <span id="qty-grapesour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('プレーンサワー','plainsour')">プレーンサワー <span id="qty-plainsour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('シークヮーサーサワー','shikuwasasour')">シークヮーサーサワー <span id="qty-shikuwasasour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('グレープフルーツサワー','grapefruitsour')">グレープフルーツサワー <span id="qty-grapefruitsour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('バイスサワー','vicesour')">バイスサワー <span id="qty-vicesour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('レモンサワー','lemonsour')">レモンサワー <span id="qty-lemonsour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ガリサワー','garisour')">ガリサワー <span id="qty-garisour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('クエン酸サワー','citricsour')">クエン酸サワー <span id="qty-citricsour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('男梅サワー','otokoumesour')">男梅サワー <span id="qty-otokoumesour" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ピリ辛トマトハイ','spicytomato')">ピリ辛トマトハイ <span id="qty-spicytomato" class="qty">0</span></div>
-  </div>
+<!-- サワー -->
+<div class="subcategory" onclick="toggleSub('sour')">酎ハイ・サワー</div>
+<div id="sour" class="sub-box">
+  <div class="item-row" onclick="addItem('しょっぱい梅サワー')">しょっぱい梅サワー <span id="qty-しょっぱい梅サワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('すっきりトマトサワー')">すっきりトマトサワー <span id="qty-すっきりトマトサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ホワイトサワー')">ホワイトサワー <span id="qty-ホワイトサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('巨峰サワー')">巨峰サワー <span id="qty-巨峰サワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('プレーンサワー')">プレーンサワー <span id="qty-プレーンサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('シークヮーサーサワー')">シークヮーサーサワー <span id="qty-シークヮーサーサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('グレープフルーツサワー')">グレープフルーツサワー <span id="qty-グレープフルーツサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('バイスサワー')">バイスサワー <span id="qty-バイスサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('レモンサワー')">レモンサワー <span id="qty-レモンサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ガリサワー')">ガリサワー <span id="qty-ガリサワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('クエン酸サワー')">クエン酸サワー <span id="qty-クエン酸サワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('男梅サワー')">男梅サワー <span id="qty-男梅サワー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ピリ辛トマトハイ')">ピリ辛トマトハイ <span id="qty-ピリ辛トマトハイ" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 沖縄の泡盛 ===== -->
-  <div class="subcategory" onclick="toggleSub('awamori')">沖縄の泡盛</div>
-  <div id="awamori" class="sub-box">
-    <div class="item-row" onclick="addItem('残波 白','zanpa_white')">残波 白 <span id="qty-zanpa_white" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('残波 黒','zanpa_black')">残波 黒 <span id="qty-zanpa_black" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('菊之露','kikunotsuyu')">菊之露 <span id="qty-kikunotsuyu" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('久米仙','kumesen')">久米仙 <span id="qty-kumesen" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('久米仙 古酒35','kumesen35')">久米仙 古酒35° <span id="qty-kumesen35" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('春雨','harusame')">春雨 <span id="qty-harusame" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('古里','furusato')">古里 <span id="qty-furusato" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('菊之露VIP','kikunovip')">菊之露VIP <span id="qty-kikunovip" class="qty">0</span></div>
-    <div class="item-row"onclick="addItem('琉球王朝','ryukyu')">琉球王朝 <span id="qty-ryukyu" class="qty">0</span></div>
-  </div>
+<!-- 沖縄の泡盛 -->
+<div class="subcategory" onclick="toggleSub('awamori')">沖縄の泡盛</div>
+<div id="awamori" class="sub-box">
+  <div class="item-row" onclick="addItem('残波 白')">残波 白 <span id="qty-残波 白" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('残波 黒')">残波 黒 <span id="qty-残波 黒" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('菊之露')">菊之露 <span id="qty-菊之露" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('久米仙')">久米仙 <span id="qty-久米仙" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('久米仙 古酒35°')">久米仙 古酒35° <span id="qty-久米仙 古酒35°" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('春雨')">春雨 <span id="qty-春雨" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('古里')">古里 <span id="qty-古里" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('菊之露VIP')">菊之露VIP <span id="qty-菊之露VIP" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('琉球王朝')">琉球王朝 <span id="qty-琉球王朝" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 泡盛リキュール ===== -->
-  <div class="subcategory" onclick="toggleSub('liqueur')">泡盛リキュール</div>
-  <div id="liqueur" class="sub-box">
-    <div class="item-row" onclick="addItem('請福 ゆず','seifuku_yuzu')">請福 ゆず <span id="qty-seifuku_yuzu" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('請福 生姜レモン','seifuku_shoga')">請福 生姜レモン <span id="qty-seifuku_shoga" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('請福 シークヮーサー','seifuku_shikuwasa')">請福 シークヮーサー <span id="qty-seifuku_shikuwasa" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('格','kaku')">格 <span id="qty-kaku" class="qty">0</span></div>
-  </div>
+<!-- 泡盛リキュール -->
+<div class="subcategory" onclick="toggleSub('liqueur')">泡盛リキュール</div>
+<div id="liqueur" class="sub-box">
+  <div class="item-row" onclick="addItem('請福 ゆず')">請福 ゆず <span id="qty-請福 ゆず" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('請福 生姜レモン')">請福 生姜レモン <span id="qty-請福 生姜レモン" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('請福 シークヮーサー')">請福 シークヮーサー <span id="qty-請福 シークヮーサー" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('格')">格 <span id="qty-格" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 八重山の泡盛 ===== -->
-  <div class="subcategory" onclick="toggleSub('yaeyama')">八重山の泡盛</div>
-  <div id="yaeyama" class="sub-box">
-    <div class="item-row" onclick="addItem('請福','yae_seifuku')">請福 <span id="qty-yae_seifuku" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('八重泉','yae_yaesen')">八重泉 <span id="qty-yae_yaesen" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('黒真珠','yae_pearl')">黒真珠 <span id="qty-yae_pearl" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('玉の露','yae_tama')">玉の露 <span id="qty-yae_tama" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('おもと','yae_omoto')">おもと <span id="qty-yae_omoto" class="qty">0</span></div>
-  </div>
+<!-- 八重山の泡盛 -->
+<div class="subcategory" onclick="toggleSub('yaeyama')">八重山の泡盛</div>
+<div id="yaeyama" class="sub-box">
+  <div class="item-row" onclick="addItem('請福')">請福 <span id="qty-請福" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('八重泉')">八重泉 <span id="qty-八重泉" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('黒真珠')">黒真珠 <span id="qty-黒真珠" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('玉の露')">玉の露 <span id="qty-玉の露" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('おもと')">おもと <span id="qty-おもと" class="qty">0</span></div>
+</div>
 
-  <!-- ===== 石垣島のお酒 ===== -->
-  <div class="subcategory" onclick="toggleSub('ishigaki')">石垣島のお酒</div>
-  <div id="ishigaki" class="sub-box">
-    <div class="item-row" onclick="addItem('IMUGE. 25°','imuge25')">IMUGE. 25° <span id="qty-imuge25" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('IMUGE. 37°','imuge37')">IMUGE. 37° <span id="qty-imuge37" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('島ラム','islandrum')">島ラム <span id="qty-islandrum" class="qty">0</span></div>
-  </div>
+<!-- 石垣島のお酒 -->
+<div class="subcategory" onclick="toggleSub('ishigaki')">石垣島のお酒</div>
+<div id="ishigaki" class="sub-box">
+  <div class="item-row" onclick="addItem('IMUGE. 25°')">IMUGE. 25° <span id="qty-IMUGE. 25°" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('IMUGE. 37°')">IMUGE. 37° <span id="qty-IMUGE. 37°" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('島ラム')">島ラム <span id="qty-島ラム" class="qty">0</span></div>
+</div>
 
-  <!-- ===== ソフトドリンク（全部） ===== -->
-  <div class="subcategory" onclick="toggleSub('soft')">ソフトドリンク</div>
-  <div id="soft" class="sub-box">
-    <div class="item-row" onclick="addItem('コーラ','cola')">コーラ <span id="qty-cola" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('ジンジャーエール','ginger')">ジンジャーエール <span id="qty-ginger" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('さんぴん茶','sanpin_tea')">さんぴん茶 <span id="qty-sanpin_tea" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('緑茶','greentea')">緑茶 <span id="qty-greentea" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('無糖紅茶','unsweettea')">無糖紅茶 <span id="qty-unsweettea" class="qty">0</span></div>
-    <div class="item-row" onclick="addItem('烏龍茶','oolong')">烏龍茶 <span id="qty-oolong" class="qty">0</span></div>
-  </div>
+<!-- ソフトドリンク -->
+<div class="subcategory" onclick="toggleSub('soft')">ソフトドリンク</div>
+<div id="soft" class="sub-box">
+  <div class="item-row" onclick="addItem('コーラ')">コーラ <span id="qty-コーラ" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('ジンジャーエール')">ジンジャーエール <span id="qty-ジンジャーエール" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('さんぴん茶')">さんぴん茶 <span id="qty-さんぴん茶" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('緑茶')">緑茶 <span id="qty-緑茶" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('無糖紅茶')">無糖紅茶 <span id="qty-無糖紅茶" class="qty">0</span></div>
+  <div class="item-row" onclick="addItem('烏龍茶')">烏龍茶 <span id="qty-烏龍茶" class="qty">0</span></div>
+</div>
 
 </div>
-<!-- =============================== -->
-<!-- 固定 注文する ボタン -->
-<!-- =============================== -->
+
+<!-- ===== 注文ボタン ===== -->
 <div id="orderButton" onclick="submitOrder()">注文する</div>
 
-<!-- =============================== -->
-<!-- 注文完了バナー -->
-<!-- =============================== -->
-<div id="doneBanner">✨ ご注文を送信しました！ ✨</div>
-
-
-<!-- =============================== -->
-<!--          Script                -->
-<!-- =============================== -->
 <script>
-
 let seat = "";
-let order = {}; // すべての注文データを格納
+let order = {};  // 商品名 → 数量で管理（ID廃止）
 
-
-/* ===============================
-   席を選択
-================================*/
 function selectSeat(s) {
   seat = s;
   document.getElementById("seatModal").style.display = "none";
   document.getElementById("menuContainer").style.display = "block";
 }
 
-
-/* ===============================
-   大カテゴリ開閉
-================================*/
 function toggleMain(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
-/* ===============================
-   サブカテゴリ開閉
-================================*/
 function toggleSub(id) {
   const box = document.getElementById(id);
   box.style.display = box.style.display === "block" ? "none" : "block";
 }
 
+/* 商品追加（名前のみ管理） */
+function addItem(name) {
+  if (!order[name]) order[name] = 0;
+  order[name]++;
 
-/* ===============================
-   商品を追加
-================================*/
-function addItem(name, id) {
-  if (!order[id]) order[id] = { name: name, qty: 0 };
-
-  order[id].qty++;
-
-  const qtyEl = document.getElementById("qty-" + id);
-  qtyEl.innerText = order[id].qty;
-
+  const qtyEl = document.getElementById("qty-" + name);
+  qtyEl.innerText = order[name];
   qtyEl.style.transform = "scale(1.25)";
   setTimeout(() => qtyEl.style.transform = "scale(1)", 150);
 }
 
+/* フード/ドリンク判定（名前で分類） */
+function isDrink(name) {
+  const drinks = [
+    "生ビール","瓶ビール","クリアフリー","ビアボール",
+    "角ハイボール","碧（あお）","マッケンナー",
+    "レポサド1800","どなん","ハブ酒","ハブーラ",
+    "カシスソーダ","カシスオレンジ","ピーチオレンジ","ピーチウーロン",
+    "黒霧島","二階堂","金宮","黒糖焼酎",
+    "夜の帝王",
+    "ウーロンハイ","緑茶ハイ","JJ","JR","MM","ヒゲ茶ハイ","無糖紅茶ハイ","さんぴん茶ハイ",
+    "しょっぱい梅サワー","すっきりトマトサワー","ホワイトサワー","巨峰サワー",
+    "プレーンサワー","シークヮーサーサワー","グレープフルーツサワー","バイスサワー",
+    "レモンサワー","ガリサワー","クエン酸サワー","男梅サワー","ピリ辛トマトハイ",
+    "残波 白","残波 黒","菊之露","久米仙","久米仙 古酒35°","春雨","古里","菊之露VIP","琉球王朝",
+    "請福 ゆず","請福 生姜レモン","請福 シークヮーサー","格",
+    "請福","八重泉","黒真珠","玉の露","おもと",
+    "IMUGE. 25°","IMUGE. 37°","島ラム",
+    "コーラ","ジンジャーエール","さんぴん茶","緑茶","無糖紅茶","烏龍茶"
+  ];
+  return drinks.includes(name);
+}
 
-/* ===============================
-   注文テキスト生成
-================================*/
+/* 注文テキスト生成 */
 function buildOrderText() {
-  let foodText = "";
-  let drinkText = "";
+  let food = "";
+  let drink = "";
 
-  Object.keys(order).forEach(id => {
-    const item = order[id];
-    if (!item || item.qty <= 0) return;
+  Object.keys(order).forEach(name => {
+    const qty = order[name];
+    if (qty <= 0) return;
 
-    if (isDrink(id)) {
-      drinkText += `・${item.name} × ${item.qty}\n`;
-    } else {
-      foodText += `・${item.name} × ${item.qty}\n`;
-    }
+    if (isDrink(name)) drink += `・${name} × ${qty}\n`;
+    else food += `・${name} × ${qty}\n`;
   });
 
   return (
     `席：${seat}\n\n` +
-    `【フード】\n${foodText || "なし"}\n` +
-    `【ドリンク】\n${drinkText || "なし"}`
+    `【フード】\n${food || "なし"}\n` +
+    `【ドリンク】\n${drink || "なし"}`
   );
 }
 
-
-/* ===============================
-   ドリンクかどうか判定（ID で判別）
-================================*/
-function isDrink(id) {
-  const drinkIds = [
-    // ビール
-    "beer_nama","beer_bottle","beer_free","beer_ball",
-
-    // ウイスキー
-    "kakuhigh","ao",
-
-    // バーボン
-    "mckenna",
-
-    // テキーラ（独立）
-    "reposado",
-
-    // ショット
-    "donan","habushu","habura",
-
-    // カクテル
-    "cassissoda","cassisorange","peachorange","peachoolong",
-
-    // 焼酎
-    "kurokirishima","nikaido","kinmiya","kokuto",
-
-    // 日本酒
-    "yotateio",
-
-    // 茶割り
-    "oolonghigh","greenteahigh","jj","jr","mm","higetea","unsweettea_high","sanpin_high",
-
-    // サワー
-    "ume_sour","tomato_sour","white_sour","grape_sour","plain_sour",
-    "shikuwasa_sour","grapefruit_sour","weiss_sour","lemon_sour",
-    "gari_sour","citric_sour","otoko_sour","spicytomato_high",
-
-    // 泡盛
-    "zanpa_white","zanpa_black","kikuno","kumesen","kumesen35",
-    "harusame","furusato","kikuno_vip","ryukyu",
-
-    // 泡盛リキュール
-    "seifuku_yuzu","seifuku_ginger","seifuku_shikuwasa","kaku_liqueur",
-
-    // 八重山泡盛
-    "yae_seifuku","yae_yaesen","yae_blackpearl","yae_tama","yae_omoto",
-
-    // 石垣島のお酒
-    "imuge25","imuge37","islandrum",
-
-    // ソフトドリンク
-    "cola","ginger","sanpin","greentea","unsweettea","oolong"
-  ];
-
-  return drinkIds.includes(id);
-}
-
-
-/* ===============================
-   注文送信
-================================*/
+/* 注文送信 */
 async function submitOrder() {
-  if (!seat) {
-    alert("席が選択されていません");
-    return;
-  }
+  if (!seat) return alert("席が選択されていません");
 
   const text = buildOrderText();
 
   await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({ text })
   });
 
-  // 完了アニメーション
   const banner = document.getElementById("doneBanner");
   banner.style.display = "block";
   setTimeout(() => banner.style.display = "none", 1800);
@@ -631,18 +525,14 @@ async function submitOrder() {
   resetOrders();
 }
 
-
-/* ===============================
-   数量リセット
-================================*/
+/* 数量リセット */
 function resetOrders() {
-  Object.keys(order).forEach(id => {
-    const el = document.getElementById("qty-" + id);
+  Object.keys(order).forEach(name => {
+    const el = document.getElementById("qty-" + name);
     if (el) el.innerText = 0;
   });
   order = {};
 }
-
 </script>
 
 </body>
