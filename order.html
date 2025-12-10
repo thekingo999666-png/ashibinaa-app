@@ -3,312 +3,608 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>店内注文 - あしびなぁ（UI仮組み）</title>
+<title>店内注文 - あしびなぁ</title>
 
 <style>
+/* ============================
+   画面全体
+============================ */
 body {
   margin: 0;
   background: #0b0c10;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic";
-  display: flex;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-/* 左カテゴリ */
+/* ============================
+   上：席選択
+============================ */
+#seatSelectBox {
+  padding: 12px;
+  background: #101820;
+  border-bottom: 1px solid #333;
+}
+
+#seatSelect {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  background: #182733;
+  color: #fff;
+}
+
+/* ============================
+   メイン3分割
+============================ */
+#container {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+/* 左：カテゴリ */
 #categoryList {
   width: 28%;
-  background: #111;
+  background: #111c27;
   overflow-y: auto;
   border-right: 1px solid #333;
+  padding: 10px;
 }
+
 .category-item {
-  padding: 14px;
-  border-bottom: 1px solid #222;
+  padding: 14px 10px;
+  margin-bottom: 8px;
+  background: #15293b;
+  color: #cde6ff;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
 }
+
 .category-item.active {
-  background: #1d3c50;
-}
-
-/* 中央メニュー表示部 */
-#menuList {
-  flex: 1;
-  overflow-y: auto;
-  padding: 12px;
-}
-.menu-item {
-  padding: 12px;
-  background: #1a1c22;
-  border: 1px solid #333;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.menu-item-name { font-size: 1rem; }
-.menu-item-price { font-size: 0.9rem; opacity: 0.8; }
-
-/* 数量表示右側 */
-.qty-box {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.qty-btn {
-  width: 32px;
-  height: 32px;
-  background: #0f4c75;
-  border: none;
+  background: #1f3f5e;
   color: #fff;
-  border-radius: 4px;
-  font-size: 1.1rem;
+  border-left: 4px solid #4db8ff;
 }
 
-/* 下部カート */
-#cartBar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #000;
-  border-top: 1px solid #333;
+/* 中央：メニュー */
+#menuList {
+  width: 44%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.menu-item {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #2a2a2a;
+}
+
+.menu-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.menu-price {
+  float: right;
+  color: #f5d36b;
+}
+
+/* 右：カート */
+#cartPanel {
+  width: 28%;
+  background: #111c27;
+  border-left: 1px solid #333;
   padding: 12px;
   display: flex;
-  justify-content: space-between;
-  font-size: 1rem;
+  flex-direction: column;
 }
+
+#cartInfo {
+  margin-top: auto;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
 #sendBtn {
   background: #06c755;
-  padding: 10px 18px;
+  padding: 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* ============================
+   モーダル
+============================ */
+#detailModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background: #16222e;
+  padding: 20px;
+  width: 90%;
+  max-width: 380px;
+  border-radius: 10px;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+}
+
+.modal-price {
+  font-size: 1.1rem;
+  color: #f5d36b;
+  margin-bottom: 14px;
+}
+
+.qty-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.qty-btn {
+  background: #254057;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.qty-display {
+  width: 40px;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.option-btn {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #254057;
+  margin: 4px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-/* 商品タップ → 詳細モーダル */
-#detailModal {
-  position: fixed;
-  bottom: -100%;
-  left: 0;
+.option-btn.active {
+  background: #4db8ff;
+}
+
+.memo-input {
   width: 100%;
-  background: #1a1c22;
-  border-top: 2px solid #444;
-  padding: 20px;
-  transition: 0.3s;
-}
-.modal-title {
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-}
-.radiobox {
-  margin: 4px 0;
-}
-textarea {
-  width: 100%;
-  height: 60px;
-  background: #0f0f0f;
-  color: #fff;
-  border: 1px solid #444;
-  border-radius: 6px;
-  margin-top: 8px;
-  padding: 6px;
-}
-#addBtn {
-  margin-top: 10px;
-  width: 100%;
-  background: #0f4c75;
   padding: 10px;
   border-radius: 6px;
-  text-align: center;
-  cursor: pointer;
+  background: #0f1b27;
+  border: none;
+  margin-top: 10px;
+  color: #fff;
 }
 
+.modal-btn {
+  margin-top: 12px;
+  padding: 12px;
+  background: #06c755;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
 
-<!-- 左カテゴリ -->
-<div id="categoryList"></div>
-
-<!-- 中央メニュー -->
-<div id="menuList"></div>
-
-<!-- カート -->
-<div id="cartBar">
-  <div id="cartInfo">0点 | 合計 ¥0</div>
-  <div id="sendBtn">注文送信</div>
+<!-- ===============================
+     席選択
+=============================== -->
+<div id="seatSelectBox">
+  <label>席番号：</label>
+  <select id="seatSelect">
+    <option value="">選択してください</option>
+    <option value="A1">A1</option>
+    <option value="A2">A2</option>
+    <option value="A3">A3</option>
+    <option value="B1">B1</option>
+    <option value="B2">B2</option>
+    <option value="B3">B3</option>
+  </select>
 </div>
 
-<!-- 詳細モーダル -->
+<!-- ===============================
+     メイン画面 3カラム
+=============================== -->
+<div id="container">
+
+  <!-- 左：カテゴリ -->
+  <div id="categoryList"></div>
+
+  <!-- 中央：メニュー一覧 -->
+  <div id="menuList"></div>
+
+  <!-- 右：カートパネル -->
+  <div id="cartPanel">
+    <div id="cartItems"></div>
+    <div id="cartInfo">0 点 ｜ ¥0</div>
+    <div id="sendBtn" onclick="sendOrder()">注文送信</div>
+  </div>
+
+</div>
+
+<!-- ===============================
+     詳細モーダル（数量・割り方・メモ）
+=============================== -->
 <div id="detailModal">
-  <div class="modal-title" id="modalName"></div>
-  <div id="modalPrice"></div>
+  <div class="modal-box">
 
-  <div id="modalOptions"></div>
+    <div id="modalName" class="modal-title"></div>
+    <div id="modalPrice" class="modal-price"></div>
 
-  <textarea id="memoInput" placeholder="メモ（氷少なめ、薄め等）"></textarea>
-  <div id="addBtn">追加する</div>
+    <!-- 数量 -->
+    <div class="qty-box">
+      <div class="qty-btn" onclick="changeQty(-1)">－</div>
+      <div id="modalQty" class="qty-display">1</div>
+      <div class="qty-btn" onclick="changeQty(1)">＋</div>
+    </div>
+
+    <!-- 割り方 -->
+    <div id="modalOptions"></div>
+
+    <!-- メモ -->
+    <textarea id="memoInput" class="memo-input"
+      placeholder="メモ（氷少なめ、薄め 等）"></textarea>
+
+    <!-- 追加ボタン -->
+    <div class="modal-btn" onclick="addToCart()">追加する</div>
+    <div class="modal-btn" style="background:#444" onclick="closeModal()">閉じる</div>
+  </div>
 </div>
 
 <script>
-/* ===== API（LINE送信用） ===== */
-const API_ENDPOINT = "https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order";
+/* ============================================================
+   メニュー定義
+============================================================ */
 
-/* ===== 仮メニュー（後で本番全メニューに差し替え可） ===== */
-const DATA = {
-  "おすすめ": [
-    { name: "石垣牛ハンバーグ", price: 1600, type: "food" }
+const categories = [
+  { id: "osusume", name: "⭐ オススメ" },
+  { id: "food", name: "🍽 フード" },
+  { id: "drink", name: "🍻 ドリンク" },
+  { id: "awamori_hontou", name: "🥃 泡盛（沖縄本島）" },
+  { id: "awamori_yaeyama", name: "🥃 泡盛（八重山）" },
+  { id: "ishigaki", name: "🥃 石垣島のお酒" }
+];
+
+/* ======================
+   商品リスト
+====================== */
+
+const menuData = {
+
+  /* --- オススメ --- */
+  osusume: [
+    { name: "石垣牛ハンバーグ", price: 1600 },
+    { name: "ざるもずく", price: 800 },
+    { name: "もずくキムチ", price: 650 }
   ],
-  "おつまみ": [
-    { name: "島らっきょ", price: 500, type: "food" }
+
+  /* --- フード --- */
+  food: [
+    { name: "ゴーヤチャンプル", price: 800 },
+    { name: "ヒラヤーチ", price: 650 },
+    { name: "ポチギ", price: 650 },
+    { name: "島焼きそば（塩）", price: 900 },
+    { name: "島焼きそば（シークワサー）", price: 950 },
+    { name: "アグーペペロン", price: 1200 },
+    { name: "ピリ辛エビトマト", price: 1300 },
+    { name: "本日の気まぐれ", price: 1200 },
+    { name: "島らっきょ", price: 500 },
+    { name: "島らっきょクリームチーズベーコン", price: 750 },
+    { name: "ラフテー", price: 850 }
   ],
-  "チャンプル": [
-    { name: "ゴーヤチャンプル", price: 800, type: "food" }
+
+  /* --- ドリンク（一般） --- */
+  drink: [
+    { name: "生ビール", price: 700 },
+    { name: "瓶ビール", price: 700 },
+    { name: "ハイボール（角）", price: 650, drinkType: "alcohol" },
+    { name: "ジントニック", price: 650, drinkType: "alcohol" },
+    { name: "レモンサワー", price: 600, drinkType: "alcohol" },
+    { name: "緑茶ハイ", price: 600, drinkType: "alcohol" },
+    { name: "烏龍ハイ", price: 600, drinkType: "alcohol" },
+    { name: "さんぴんハイ", price: 600, drinkType: "alcohol" },
+    { name: "黒霧島", price: 550, drinkType: "alcohol" },
+    { name: "金宮", price: 550, drinkType: "alcohol" },
+    { name: "ダイヤメ", price: 600, drinkType: "alcohol" }
   ],
-  "焼酎": [
-    { name: "黒霧島", price: 550, type: "drink", subtype: "shochu" }
+
+  /* --- 泡盛（沖縄本島） --- */
+  awamori_hontou: [
+    { name: "菊之露", price: 650, drinkType: "alcohol" },
+    { name: "残波 白", price: 650, drinkType: "alcohol" },
+    { name: "残波 黒", price: 650, drinkType: "alcohol" }
   ],
-  "石垣島のお酒": [
-    { name: "島ラム", price: 700, type: "drink", subtype: "rum" }
+
+  /* --- 泡盛（八重山） --- */
+  awamori_yaeyama: [
+    { name: "請福", price: 650, drinkType: "alcohol" },
+    { name: "八重泉", price: 650, drinkType: "alcohol" },
+    { name: "黒真珠", price: 850, drinkType: "alcohol" }
   ],
-  "ショット": [
-    { name: "ハブーラ", price: 1400, type: "drink", subtype: "shot" }
+
+  /* --- 石垣島のお酒 --- */
+  ishigaki: [
+    { name: "IMUGE 25°", price: 700, drinkType: "alcohol" },
+    { name: "IMUGE 37°", price: 900, drinkType: "alcohol" },
+    { name: "島ラム（ISLAND RUM）", price: 700, drinkType: "rum" },
+    { name: "請福シークワサー", price: 650, drinkType: "alcohol" },
+    { name: "請福レモン", price: 650, drinkType: "alcohol" },
+    { name: "請福パッションフルーツ", price: 650, drinkType: "alcohol" }
   ]
 };
 
-/* ===== UI構築 ===== */
-const categoryList = document.getElementById("categoryList");
-const menuList = document.getElementById("menuList");
 
-Object.keys(DATA).forEach((cat, i) => {
-  const div = document.createElement("div");
-  div.className = "category-item" + (i === 0 ? " active" : "");
-  div.textContent = cat;
-  div.onclick = () => {
-    document.querySelectorAll(".category-item").forEach(e => e.classList.remove("active"));
-    div.classList.add("active");
-    renderMenu(cat);
-  };
-  categoryList.appendChild(div);
-});
+/* ============================================================
+   DOMにカテゴリ・メニューを表示
+============================================================ */
 
-/* ===== メニュー描画 ===== */
-function renderMenu(category) {
-  menuList.innerHTML = "";
-  DATA[category].forEach(item => {
+function renderCategories() {
+  const box = document.getElementById("categoryList");
+  box.innerHTML = "";
+
+  categories.forEach(cat => {
     const div = document.createElement("div");
-    div.className = "menu-item";
+    div.className = "category-item";
+    div.dataset.cat = cat.id;
+    div.textContent = cat.name;
 
-    div.innerHTML = `
-      <div>
-        <div class="menu-item-name">${item.name}</div>
-        <div class="menu-item-price">¥${item.price}</div>
-      </div>
-      <div class="qty-box">
-        <button class="qty-btn" onclick="changeQty('${item.name}', -1)">−</button>
-        <div id="qty-${item.name}">0</div>
-        <button class="qty-btn" onclick="openDetail('${item.name}', ${item.price}, '${item.type}', '${item.subtype || ""}')">＋</button>
-      </div>
-    `;
-    menuList.appendChild(div);
+    div.onclick = () => showCategory(cat.id);
+
+    box.appendChild(div);
   });
 }
 
-/* 初期表示 */
-renderMenu(Object.keys(DATA)[0]);
+function renderMenus() {
+  const menuList = document.getElementById("menuList");
+  menuList.innerHTML = "";
 
-/* ===== カート処理 ===== */
+  categories.forEach(cat => {
+    const group = document.createElement("div");
+    group.className = "menu-group";
+    group.dataset.cat = cat.id;
+
+    menuData[cat.id].forEach(item => {
+
+      const card = document.createElement("div");
+      card.className = "menu-item";
+      card.onclick = () => openModal(item);
+
+      const title = document.createElement("div");
+      title.className = "menu-title";
+      title.textContent = item.name;
+
+      const price = document.createElement("div");
+      price.className = "menu-price";
+      price.textContent = "¥" + item.price;
+
+      card.appendChild(title);
+      card.appendChild(price);
+      group.appendChild(card);
+    });
+
+    menuList.appendChild(group);
+  });
+}
+
+
+/* ============================================================
+   カテゴリ切り替え
+============================================================ */
+
+function showCategory(catId) {
+  document.querySelectorAll(".category-item").forEach(c => {
+    c.classList.toggle("active", c.dataset.cat === catId);
+  });
+
+  document.querySelectorAll(".menu-group").forEach(group => {
+    group.style.display = (group.dataset.cat === catId) ? "block" : "none";
+  });
+}
+
+
+/* ============================================================
+   モーダル（割り方・数量）
+============================================================ */
+
+let selectedItem = null;
+
+function openModal(item) {
+  selectedItem = item;
+
+  document.getElementById("modalName").textContent = item.name;
+  document.getElementById("modalPrice").textContent = "¥" + item.price;
+  document.getElementById("modalQty").textContent = 1;
+  document.getElementById("memoInput").value = "";
+
+  const optBox = document.getElementById("modalOptions");
+  optBox.innerHTML = "";
+
+  let options = [];
+
+  if (item.drinkType === "rum") {
+    options = ["ソーダ", "ロック", "ストレート"];
+  } else if (item.drinkType === "alcohol") {
+    options = ["水割り", "ソーダ割り", "ロック", "ストレート"];
+  }
+
+  options.forEach(opt => {
+    const b = document.createElement("div");
+    b.className = "option-btn";
+    b.textContent = opt;
+
+    b.onclick = () => {
+      document.querySelectorAll(".option-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+    };
+
+    optBox.appendChild(b);
+  });
+
+  document.getElementById("detailModal").style.display = "flex";
+}
+
+function changeQty(v) {
+  const label = document.getElementById("modalQty");
+  let q = parseInt(label.textContent);
+  q = Math.max(1, q + v);
+  label.textContent = q;
+}
+
+function closeModal() {
+  document.getElementById("detailModal").style.display = "none";
+}
+
+
+/* ============================================================
+   カート処理
+============================================================ */
+
 let cart = [];
 
-function changeQty(name, num) {
-  const entry = cart.find(x => x.name === name);
-  if (entry) {
-    entry.qty += num;
-    if (entry.qty <= 0) cart = cart.filter(x => x.name !== name);
-  }
-  updateCartUI();
-}
-
-function updateCartUI() {
-  let totalQty = 0, totalPrice = 0;
-
-  cart.forEach(e => {
-    totalQty += e.qty;
-    totalPrice += e.qty * e.price;
-    document.getElementById(`qty-${e.name}`).textContent = e.qty;
-  });
-
-  document.getElementById("cartInfo").textContent = `${totalQty}点 | 合計 ¥${totalPrice}`;
-}
-
-/* ===== 詳細モーダル ===== */
-const modal = document.getElementById("detailModal");
-let currentItem = {};
-
-function openDetail(name, price, type, subtype) {
-  currentItem = { name, price, type, subtype };
-
-  document.getElementById("modalName").textContent = name;
-  document.getElementById("modalPrice").textContent = `¥${price}`;
-
-  let html = "";
-
-  if (subtype === "shochu" || subtype === "awamori" || subtype === "whisky") {
-    html += radioGroup(["水割り", "ロック", "ストレート", "ソーダ"]);
-  } else if (subtype === "rum") {
-    html += radioGroup(["ロック", "ストレート", "ソーダ"]);
-  } else if (subtype === "shot") {
-    html += `<div>ショット（割り方なし）</div>`;
-  } else {
-    html += `<div>料理（メモのみ）</div>`;
-  }
-
-  document.getElementById("modalOptions").innerHTML = html;
-
-  modal.style.bottom = "0";
-}
-
-function radioGroup(list) {
-  return list.map(v => `
-    <label class="radiobox">
-      <input type="radio" name="option" value="${v}"> ${v}
-    </label>
-  `).join("");
-}
-
-document.getElementById("addBtn").onclick = () => {
-  const option = document.querySelector('input[name="option"]:checked');
+function addToCart() {
+  const qty = parseInt(document.getElementById("modalQty").textContent);
   const memo = document.getElementById("memoInput").value;
 
+  let option = "";
+  const activeOpt = document.querySelector(".option-btn.active");
+  if (activeOpt) option = activeOpt.textContent;
+
   cart.push({
-    name: currentItem.name + (option ? `（${option.value}）` : ""),
-    price: currentItem.price,
-    qty: 1,
+    name: selectedItem.name,
+    price: selectedItem.price,
+    qty,
+    option,
     memo
   });
 
-  modal.style.bottom = "-100%";
-  document.getElementById("memoInput").value = "";
-  updateCartUI();
-};
+  updateCart();
+  closeModal();
+}
 
-/* ===== 注文送信 ===== */
-document.getElementById("sendBtn").onclick = async () => {
-  if (cart.length === 0) return alert("注文がありません");
+function updateCart() {
+  const cartPanel = document.getElementById("cartItems");
+  cartPanel.innerHTML = "";
 
-  const payload = { order: cart };
+  let totalQty = 0;
+  let totalPrice = 0;
 
-  await fetch(API_ENDPOINT, {
+  cart.forEach(item => {
+    totalQty += item.qty;
+    totalPrice += item.price * item.qty;
+
+    const row = document.createElement("div");
+    row.textContent =
+      `${item.name} ×${item.qty}` +
+      (item.option ? `（${item.option}）` : "") +
+      (item.memo ? `【${item.memo}】` : "");
+
+    row.style.marginBottom = "8px";
+
+    cartPanel.appendChild(row);
+  });
+
+  document.getElementById("cartInfo").textContent =
+    `${totalQty} 点 ｜ ¥${totalPrice}`;
+}
+
+
+/* ============================================================
+   LINEへ注文送信
+============================================================ */
+
+async function sendOrder() {
+  const seat = document.getElementById("seatSelect").value;
+
+  if (!seat) {
+    alert("席を選択してください");
+    return;
+  }
+
+  if (cart.length === 0) {
+    alert("カートが空です");
+    return;
+  }
+
+  let food = [];
+  let drink = [];
+
+  cart.forEach(item => {
+    const line =
+      `${item.name} ×${item.qty}` +
+      (item.option ? `（${item.option}）` : "") +
+      (item.memo ? `【${item.memo}】` : "");
+
+    if (item.option || item.price >= 500) {
+      drink.push(line);
+    } else {
+      food.push(line);
+    }
+  });
+
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+  const payload = {
+    seat,
+    food,
+    drink,
+    total
+  };
+
+  console.log("SEND:", payload);
+
+  await fetch("https://odd-shape-3114.ashibinaa-izakaya.workers.dev/order", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
 
   alert("注文を送信しました！");
   cart = [];
-  updateCartUI();
-};
+  updateCart();
+}
+
+
+/* ============================================================
+   初期化
+============================================================ */
+
+renderCategories();
+renderMenus();
+showCategory("osusume");
+
 </script>
+
 </body>
 </html>
