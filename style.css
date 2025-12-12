@@ -1,0 +1,249 @@
+/* ===============================
+   基本設定
+=============================== */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: #0b0c10;
+  color: #fff;
+}
+
+#seatBox {
+  padding: 12px;
+  background: #101820;
+  border-bottom: 1px solid #333;
+  font-size: 1rem;
+}
+
+#seatSelect {
+  padding: 6px;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* ===============================
+   レイアウト（PC 3カラム）
+=============================== */
+#container {
+  display: flex;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+#categoryList {
+  width: 20%;
+  background: #111;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+}
+
+#menuList {
+  width: 50%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+#cartBox {
+  width: 30%;
+  background: #151515;
+  border-left: 1px solid #333;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+/* ===============================
+   カテゴリ
+=============================== */
+.category-item {
+  padding: 14px;
+  border-bottom: 1px solid #222;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.category-item.active {
+  background: #f5b542;
+  color: #111;
+  font-weight: bold;
+}
+
+/* ===============================
+   メニュー
+=============================== */
+.menu-item {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.menu-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.menu-price {
+  float: right;
+  color: #f5b542;
+}
+
+/* ===============================
+   カート
+=============================== */
+#cartItems {
+  margin-bottom: 14px;
+}
+
+.cart-row {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+#cartTotal {
+  font-size: 1.2rem;
+  margin-top: 12px;
+}
+
+#sendBtn {
+  width: 100%;
+  padding: 12px;
+  background: #06c755;
+  color: #fff;
+  border: none;
+  margin-top: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* ===============================
+   モーダル
+=============================== */
+#modalOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#modalBox {
+  background: #1a1a1a;
+  width: 90%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #444;
+}
+
+#modalTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+#modalPrice {
+  font-size: 1.1rem;
+  margin-top: 6px;
+  color: #f5b542;
+}
+
+.qtyBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.qtyBtn {
+  padding: 8px 14px;
+  background: #333;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1.2rem;
+}
+
+#qtyNumber {
+  margin: 0 16px;
+  font-size: 1.3rem;
+}
+
+#memoInput {
+  width: 100%;
+  height: 60px;
+  margin-top: 12px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.option-btn {
+  display: inline-block;
+  background: #333;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin: 5px;
+  cursor: pointer;
+  border: 1px solid #555;
+}
+
+.option-btn.active {
+  background: #f5b542;
+  color: #111;
+}
+
+#addCartBtn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  background: #f5b542;
+  border: none;
+  color: #111;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+
+#closeModalBtn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #444;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  border-radius: 8px;
+}
+
+/* ===============================
+   スマホ最適化
+=============================== */
+@media (max-width: 768px) {
+  #container {
+    display: block;
+    height: auto;
+  }
+
+  #categoryList,
+  #menuList,
+  #cartBox {
+    width: 100%;
+    height: auto;
+  }
+
+  #cartBox {
+    margin-top: 12px;
+  }
+
+  .menu-item {
+    font-size: 1rem;
+  }
+
+  .category-item {
+    font-size: 1rem;
+  }
+}
